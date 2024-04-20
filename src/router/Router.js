@@ -134,20 +134,20 @@ const Router = () => {
                               /*eslint-disable */
                               {...(route.appLayout
                                 ? {
-                                    appLayout: route.appLayout,
-                                  }
+                                  appLayout: route.appLayout,
+                                }
                                 : {})}
                               {...(route.meta
                                 ? {
-                                    routeMeta: route.meta,
-                                  }
+                                  routeMeta: route.meta,
+                                }
                                 : {})}
                               {...(route.className
                                 ? {
-                                    wrapperClass: route.className,
-                                  }
+                                  wrapperClass: route.className,
+                                }
                                 : {})}
-                              /*eslint-enable */
+                            /*eslint-enable */
                             >
                               {/* <Suspense fallback={null}> */}
                               <PrivateRoute
@@ -190,7 +190,7 @@ const Router = () => {
 
   return (
     <>
-      <AppRouter basename={process.env.REACT_APP_BASENAME}>
+      <AppRouter basename={process.env.REACT_APP_BASENAME || ""}>
         <Switch>
           <Route
             exact
