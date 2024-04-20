@@ -45,6 +45,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 // ** Service Worker
 import * as serviceWorker from "./serviceWorker";
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 // ** Lazy load app
 const LazyApp = lazy(() => import("./App"));
@@ -58,6 +59,7 @@ root.render(
         <ThemeContext>
           <LazyApp />
           <ToastContainer newestOnTop />
+          <SpeedInsights />
         </ThemeContext>
       </Suspense>
     </PersistGate>
