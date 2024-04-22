@@ -7,6 +7,7 @@ import {
   createCandidateCsvAPI,
   createCandidatePublicAPI,
   deleteCandidateAPI,
+  getBestMatchesCandidateAPI,
   // getAllCandidate,
   getCandidateAPI,
   getClientCandidateAPI,
@@ -61,6 +62,46 @@ export function* WATCH_GET_CLIENT_CANDIDATE(action) {
       });
     }
 
+    if (resp.msg) {
+      yield put({
+        type: actions.PLAN_EXPIRE,
+        payload: resp,
+      });
+    }
+    yield put({
+      type: actions.SET_CANDIDATE,
+      payload: resp,
+    });
+  } catch (err) {
+    yield put({
+      type: actions.GET_CLIENT_CANDIDATE_LOADER,
+      payload: false,
+    });
+  }
+  yield put({
+    type: actions.GET_CLIENT_CANDIDATE_LOADER,
+    payload: false,
+  });
+}
+
+export function* WATCH_GET_BEST_MATCHES_CANDIDATE(action) {
+  try {
+    yield put({
+      type: actions.GET_CLIENT_CANDIDATE_LOADER,
+      payload: true,
+    });
+    const planId = store.getState()?.subscription?.currentPlan?.id;
+    const { agencyDetail } = yield select((state) => state?.agency);
+    action.payload.filterData.dataMergePermission =
+      agencyDetail?.permission?.dataMerge;
+    const resp = yield getBestMatchesCandidateAPI(action.payload, planId);
+
+    if (resp) {
+      yield put({
+        type: actions.GET_CLIENT_CANDIDATE_LOADER,
+        payload: false,
+      });
+    }
     if (resp.msg) {
       yield put({
         type: actions.PLAN_EXPIRE,
@@ -257,6 +298,7 @@ export default function* rootSaga() {
     takeEvery(actions.CREATE_CANDIDATE_CSV, WATCH_CREATE_CANDIDATE_CSV),
     takeEvery(actions.GET_CANDIDATE, WATCH_GET_CANDIDATE),
     takeEvery(actions.GET_CLIENT_CANDIDATE, WATCH_GET_CLIENT_CANDIDATE),
+    takeEvery(actions.GET_BEST_MATCHES_CANDIDATE, WATCH_GET_BEST_MATCHES_CANDIDATE),
     takeEvery(actions.UPDATE_CANDIDATE, WATCH_UPDATE_CANDIDATE),
     takeEvery(actions.UPDATE_CANDIDATE_PUBLIC, UPDATE_CANDIDATE_PUBLIC),
     takeEvery(actions.DELETE_CANDIDATE, WATCH_DELETE_CANDIDATE),

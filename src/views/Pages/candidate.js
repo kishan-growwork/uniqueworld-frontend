@@ -84,11 +84,16 @@ const SecondPage = ({ isSavedCandidates = false }) => {
   const { width } = useBreakpoint();
   const colRef = useRef(null);
   const history = useHistory();
+  const params = useLocation();
   // const { isSent, isNotSent } = useSelector(state => state.candidate)
   const dispatch = useDispatch();
   const location = useLocation().search;
   const auth = useSelector((state) => state?.auth);
   const { client } = useSelector((state) => state);
+  console.info("--------------------");
+  console.info("params => ", params?.pathname?.includes("/best-matches"));
+  console.info("--------------------");
+  const isBestMatches = params?.pathname?.includes("/best-matches");
   const {
     currentPlan,
     currentSubscription,
@@ -232,15 +237,27 @@ const SecondPage = ({ isSavedCandidates = false }) => {
           },
         });
       } else {
-        dispatch({
-          type: CandidateActions.GET_CLIENT_CANDIDATE,
-          payload: {
-            filterData: data,
-            page,
-            perPage,
-            isSavedCandidates,
-          },
-        });
+        if (isBestMatches == true) {
+          dispatch({
+            type: CandidateActions.GET_BEST_MATCHES_CANDIDATE,
+            payload: {
+              filterData: data,
+              page,
+              perPage,
+              isSavedCandidates,
+            },
+          });
+        } else {
+          dispatch({
+            type: CandidateActions.GET_CLIENT_CANDIDATE,
+            payload: {
+              filterData: data,
+              page,
+              perPage,
+              isSavedCandidates,
+            },
+          });
+        }
       }
     } else {
       dispatch({
@@ -1147,15 +1164,27 @@ const SecondPage = ({ isSavedCandidates = false }) => {
           },
         });
       } else {
-        dispatch({
-          type: CandidateActions.GET_CLIENT_CANDIDATE,
-          payload: {
-            filterData: data,
-            page,
-            perPage,
-            isSavedCandidates,
-          },
-        });
+        if (isBestMatches == true) {
+          dispatch({
+            type: CandidateActions.GET_BEST_MATCHES_CANDIDATE,
+            payload: {
+              filterData: data,
+              page,
+              perPage,
+              isSavedCandidates,
+            },
+          });
+        } else {
+          dispatch({
+            type: CandidateActions.GET_CLIENT_CANDIDATE,
+            payload: {
+              filterData: data,
+              page,
+              perPage,
+              isSavedCandidates,
+            },
+          });
+        }
       }
     } else {
       console.log("elseeeeeeeeeeeeeeeee", data);
@@ -1548,7 +1577,7 @@ const SecondPage = ({ isSavedCandidates = false }) => {
           style={canvasStyles}
         />
         <h3 style={{ color: themecolor }}>
-          <b>{isSavedCandidates ? "Saved Candidates" : "Candidates"} </b>
+          <b>{isSavedCandidates ? "Saved Candidates" : isBestMatches == true ? "Best Matches Candidates" : "Candidates"} </b>
         </h3>
         {/* <Marquee>
           <h1>hello</h1>
