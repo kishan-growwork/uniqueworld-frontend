@@ -323,7 +323,7 @@ const LoginCover = (props) => {
                                     className="form-label"
                                     for="login-email"
                                   >
-                                    Agency
+                                    Select Your Agency
                                   </Label>
                                   <Select
                                     id="gender"

@@ -47,8 +47,7 @@ export const useLayout = () => {
   if (window) {
     let breakpoint;
     if (role == "Client") {
-      breakpoint = 1024;
-      
+      breakpoint = 1160;
     } else {
        breakpoint = 1560;
     }

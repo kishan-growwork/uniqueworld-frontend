@@ -97,10 +97,6 @@ const ClientRegistration = () => {
     }
     if (leads?.id) {
       setPopup(true);
-      setTimeout(() => {
-        setPopup(false);
-        window.location.href = "/login";
-      }, 12000);
     }
   }, [leads]);
 
@@ -273,13 +269,19 @@ const ClientRegistration = () => {
           </p>
         </ModalBody>
       </Modal>
-
-      <Modal isOpen={popup} className="modal-dialog-centered">
-        <ModalHeader className="bg-transparent"></ModalHeader>
-        <ModalBody className="px-sm-5 mx-50 pb-5">
-          <h1 className="text-center mb-1" style={{ color: "#105996" }}>
-            Congratulations!!
-          </h1>
+       <Modal
+          className="modal-dialog-centered"
+          isOpen={popup}
+        >
+          <ModalHeader
+            toggle={() => {
+              setPopup(false);
+              window.location.href = "/login";
+            }}
+          >
+             Congratulations!!
+          </ModalHeader>
+          <ModalBody>
           <p className="text-center">
             {" "}
             Your registration with us is completed. Thank you for choosing to
@@ -295,8 +297,8 @@ const ClientRegistration = () => {
             with approval. If you have any further queries, feel free to contact
             us.
           </p>
-        </ModalBody>
-      </Modal>
+          </ModalBody>
+        </Modal>
     </>
   );
 };
