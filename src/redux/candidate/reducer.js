@@ -3,7 +3,7 @@ import actions from "./actions";
 export const candidateReducer = (state = [], action) => {
   switch (action.type) {
     case actions.SET_CANDIDATE:
-      return action.payload;
+     return {...state,...action.payload};
     case actions.SET_SELECTED_FOR_EMAIL_CANDIDATE:
       return { ...state, selectedCandidates: action.payload, isSent: false };
     case actions.IS_SENT:
@@ -18,6 +18,10 @@ export const candidateReducer = (state = [], action) => {
       return action.payload;
     case actions.GET_CLIENT_CANDIDATE_LOADER:
       return { ...state, getClientCandidateLoader: action.payload };
+    case actions.GET_BEST_MATCHES_CANDIDATE_LOADER:
+      return { ...state, getBestMatchesCandidateLoader: action.payload };
+    case actions.GET_SAVED_CANDIDATE_LOADER:
+      return { ...state, getSavedCandidateLoader: action.payload };
     default:
       return state;
   }
