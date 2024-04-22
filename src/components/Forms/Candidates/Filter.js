@@ -280,6 +280,36 @@ const Filter = ({
     { value: "Not Joined It", id: "interviewStatus", label: "Not Joined It" },
     { value: "Left", id: "interviewStatus", label: "Left" },
   ];
+  const salaryRangeOptions = [
+    {
+      value: "10000 to 25000",
+      id: "salaryRange",
+      label: "10000 to 25000",
+      start: "10000",
+      end: "25000",
+    },
+    {
+      value: "25000 to 50000",
+      id: "salaryRange",
+      label: "25000 to 50000",
+      start: "25000",
+      end: "50000",
+    },
+    {
+      value: "50000 to 75000",
+      id: "salaryRange",
+      label: "50000 to 75000",
+      start: "50000",
+      end: "75000",
+    },
+    {
+      value: "75000 to 100000",
+      id: "salaryRange",
+      label: "75000 to 100000",
+      start: "75000",
+      end: "100000",
+    },
+  ];
   const handleFilterChange = (id, value) => {
     setFilter({ ...filter, [id]: value });
   };
@@ -345,6 +375,7 @@ const Filter = ({
     //   payload: filterdata
     // })
   };
+  const [salaryRange, setSalaryRange] = useState("");
 
   const handleClear = () => {
     const data = {};
@@ -377,15 +408,27 @@ const Filter = ({
       });
     }
     if (auth?.user?.clients?.id) {
-      dispatch({
-        type: actions.GET_CLIENT_CANDIDATE,
-        payload: {
-          filterData: data,
-          page: 1,
-          perPage: 10,
-          isSavedCandidates,
-        },
-      });
+      if (isBestMatches == true) {
+        dispatch({
+          type: actions.GET_BEST_MATCHES_CANDIDATE,
+          payload: {
+            filterData: data,
+            page: 1,
+            perPage: 10,
+            isSavedCandidates,
+          },
+        });
+      } else {
+        dispatch({
+          type: actions.GET_CLIENT_CANDIDATE,
+          payload: {
+            filterData: data,
+            page: 1,
+            perPage: 10,
+            isSavedCandidates,
+          },
+        });
+      }
     } else {
       dispatch({
         type: actions.GET_CANDIDATE,
@@ -863,49 +906,23 @@ const Filter = ({
             </Col>
 
             <Col md="12" className="mt-1">
-              <Label>Current Salary</Label>
-              <Input
-                id="currentSalary"
-                name="currentSalary"
-                className="w-100"
-                onFocus={() => setIsfocus("currentSalary")}
-                onBlur={() => setIsfocus(null)}
-                style={{
-                  borderColor: focus === "currentSalary" && themecolor,
+              <Label id="salaryRangeStart">Salary Range</Label>
+              <Select
+                id="negotiable"
+                value={salaryRange}
+                placeholder="Select Salary Range"
+                options={salaryRangeOptions}
+                className="react-select"
+                classNamePrefix="select"
+                theme={selectThemeColors}
+                onChange={(e) => {
+                  setFilter({
+                    ...filter,
+                    ["salaryRangeStart"]: e.start,
+                    ["salaryRangeEnd"]: e.end,
+                  });
+                  setSalaryRange(e);
                 }}
-                type="text"
-                maxLength={15}
-                value={filter?.currentSalary}
-                placeholder={"Enter Current Salary"}
-                onChange={(e) =>
-                  handleFilterChange(
-                    e.target.id,
-                    e.target.value.replace(/\D/g, "")
-                  )
-                }
-              />
-            </Col>
-            <Col md="12" className="mt-1">
-              <Label>Expected Salary</Label>
-              <Input
-                id="expectedsalary"
-                name="expectedsalary"
-                onFocus={() => setIsfocus("expectedsalary")}
-                onBlur={() => setIsfocus(null)}
-                style={{
-                  borderColor: focus === "expectedsalary" && themecolor,
-                }}
-                maxLength={15}
-                value={filter?.expectedsalary}
-                className="w-100"
-                type="text"
-                placeholder={"Enter Expected Salary"}
-                onChange={(e) =>
-                  handleFilterChange(
-                    e.target.id,
-                    e.target.value.replace(/\D/g, "")
-                  )
-                }
               />
             </Col>
 
