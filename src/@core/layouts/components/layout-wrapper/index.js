@@ -77,9 +77,9 @@ const LayoutWrapper = (props) => {
         <div
           style={
             roleuser === "Client"
-              ? breakpoint.width > 1024
+              ? breakpoint.width > 1160
                 ? { padding: "calc(0rem + 4rem + 1rem) 2rem 0" }
-                : breakpoint.width <= 1024 && breakpoint.width >= 769
+                : breakpoint.width <= 1160 && breakpoint.width >= 769
                 ? { padding: "calc(2.5rem + 4.45rem + 1.3rem) 2rem 0" }
                 : { padding: "calc(2.5rem + 2.45rem + 1.3rem) 2rem 0" }
               : breakpoint.width >= 1560

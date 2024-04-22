@@ -46,6 +46,12 @@ const Routes = [
     component: lazy(() => import("../../views/Pages/candidate")),
     permission: ["Admin", "Team Leader", "Recruiter", "BDM", "Client"],
   },
+  {
+    path: "/:slug/best-matches",
+    exact: true,
+    component: lazy(() => import("../../views/Pages/CandidateBestMatches.js")),
+    permission: ["Client"],
+  },
   // {
   //   path: "/login",
   //   exact: true,
