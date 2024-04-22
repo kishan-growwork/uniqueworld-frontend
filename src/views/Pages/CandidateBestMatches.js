@@ -3,7 +3,7 @@ import SecondPage from './candidate'
 
 const CandidateBestMatches = () => {
   return (
-    <SecondPage />
+    <SecondPage bestMatchesCandidate={true}/>
   )
 }
 
