@@ -44,6 +44,13 @@ export default [
     permission: ["Admin", "Team Leader", "Recruiter", "BDM", "Client"],
   },
   {
+    id: "secondPage",
+    title: "Best Matches",
+    icon: <User size={20} />,
+    navLink: `/best-matches`,
+    permission: ["Client"],
+  },
+  {
     id: "Job Opening",
     title: "Job Opening",
     icon: <Home size={20} />,

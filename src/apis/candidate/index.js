@@ -46,6 +46,18 @@ export const getClientCandidateAPI = async (payload, planId) => {
       return res;
     });
 };
+export const getBestMatchesCandidateAPI = async (payload, planId) => {
+  return await apiCall
+    .post(
+      `/clients/bestmatchcandidate?planId=${planId}&page=${payload.page || 1}&perPage=${
+        payload.perPage || 10
+      }&isSavedCandidates=${payload?.isSavedCandidates || false}`,
+      payload.filterData
+    )
+    .then((res) => {
+      return res;
+    });
+};
 export const createCandidateAPI = async (payload) => {
   return await apiCall.post("/candidate/create", payload, {
     headers: { "Content-Type": "multipart/form-data" },

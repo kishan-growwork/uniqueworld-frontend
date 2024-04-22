@@ -47,7 +47,7 @@ const ThemeNavbar = (props) => {
             </NavLink>
           </NavItem>
         ) : null}
-        {width < 1024 && role == "Client" ? (
+        {width <= 1160 && role == "Client" ? (
           <NavItem className="mobile-menu me-auto d-flex align-items-center">
             <NavLink
               className="nav-menu-main menu-toggle hidden-xs is-active"
