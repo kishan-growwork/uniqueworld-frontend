@@ -33,14 +33,36 @@ export function* WATCH_GET_CANDIDATE(action) {
   });
 }
 export function* WATCH_GET_SAVED_CANDIDATE(action) {
-  const { agencyDetail } = yield select((state) => state?.agency);
-  action.payload.filterData.dataMergePermission =
+  try {
+    yield put({
+      type: actions.GET_SAVED_CANDIDATE_LOADER,
+      payload: true,
+    });
+    const { agencyDetail } = yield select((state) => state?.agency);
+    action.payload.filterData.dataMergePermission =
     agencyDetail?.permission?.dataMerge;
-  const resp = yield getSavedCandidateAPI(action.payload);
-  yield put({
-    type: actions.SET_CANDIDATE,
-    payload: resp,
-  });
+    const resp = yield getSavedCandidateAPI(action.payload);
+    yield put({
+      type: actions.SET_CANDIDATE,
+      payload: resp,
+    });
+    if (resp) {
+      yield put({
+        type: actions.GET_SAVED_CANDIDATE_LOADER,
+        payload: false,
+      });
+    } else {
+      yield put({
+        type: actions.GET_SAVED_CANDIDATE_LOADER,
+        payload: false,
+      });
+    }
+  } catch (error) {
+    yield put({
+      type: actions.GET_SAVED_CANDIDATE_LOADER,
+      payload: false,
+    });
+  }
 }
 
 export function* WATCH_GET_CLIENT_CANDIDATE(action) {
@@ -87,7 +109,7 @@ export function* WATCH_GET_CLIENT_CANDIDATE(action) {
 export function* WATCH_GET_BEST_MATCHES_CANDIDATE(action) {
   try {
     yield put({
-      type: actions.GET_CLIENT_CANDIDATE_LOADER,
+      type: actions.GET_BEST_MATCHES_CANDIDATE_LOADER,
       payload: true,
     });
     const planId = store.getState()?.subscription?.currentPlan?.id;
@@ -97,8 +119,14 @@ export function* WATCH_GET_BEST_MATCHES_CANDIDATE(action) {
     const resp = yield getBestMatchesCandidateAPI(action.payload, planId);
 
     if (resp) {
+      // yield put({
+      //   type: actions.SET_CANDIDATE,
+      //   payload: {
+      //     bestMatchesCandidates: resp
+      //   },
+      // });
       yield put({
-        type: actions.GET_CLIENT_CANDIDATE_LOADER,
+        type: actions.GET_BEST_MATCHES_CANDIDATE_LOADER,
         payload: false,
       });
     }
@@ -110,16 +138,18 @@ export function* WATCH_GET_BEST_MATCHES_CANDIDATE(action) {
     }
     yield put({
       type: actions.SET_CANDIDATE,
-      payload: resp,
+       payload: {
+      bestMatchesCandidates: resp
+       }
     });
   } catch (err) {
     yield put({
-      type: actions.GET_CLIENT_CANDIDATE_LOADER,
+      type: actions.GET_BEST_MATCHES_CANDIDATE_LOADER,
       payload: false,
     });
   }
   yield put({
-    type: actions.GET_CLIENT_CANDIDATE_LOADER,
+    type: actions.GET_BEST_MATCHES_CANDIDATE_LOADER,
     payload: false,
   });
 }

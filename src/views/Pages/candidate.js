@@ -43,7 +43,7 @@ import {
 import { CardBody, CardText, CardTitle, CardHeader } from "reactstrap";
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
-import { Component, useEffect, useRef, useState } from "react";
+import { Component, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Candidate from "../../components/Dialog/Candidate";
 import CandidateActions from "../../redux/candidate/actions";
@@ -80,7 +80,7 @@ const canvasStyles = {
   left: 0,
 };
 
-const SecondPage = ({ isSavedCandidates = false }) => {
+const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false }) => {
   const { width } = useBreakpoint();
   const colRef = useRef(null);
   const history = useHistory();
@@ -108,7 +108,8 @@ const SecondPage = ({ isSavedCandidates = false }) => {
   const candidateId = new URLSearchParams(location).get("id");
   const [show, setShow] = useState(false);
   const candidates = useSelector((state) => state.candidate);
-  const { getClientCandidateLoader } = useSelector((state) => state.candidate);
+  const { bestMatchesCandidates } = useSelector((state) => state.candidate);
+  const { getSavedCandidateLoader } = useSelector((state) => state.candidate);
   const [candidate, setCandidate] = useState([]);
   const [experience, setExperience] = useState([]);
   const [education, setEducation] = useState([]);
@@ -142,6 +143,20 @@ const SecondPage = ({ isSavedCandidates = false }) => {
   const [isDisabledAllFields, setIsDisabledAllFields] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [showWPModal, setShowWPModal] = useState(false);
+
+  console.info('--------------------')
+  console.info('totalRows => ', totalRows )
+  console.info('--------------------')
+
+  // useLayoutEffect(() => {
+  //   // if (bestMatchesCandidate) {
+  //     dispatch({
+  //       type: CandidateActions.SET_CANDIDATE,
+  //       payload: [],
+  //     });
+  //   // }
+  // }, [isBestMatches])
+  
 
   const toggle = (index) => {
     const newCollapseStates = [...isOpen];
@@ -194,9 +209,19 @@ const SecondPage = ({ isSavedCandidates = false }) => {
   }, [candidates]);
 
   useEffect(() => {
-    setCandidateList(candidates?.results);
-    setLoading(false);
+    if (candidates?.results && isBestMatches == false) {
+      setCandidateList(candidates?.results);
+      setLoading(false);
+    }
   }, [candidates?.results]);
+
+  useEffect(() => {
+    if (bestMatchesCandidates?.results && isBestMatches == true) {
+      setCandidateList(bestMatchesCandidates?.results);
+      setLoading(false);
+    }
+  }, [bestMatchesCandidates])
+  
 
   const getCandidates = async (page) => {
     setLoading(true);
@@ -322,9 +347,16 @@ const SecondPage = ({ isSavedCandidates = false }) => {
     }
   }, [candidates]);
 
+  // useEffect(() => {
+  //   setTotalRows(candidates.total);
+  // }, [candidates]);
   useEffect(() => {
-    setTotalRows(candidates.total);
-  }, [candidates]);
+    if (bestMatchesCandidates?.total && isBestMatches == true) {
+      setTotalRows(bestMatchesCandidates.total);
+    } else {
+      setTotalRows(candidates.total);
+    }
+  }, [bestMatchesCandidates,candidates]);
 
   const interviewRequest = async (candidate) => {
     dispatch({
@@ -1577,7 +1609,13 @@ const SecondPage = ({ isSavedCandidates = false }) => {
           style={canvasStyles}
         />
         <h3 style={{ color: themecolor }}>
-          <b>{isSavedCandidates ? "Saved Candidates" : isBestMatches == true ? "Best Matches Candidates" : "Candidates"} </b>
+          <b>
+            {isSavedCandidates
+              ? "Saved Candidates"
+              : isBestMatches == true
+              ? "Best Matches Candidates"
+              : "Candidates"}{" "}
+          </b>
         </h3>
         {/* <Marquee>
           <h1>hello</h1>
@@ -2194,7 +2232,7 @@ const SecondPage = ({ isSavedCandidates = false }) => {
                   handleselected(e);
                 }}
                 fixedHeader={true}
-                progressPending={loading}
+                progressPending={loading || getSavedCandidateLoader}
                 progressComponent={
                   <ComponentSpinner
                     isClientCandidate={true}
