@@ -143,9 +143,6 @@ const AgencyForm = ({
       </>
     );
   };
-  console.info("-------------------------------");
-  console.info("states => ", states);
-  console.info("-------------------------------");
   const decodedUrl = decodeURIComponent(agency?.logo);
   const logoName = decodedUrl.substring(decodedUrl.lastIndexOf("/") + 1);
 
