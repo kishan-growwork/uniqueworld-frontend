@@ -21,8 +21,8 @@ import { useDispatch, useSelector } from "react-redux";
 // import actions from '../../../redux/candidate/actions'
 import { Scrollbars } from "react-custom-scrollbars";
 import course from "./../Course";
-import jobCategoryActions from "./../../../redux/jobCategory/actions";
-import industriesActions from "./../../../redux/industries/actions";
+// import jobCategoryActions from "./../../../redux/jobCategory/actions";
+// import industriesActions from "./../../../redux/industries/actions";
 import { Country, State, City } from "country-state-city";
 import actions from "../../../redux/candidate/actions";
 import Sidebar from "@components/sidebar";
@@ -62,7 +62,9 @@ const Filter = ({
   handleFilterToggleMode = () => {},
   handleFilter = () => {},
   clear,
-  setclear = () => {},
+  setclear = () => { },
+  filterKey = () => { },
+  filterData
   // handleClearr,
 }) => {
   const { clients } = useSelector((state) => state.auth.user);
@@ -139,15 +141,6 @@ const Filter = ({
 
     getCities();
   }, [selectedState]);
-
-  useEffect(() => {
-    if (!auth?.user?.clients?.id) {
-      dispatch({
-        type: jobCategoryActions.GET_ALL_JOBCAT,
-      });
-      dispatch({ type: industriesActions?.GET_ALL_INDUSTRIES });
-    }
-  }, []);
 
   useEffect(() => {
     if (auth?.user?.clients?.id) {
@@ -407,37 +400,41 @@ const Filter = ({
         data.jobCategoryId = jobCategoryId;
       });
     }
-    if (auth?.user?.clients?.id) {
-      if (isBestMatches == true) {
-        dispatch({
-          type: actions.GET_BEST_MATCHES_CANDIDATE,
-          payload: {
-            filterData: data,
-            page: 1,
-            perPage: 10,
-            isSavedCandidates,
-          },
-        });
+    if (filterKey(filterData).length) {
+      if (auth?.user?.clients?.id) {
+        if (isBestMatches == true) {
+          dispatch({
+            type: actions.GET_BEST_MATCHES_CANDIDATE,
+            payload: {
+              filterData: data,
+              page: 1,
+              perPage: 10,
+              isSavedCandidates,
+            },
+          });
+        } else {
+          dispatch({
+            type: actions.GET_CLIENT_CANDIDATE,
+            payload: {
+              filterData: data,
+              page: 1,
+              perPage: 10,
+              isSavedCandidates,
+            },
+          });
+        }
       } else {
         dispatch({
-          type: actions.GET_CLIENT_CANDIDATE,
+          type: actions.GET_CANDIDATE,
           payload: {
             filterData: data,
             page: 1,
             perPage: 10,
-            isSavedCandidates,
           },
         });
       }
     } else {
-      dispatch({
-        type: actions.GET_CANDIDATE,
-        payload: {
-          filterData: data,
-          page: 1,
-          perPage: 10,
-        },
-      });
+      setLoading(false)
     }
     setFilterData([]);
     setSubCourse({ label: "Select Field" });

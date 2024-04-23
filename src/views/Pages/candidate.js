@@ -145,7 +145,9 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
   const [showWPModal, setShowWPModal] = useState(false);
 
   console.info('--------------------')
-  console.info('totalRows => ', totalRows )
+  console.info('getSavedCandidateLoader => ', getSavedCandidateLoader)
+  console.info('getSavedCandidateLoader => ', loading)
+  console.info('getSavedCandidateLoader => ', filterToggleMode)
   console.info('--------------------')
 
   // useLayoutEffect(() => {
@@ -164,7 +166,7 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
     setIsOpen(newCollapseStates);
   };
   useEffect(() => {
-    if (user?.clients?.id) {
+    if (user?.clients?.id) {    
       dispatch({
         type: userActions.GET_LOGIN_USER_DETAIL,
         payload: user?.id,
@@ -297,15 +299,24 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
   };
 
   useEffect(() => {
+    getCandidates(currentPage);
+  }, [])
+
+  useEffect(() => {
     if (
-      filterData.length !== 0 &&
+      filterKey(filterData).length !== 0 &&
       create === false &&
       update === false &&
       show === false
     ) {
       getCandidates(currentPage);
     }
-  }, [filterData, create, update, show]);
+  }, [filterData]);
+
+  console.info('---------------')
+  console.info('candidate', candidate)
+  console.info('---------------')
+
   useEffect(() => {
     if (!show) {
       setCandidate([]);
@@ -411,7 +422,7 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
   const statusUpdate = (row) => {
     dispatch({
       type: CandidateActions.CANDIDATE_STATUS,
-      payload: { id: row.id },
+      payload: { id: row.id, page: currentPage, perPage: perPage, filterData: filterData },
     });
   };
 
@@ -1799,6 +1810,7 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
             setFilterToggleMode={setFilterToggleMode}
             setFilterData={setFilterData}
             handleFilter={handleFilter}
+            filterKey={filterKey}
           />
         </Col>
 

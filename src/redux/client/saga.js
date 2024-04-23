@@ -49,7 +49,7 @@ export function* WATCH_CREATE_CLIENT(action) {
     const resp = yield getClientAPI({
       page: action.payload?.page,
       perPage: action.payload?.perPage,
-      filterData: [],
+      filterData: action?.payload?.filterData,
     });
     resp.isSuccess = true;
     yield put({
@@ -80,7 +80,7 @@ export function* WATCH_UPDATE_CLIENT(action) {
     const resp = yield getClientAPI({
       page: action.payload?.page,
       perPage: action.payload?.perPage,
-      filterData: [],
+      filterData: action?.payload?.filterData,
     });
     resp.isSuccess = true;
     resp.loading = false;

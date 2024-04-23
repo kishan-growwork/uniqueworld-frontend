@@ -123,6 +123,14 @@ const Clients = () => {
     });
   }, []);
 
+  function filterKey(data) {
+    const notIncludedKeys = [];
+    if (auth?.user?.clients) {
+      notIncludedKeys.push("jobCategoryId");
+    }
+    return Object.keys(data).filter((key) => !notIncludedKeys.includes(key));
+  }
+
   const clearStates = () => {
     if (clients?.constraint === "clients_email_unique") {
       tostify("Email Already Exist");
@@ -143,12 +151,22 @@ const Clients = () => {
 
   useEffect(() => {
     getClients(1);
-  }, [filterData]);
+  }, [])
+
+
   useEffect(() => {
-    if (create === false && update === false) {
-      getClients(currentPage);
+    if (filterKey(filterData).length) {
+      getClients(1);
     }
-  }, [create, update]);
+    console.info('---------------')
+    console.info('filterData00000000000', filterData)
+    console.info('---------------')
+  }, [filterData]);
+  // useEffect(() => {
+  //   if (create === false && update === false) {
+  //     getClients(currentPage);
+  //   }
+  // }, [create, update]);
   useEffect(() => {
     setTotalRows(clients.total);
   }, [clients]);
@@ -335,6 +353,7 @@ const Clients = () => {
         setLoading,
         page: currentPage,
         perPage: perPage,
+        filterData: filterData
       },
     });
   };
@@ -352,6 +371,7 @@ const Clients = () => {
         setLoading,
         page: currentPage,
         perPage: perPage,
+        filterData: filterData
       },
     });
   };
@@ -777,6 +797,7 @@ const Clients = () => {
             setFilterToggleMode={setFilterToggleMode}
             setFilterData={setFilterData}
             handleFilter={handleFilter}
+            filterKey={filterKey}
           />
         </Col>
         <Col

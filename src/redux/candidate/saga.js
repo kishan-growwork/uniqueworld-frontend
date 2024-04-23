@@ -245,7 +245,20 @@ export function* WATCH_FILTER_CANDIDATE(action) {
   });
 }
 export function* WATCH_CANDIDATE_STATUS(action) {
-  yield candidateStatus(action.payload);
+  const resp = yield candidateStatus(action.payload);
+  if (resp) {
+    const res = yield getCandidateAPI({
+      page: action.payload?.page,
+      perPage: action.payload?.perPage,
+      filterData: action.payload?.filterData,
+    });
+    if (res) {
+      yield put({
+        type: actions.SET_CANDIDATE,
+        payload: resp,
+      });
+    }
+  }
 }
 export function* UPDATE_CANDIDATE_PUBLIC(action) {
   const data = yield updateCandidatePublicAPI(action.payload);
