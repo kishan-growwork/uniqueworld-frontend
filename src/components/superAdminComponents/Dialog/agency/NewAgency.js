@@ -60,9 +60,6 @@ const NewAgency = ({
       date: enddate,
       id: agency?.id,
     });
-    console.info("-------------------------------");
-    console.info("resp => ", resp);
-    console.info("-------------------------------");
     if (resp?.msg == "success") {
       await getAgency(0);
     }
