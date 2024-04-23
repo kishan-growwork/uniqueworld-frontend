@@ -21,6 +21,7 @@ import moment from "moment/moment";
 // import agencyActions from "../../../../redux/agency/actions";
 // import { useDispatch } from "react-redux";
 import { updateAgencyValidity } from "../../../../apis/agency";
+// import useSelection from "antd/es/table/hooks/useSelection";
 // import { awsUploadAssetsWithResp } from "../../../../helper/awsUploadAssets";
 
 const NewAgency = ({
@@ -48,6 +49,7 @@ const NewAgency = ({
   const [permissionSelectedCity, setPermissionSelectedCity] = useState();
   const [DrowpdownTime, setDropdownTime] = useState([]);
   const [selectTime, setSelectTime] = useState();
+  // const agencySelect = useSelection((state) => state);
   async function handleValidity() {
     const endDay = moment()
       .add(Number(selectTime?.value), "days")
@@ -57,12 +59,10 @@ const NewAgency = ({
     const enddate = moment(endDay).format();
     setShow(false);
     const resp = await updateAgencyValidity({
+      months: selectTime?.label,
       date: enddate,
       id: agency?.id,
     });
-    console.info("-------------------------------");
-    console.info("resp => ", resp);
-    console.info("-------------------------------");
     if (resp?.msg == "success") {
       await getAgency(0);
     }
@@ -403,7 +403,11 @@ const NewAgency = ({
                       id="state"
                       value={selectTime}
                       placeholder={
-                        selectTime ? selectTime : "Select Validity for agency"
+                        agency?.months
+                          ? agency?.months
+                          : selectTime
+                          ? selectTime
+                          : "Select Validity for agency"
                       }
                       options={DrowpdownTime}
                       className="react-select"

@@ -72,6 +72,7 @@ const PublicCandidate = () => {
   const [update, setUpdate] = useState(false);
   const [gender, setGender] = useState();
   const [logo, setLogo] = useState(null);
+  const [agncyid, setagncyid] = useState();
   const params = useParams();
   useEffect(() => {
     (async () => {
@@ -81,6 +82,7 @@ const PublicCandidate = () => {
           ...candidate,
           agencyId: resp?.id,
         });
+        setagncyid(resp?.id);
       } else {
         history.push("/*");
       }
@@ -138,8 +140,8 @@ const PublicCandidate = () => {
     }
   }, []);
   useEffect(() => {
-    setCandidate({ email, mobile });
-  }, [email, mobile]);
+    setCandidate({ email, mobile, agencyId: agncyid });
+  }, [email, mobile, agncyid]);
 
   const handleChange = (e) => {
     if (e?.key == "state") {
@@ -400,7 +402,7 @@ const PublicCandidate = () => {
               />
             )}
             <h1 style={{ color: "#105996" }}>Candidate Registration</h1>
-            {/* {verified ? <h1>Candidate Detail</h1> : null} */}
+            {/* {/ {verified ? <h1>Candidate Detail</h1> : null} /} */}
           </Col>
         </Row>
         <div style={{ display: "flex", justifyContent: "center" }}>
@@ -468,7 +470,7 @@ const PublicCandidate = () => {
           </>
         ) : (
           <>
-            {/* <CandidateCheck setDisabeled={setDisabeled} email={email} setEmail={setEmail} mobile={mobile} setVerified={setVerified} verified={verified} setMobile={setMobile} /> */}
+            {/* {/ <CandidateCheck setDisabeled={setDisabeled} email={email} setEmail={setEmail} mobile={mobile} setVerified={setVerified} verified={verified} setMobile={setMobile} /> /} */}
           </>
         )}
         <Modal isOpen={isSuccess} className="modal-dialog-centered">

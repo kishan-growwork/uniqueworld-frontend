@@ -193,7 +193,7 @@ const Filter = ({
     if (clients?.industries_relation?.length > 0) {
       if (isBestMatches == true) {
         const selected = [];
-        clients.industries_relation?.forEach((ele) => {
+        clients?.industries_relation?.forEach((ele) => {
           ele.label = ele?.industries?.industryCategory;
           ele.value = ele?.industries?.id;
           selected.push(ele);
@@ -202,23 +202,23 @@ const Filter = ({
       } else {
         if (industries?.length > 0) {
           industries.filter((item) => {
-            item.label = item.industries;
-            item.value = item.id;
+            item.label = item?.industryCategory;
+            item.value = item?.id;
             // item.id = "jobCategoryId"
             return item;
           });
-          setIndustriesOptions(jobCategories);
+          setIndustriesOptions(industries);
         }
       }
     } else {
       if (industries?.length > 0) {
         industries.filter((item) => {
-          item.label = item.industries;
-          item.value = item.id;
+          item.label = item?.industryCategory;
+          item.value = item?.id;
           // item.id = "jobCategoryId"
           return item;
         });
-        setIndustriesOptions(jobCategories);
+        setIndustriesOptions(industries);
       }
     }
   }, [industries, clients]);
