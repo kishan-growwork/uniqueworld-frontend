@@ -40,7 +40,8 @@ function CandidateCheck({
       setVerified(true);
       setDisabeled(true);
       stepper?.next();
-    } else if (JSON.stringify(candidate) === "{}") {
+    } else if (candidate?.msg == false) {
+      setUpdate(false);
       setVerified(true);
       setModalLoader(false);
       setDisabeled(true);
@@ -126,7 +127,7 @@ function CandidateCheck({
             type="button"
             className="add-new-user"
             color="defalt"
-            style={{ backgroundColor: "#105996", color: 'white' }}
+            style={{ backgroundColor: "#105996", color: "white" }}
             onClick={() => handleSubmit()}
           >
             Submit
