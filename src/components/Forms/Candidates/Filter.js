@@ -193,8 +193,8 @@ const Filter = ({
     if (clients?.industries_relation?.length > 0) {
       if (isBestMatches == true) {
         const selected = [];
-        clients.industries_relation?.forEach((ele) => {
-          ele.label = ele?.industryCategory;
+        clients?.industries_relation?.forEach((ele) => {
+          ele.label = ele?.industries?.industryCategory;
           ele.value = ele?.industries?.id;
           selected.push(ele);
         });
