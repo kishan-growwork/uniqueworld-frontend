@@ -70,6 +70,7 @@ import { allAccessEmail } from "../../constant/constant";
 import jobcategoryActions from "./../../redux/jobCategory/actions";
 import industriesActions from "./../../redux/industries/actions";
 import WhatsappDialog from "../../components/Dialog/WhatsappDialog";
+import _ from "lodash";
 
 const canvasStyles = {
   position: "fixed",
@@ -80,7 +81,10 @@ const canvasStyles = {
   left: 0,
 };
 
-const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false }) => {
+const SecondPage = ({
+  isSavedCandidates = false,
+  bestMatchesCandidate = false,
+}) => {
   const { width } = useBreakpoint();
   const colRef = useRef(null);
   const history = useHistory();
@@ -144,12 +148,6 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
   const [currentPage, setCurrentPage] = useState(1);
   const [showWPModal, setShowWPModal] = useState(false);
 
-  console.info('--------------------')
-  console.info('getSavedCandidateLoader => ', getSavedCandidateLoader)
-  console.info('getSavedCandidateLoader => ', loading)
-  console.info('getSavedCandidateLoader => ', filterToggleMode)
-  console.info('--------------------')
-
   // useLayoutEffect(() => {
   //   // if (bestMatchesCandidate) {
   //     dispatch({
@@ -166,7 +164,7 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
     setIsOpen(newCollapseStates);
   };
   useEffect(() => {
-    if (user?.clients?.id) {    
+    if (user?.clients?.id) {
       dispatch({
         type: userActions.GET_LOGIN_USER_DETAIL,
         payload: user?.id,
@@ -313,10 +311,6 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
     }
   }, [filterData]);
 
-  console.info('---------------')
-  console.info('candidate', candidate)
-  console.info('---------------')
-
   useEffect(() => {
     if (!show) {
       setCandidate([]);
@@ -353,7 +347,7 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
   };
 
   useEffect(() => {
-    if (update === true || create === true) {
+    if (create === true) {
       clearStates();
     }
   }, [candidates]);
@@ -367,7 +361,7 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
     } else {
       setTotalRows(candidates.total);
     }
-  }, [bestMatchesCandidates,candidates]);
+  }, [bestMatchesCandidates, candidates]);
 
   const interviewRequest = async (candidate) => {
     dispatch({
@@ -387,7 +381,8 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
     setLoading(true);
     dispatch({
       type: CandidateActions.DELETE_CANDIDATE,
-      payload: { id: row.id, page: currentPage, perPage: perPage },
+      payload: { id: row.id },
+      setLoading
     });
   };
 
@@ -422,7 +417,7 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
   const statusUpdate = (row) => {
     dispatch({
       type: CandidateActions.CANDIDATE_STATUS,
-      payload: { id: row.id, page: currentPage, perPage: perPage, filterData: filterData },
+      payload: { id: row.id },
     });
   };
 
@@ -1040,45 +1035,55 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
     setLoading(true);
     delete candidate.interviews;
 
-    const typeResume = typeof candidate?.resume;
-    const typeImage = typeof candidate?.image;
+    const data = candidates?.results?.filter(
+      (item) => item?.id == candidate?.id
+    );
+    const ObjData = Object.assign({}, ...data);
+    const isMatch = _.isMatch(ObjData, candidate);
 
-    if (typeImage === "object" && candidate?.image !== null) {
-      // const resp = await uploadFiles(candidate?.image)
-      // candidate.image = `https:${resp.url}`
-      const resp = await awsUploadAssetsWithResp(candidate?.image);
-      candidate.image = `${resp.url}`;
-    }
+    if (isMatch == false) {
+      const typeResume = typeof candidate?.resume;
+      const typeImage = typeof candidate?.image;
 
-    if (typeResume === "object" && candidate?.resume !== null) {
-      // const resp = await uploadFiles(candidate?.resume)/
-      // candidate.resume = `https:${resp.url}`
-      const resp = await awsUploadAssetsWithResp(candidate?.resume);
-      candidate.resume = `${resp.url}`;
-    }
-
-    const fm = new FormData();
-    for (const key in candidate) {
-      if (key === "professional") {
-        fm.append("professional", JSON.stringify(candidate[key]));
-      } else if (key === "industries_relation") {
-        fm.append("industries_relation", JSON.stringify(candidate[key]));
-      } else if (key === "status") {
-        fm.append(key, "view");
-      } else {
-        fm.append(key, candidate[key]);
+      if (typeImage === "object" && candidate?.image !== null) {
+        // const resp = await uploadFiles(candidate?.image)
+        // candidate.image = `https:${resp.url}`
+        const resp = await awsUploadAssetsWithResp(candidate?.image);
+        candidate.image = `${resp.url}`;
       }
-    }
 
-    await dispatch({
-      type: CandidateActions.UPDATE_CANDIDATE,
-      payload: {
-        id: candidate.id,
-        data: fm,
-        page: currentPage,
-        perPage: perPage,
-      },
-    });
+      if (typeResume === "object" && candidate?.resume !== null) {
+        // const resp = await uploadFiles(candidate?.resume)/
+        // candidate.resume = `https:${resp.url}`
+        const resp = await awsUploadAssetsWithResp(candidate?.resume);
+        candidate.resume = `${resp.url}`;
+      }
+
+      const fm = new FormData();
+      for (const key in candidate) {
+        if (key === "professional") {
+          fm.append("professional", JSON.stringify(candidate[key]));
+        } else if (key === "industries_relation") {
+          fm.append("industries_relation", JSON.stringify(candidate[key]));
+        } else if (key === "status") {
+          fm.append(key, "view");
+        } else {
+          fm.append(key, candidate[key]);
+        }
+      }
+
+      await dispatch({
+        type: CandidateActions.UPDATE_CANDIDATE,
+        payload: {
+          id: candidate.id,
+          data: fm,
+          page: currentPage,
+          perPage: perPage,
+        },
+      });
+    } else {
+      setLoading(false);
+    }
   };
 
   const Validations = async () => {
