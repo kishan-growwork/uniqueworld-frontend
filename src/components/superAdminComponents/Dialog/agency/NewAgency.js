@@ -10,17 +10,14 @@ import {
   Input,
   ModalHeader,
 } from "reactstrap";
-import Select from "react-select";
-import { selectThemeColors } from "../../../../utility/Utils";
 
 import { Country, State, City } from "country-state-city";
 import AgencyForm from "../../Forms/agency/AgencyForm";
 import AgencyPermission from "../../Forms/agency/AgencyPermission";
 import Loader from "../../../Dialog/Loader";
-import moment from "moment/moment";
+
 // import agencyActions from "../../../../redux/agency/actions";
 // import { useDispatch } from "react-redux";
-import { updateAgencyValidity } from "../../../../apis/agency";
 // import useSelection from "antd/es/table/hooks/useSelection";
 // import { awsUploadAssetsWithResp } from "../../../../helper/awsUploadAssets";
 
@@ -34,7 +31,7 @@ const NewAgency = ({
   setShow,
   agencyActionHandler,
   loading,
-  getAgency = () => {},
+  // getAgency = () => {},
 }) => {
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState([]);
@@ -57,63 +54,68 @@ const NewAgency = ({
   console.info("permissionState => ", permissionState);
 
   // const agencySelect = useSelection((state) => state);
-  async function handleValidity() {
-    const endDay = moment()
-      .add(Number(selectTime?.value), "days")
-      .startOf("day")
-      .set({ hour: 0, minute: 5 })
-      .format("YYYY-MM-DD HH:mm:ss");
-    const enddate = moment(endDay).format();
-    setShow(false);
-    const resp = await updateAgencyValidity({
-      months: selectTime?.label,
-      date: enddate,
-      id: agency?.id,
-    });
-    if (resp?.msg == "success") {
-      await getAgency(0);
-    }
-  }
-  useEffect(() => {
-    setDropdownTime([
-      {
-        label: "15 day",
-        name: "15 day",
-        value: "15",
-      },
-      {
-        label: "1 month",
-        name: "1 month",
-        value: "30",
-      },
-      {
-        label: "3 month",
-        name: "3 month",
-        value: "90",
-      },
-      {
-        label: "6 month",
-        name: "6 month",
-        value: "180",
-      },
-      {
-        label: "12 month",
-        name: "12 month",
-        value: "360",
-      },
-    ]);
-  }, []);
-  let presentDay = new Date();
-  let inputDate = new Date(agency?.exprireDate);
-  let timeDiff = inputDate.getTime() - presentDay.getTime();
-  let daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
-  const remainingDate = daysRemaining;
-  useEffect(() => {
-    if (selectTime?.value != undefined) {
-      const endDay = moment().add(Number(selectTime?.value), "days").calendar();
-      console.log("endDay", endDay);
-    }
-  }, [selectTime]);
+  // async function handleValidity() {
+  //   const endDay = moment()
+  //     .add(Number(selectTime?.value), "days")
+  //     .startOf("day")
+  //     .set({ hour: 0, minute: 5 })
+  //     .format("YYYY-MM-DD HH:mm:ss");
+  //   const enddate = moment(endDay).format();
+  //   setShow(false);
+  //   const resp = await updateAgencyValidity({
+  //     months: selectTime?.label,
+  //     date: enddate,
+  //     id: agency?.id,
+  //   });
+  //   if (resp?.msg == "success") {
+  //     await getAgency(0);
+  //   }
+  // }
+  // useEffect(() => {
+  //   setDropdownTime([
+  //     {
+  //       label: "7 day",
+  //       name: "7 day",
+  //       value: "7",
+  //     },
+  //     {
+  //       label: "15 day",
+  //       name: "15 day",
+  //       value: "15",
+  //     },
+  //     {
+  //       label: "1 month",
+  //       name: "1 month",
+  //       value: "30",
+  //     },
+  //     {
+  //       label: "3 month",
+  //       name: "3 month",
+  //       value: "90",
+  //     },
+  //     {
+  //       label: "6 month",
+  //       name: "6 month",
+  //       value: "180",
+  //     },
+  //     {
+  //       label: "12 month",
+  //       name: "12 month",
+  //       value: "360",
+  //     },
+  //   ]);
+  // }, []);
+  // let presentDay = new Date();
+  // let inputDate = new Date(agency?.exprireDate);
+  // let timeDiff = inputDate.getTime() - presentDay.getTime();
+  // let daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  // const remainingDate = daysRemaining;
+  // useEffect(() => {
+  //   if (selectTime?.value != undefined) {
+  //     const endDay = moment().add(Number(selectTime?.value), "days").calendar();
+  //     console.log("endDay", endDay);
+  //   }
+  // }, [selectTime]);
 
   useEffect(() => {
     setAgency({
@@ -411,7 +413,7 @@ const NewAgency = ({
               Submit
             </Button>
           </div>
-          {agency?.email != "uniqueworldjobs@gmail.com" && (
+          {/* {agency?.email != "uniqueworldjobs@gmail.com" && (
             <>
               <hr />
               <Row className="gy-1">
@@ -461,7 +463,7 @@ const NewAgency = ({
                         .slice(0, 10)}
                     />
                     {/* <h4>{agency?.exprireDate?.slice(0, 10)}</h4> */}
-                  </div>
+          {/* </div>
                 </Col>
                 <Col lg={6} xs={12} xl={4}>
                   <div>
@@ -497,7 +499,7 @@ const NewAgency = ({
                 </Button>
               </div>
             </>
-          )}
+          )} */}{" "}
         </ModalBody>
       </Modal>
     </>

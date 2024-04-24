@@ -57,12 +57,14 @@ import {
 } from "../../../apis/agency";
 import { Checkbox } from "antd";
 import useBreakpoint from "../../../utility/hooks/useBreakpoints";
+import UpdatePlan from "../../../components/superAdminComponents/Dialog/agency/UpdatePlan";
 
 const Agency = () => {
   const dispatch = useDispatch();
   const { width } = useBreakpoint();
   const { allAgency, isLoading } = useSelector((state) => state.agency);
   const [show, setShow] = useState(false);
+  const [showPlan, setShowPlan] = useState(false);
   const [agency, setAgency] = useState([]);
   const [create, setCreate] = useState(false);
   const [update, setUpdate] = useState(false);
@@ -80,7 +82,9 @@ const Agency = () => {
     newCollapseStates[index] = !newCollapseStates[index];
     setIsOpen(newCollapseStates);
   };
-
+  console.info("----------------------------");
+  console.info("showPlan =>", showPlan);
+  console.info("----------------------------");
   const clearStates = () => {
     setAgency([]);
     setLoading(false);
@@ -229,6 +233,19 @@ const Agency = () => {
     {
       name: "Create_AT",
       selector: (row) => row?.createdAt?.slice(0, 10),
+      conditionalCellStyles: [
+        {
+          when: (row) => row.isDeleted == true,
+          style: {
+            opacity: "0.5",
+          },
+        },
+      ],
+    },
+    {
+      name: "Expire_AT",
+      selector: (row) =>
+        row?.exprireDate ? row?.exprireDate?.slice(0, 10) : "-",
       conditionalCellStyles: [
         {
           when: (row) => row.isDeleted == true,
@@ -464,6 +481,26 @@ const Agency = () => {
           },
         },
       ],
+    },
+    {
+      name: "Update Validity",
+      cell: (row) => (
+        <Button
+          disabled={row?.interview_request?.isdisabled == true ? true : false}
+          onClick={() => {
+            setShowPlan(true);
+            setAgency(row);
+          }}
+          style={{
+            padding: "10px",
+            backgroundColor: "#bc4094",
+            color: "white",
+          }}
+          color="default"
+        >
+          Upgrade Plan
+        </Button>
+      ),
     },
   ];
 
@@ -1271,6 +1308,22 @@ const Agency = () => {
             setAgency={setAgency}
             show={show}
             setShow={setShow}
+            update={update}
+            setUpdate={setUpdate}
+            setCreate={setCreate}
+            agencyActionHandler={agencyActionHandler}
+            getAgency={getAgency}
+          />
+        </>
+      ) : null}
+      {showPlan === true ? (
+        <>
+          <UpdatePlan
+            loading={loading}
+            agency={agency}
+            setAgency={setAgency}
+            show={showPlan}
+            setShow={setShowPlan}
             update={update}
             setUpdate={setUpdate}
             setCreate={setCreate}
