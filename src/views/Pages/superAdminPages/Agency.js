@@ -522,7 +522,6 @@ const Agency = () => {
     //   payload: agency,
     // });
   };
-
   const Validations = async () => {
     const error = false;
     const regex =
@@ -625,20 +624,25 @@ const Agency = () => {
       agency?.whatsapp == "" ||
       agency?.whatsapp == null ||
       agency?.whatsapp == undefined
-    )
+    ) {
       return tostify("Please Enter Valid Whatsapp Number", error);
-    else if (
-      agency?.permission?.areas?.length == 0 ||
-      agency?.permission?.areas == null ||
-      agency?.permission?.areas == undefined
-    )
-      return tostify("Please Select States Permission", error);
-    else if (
-      agency?.permission?.areas[0]?.cities?.length == 0 ||
-      agency?.permission?.areas[0]?.cities == null ||
-      agency?.permission?.areas[0]?.cities == undefined
-    )
-      return tostify("Please Select Valid Cities Permission", error);
+    } else if (
+      agency?.permission?.areas != undefined &&
+      agency?.permission?.areas?.length != 0
+    ) {
+      if (
+        agency?.permission?.areas?.length == 0 ||
+        agency?.permission?.areas == null ||
+        agency?.permission?.areas == undefined
+      )
+        return tostify("Please Select States Permission", error);
+      if (
+        agency?.permission?.areas[0]?.cities?.length == 0 ||
+        agency?.permission?.areas[0]?.cities == null ||
+        agency?.permission?.areas[0]?.cities == undefined
+      )
+        return tostify("Please Select Valid Cities Permission", error);
+    }
     return error;
   };
 
