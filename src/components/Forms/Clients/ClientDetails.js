@@ -2,9 +2,12 @@ import { useState, useEffect } from "react";
 import Select from "react-select";
 import { Row, Col, Input, Label } from "reactstrap";
 import { selectThemeColors } from "@utils";
-import { useDispatch, useSelector } from "react-redux";
-import actions from "../../../redux/industries/actions";
-import jobCategoryActions from "../../../redux/jobCategory/actions";
+import {
+  // useDispatch,
+  useSelector
+} from "react-redux";
+// import actions from "../../../redux/industries/actions";
+// import jobCategoryActions from "../../../redux/jobCategory/actions";
 
 const ClientDetails = ({
   cities,
@@ -26,7 +29,7 @@ const ClientDetails = ({
   const [selectindustries, setSelectIndustries] = useState([]);
 
   const industries = useSelector((state) => state.industries);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 console.info('----------------------------');
 console.info('jobCategoryOptions =>', jobCategoryOptions);
 console.info('----------------------------');
@@ -75,15 +78,6 @@ console.info('----------------------------');
       setJobCategoryOptions(selected);
     }
   }, [industriesData, jobCategoryData]);
-
-  useEffect(() => {
-    dispatch({
-      type: actions.GET_ALL_INDUSTRIES,
-    });
-    dispatch({
-      type: jobCategoryActions.GET_ALL_JOBCAT,
-    });
-  }, []);
 
   // useEffect(() => {
   //     // if (jobCategory?.length > 0) {
