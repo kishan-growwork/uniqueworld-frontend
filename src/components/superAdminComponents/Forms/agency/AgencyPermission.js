@@ -41,7 +41,8 @@ const AgencyPermission = ({
         <Col lg={6} xs={12} xl={4}>
           <div>
             <Label id="statePermission">
-              State<span style={{ color: "red" }}>*</span>
+              State
+              <span style={{ fontSize: "1rem" }}> (Optional)</span>
             </Label>
             <Select
               isMulti
@@ -68,7 +69,8 @@ const AgencyPermission = ({
         <Col lg={6} xs={12} xl={4}>
           <div>
             <Label id="cityBasePermission">
-              City Base Permission<span style={{ color: "red" }}>*</span>
+              City Base Permission
+              <span style={{ fontSize: "1rem" }}> (Optional)</span>
             </Label>
             <Select
               isMulti

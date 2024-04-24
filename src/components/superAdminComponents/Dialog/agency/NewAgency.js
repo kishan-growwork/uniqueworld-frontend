@@ -49,6 +49,13 @@ const NewAgency = ({
   const [permissionSelectedCity, setPermissionSelectedCity] = useState();
   const [DrowpdownTime, setDropdownTime] = useState([]);
   const [selectTime, setSelectTime] = useState();
+  console.info("--------------------");
+  console.info("permissionSelectedCity => ", permissionSelectedCity);
+  console.info("--------------------");
+  console.info("permissionSelectedState => ", permissionSelectedState);
+  console.info("permissionCity => ", permissionCity);
+  console.info("permissionState => ", permissionState);
+
   // const agencySelect = useSelection((state) => state);
   async function handleValidity() {
     const endDay = moment()
@@ -163,11 +170,25 @@ const NewAgency = ({
           permissionSelectedState,
           permissionSelectedCity
         );
+        console.info("--------------------");
+        console.info("result => ", result);
+        console.info("--------------------");
         setAgency({
           ...agency,
           permission: {
             ...agency?.permission,
             areas: result,
+          },
+        });
+      } else if (
+        permissionSelectedState?.length == 0 ||
+        permissionSelectedCity?.length == 0
+      ) {
+        setAgency({
+          ...agency,
+          permission: {
+            ...agency?.permission,
+            areas: [],
           },
         });
       }
