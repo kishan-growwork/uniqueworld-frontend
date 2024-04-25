@@ -20,7 +20,7 @@ import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { useDispatch, useSelector } from "react-redux";
 // import actions from '../../../redux/client/actions'
 import { Scrollbars } from "react-custom-scrollbars";
-import actions from "../../../redux/industries/actions";
+// import actions from "../../../redux/industries/actions";
 import { Country, State, City } from "country-state-city";
 import useBreakpoint from "../../../utility/hooks/useBreakpoints";
 
@@ -44,7 +44,9 @@ const Filter = ({
   open,
   handleFilterToggleMode = () => {},
   clear,
-  setclear = () => {},
+  setclear = () => { },
+  filterKey = () => { },
+  filterData
 }) => {
   const dispatch = useDispatch();
   const [filter, setFilter] = useState(initialState);
@@ -99,10 +101,6 @@ const Filter = ({
     getCities();
   }, [selectedState]);
 
-  useEffect(() => {
-    dispatch({ type: actions?.GET_ALL_INDUSTRIES });
-  }, []);
-
   const handleFilterChange = (id, value) => {
     setFilter({ ...filter, [id]: value });
   };
@@ -132,14 +130,16 @@ const Filter = ({
   const handleClear = () => {
     setFilter(initialState);
     setIndustry([]);
-    dispatch({
-      type: "GET_CLIENT",
-      payload: {
-        filterData: [],
-        page: 1,
-        perPage: 10,
-      },
-    });
+    if (filterKey(filterData).length) {
+      dispatch({
+        type: "GET_CLIENT",
+        payload: {
+          filterData: [],
+          page: 1,
+          perPage: 10,
+        },
+      });
+    }
     setFilterData([]);
     setSelectedState("");
     setSelectedCity("");
