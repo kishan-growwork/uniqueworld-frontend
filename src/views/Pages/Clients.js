@@ -53,6 +53,7 @@ import jobCategoryActions from "../../redux/jobCategory/actions";
 import Loader from "./../../components/Dialog/Loader";
 import actions from "../../redux/industries/actions";
 import useBreakpoint from "../../utility/hooks/useBreakpoints";
+import _ from "lodash";
 
 const Clients = () => {
   const auth = useSelector((state) => state.auth);
@@ -123,6 +124,14 @@ const Clients = () => {
     });
   }, []);
 
+  function filterKey(data) {
+    const notIncludedKeys = [];
+    if (auth?.user?.clients) {
+      notIncludedKeys.push("jobCategoryId");
+    }
+    return Object.keys(data).filter((key) => !notIncludedKeys.includes(key));
+  }
+
   const clearStates = () => {
     if (clients?.constraint === "clients_email_unique") {
       tostify("Email Already Exist");
@@ -143,12 +152,21 @@ const Clients = () => {
 
   useEffect(() => {
     getClients(1);
-  }, [filterData]);
+  }, []);
+
   useEffect(() => {
-    if (create === false && update === false) {
-      getClients(currentPage);
+    if (filterKey(filterData).length) {
+      getClients(1);
     }
-  }, [create, update]);
+    console.info("---------------");
+    console.info("filterData00000000000", filterData);
+    console.info("---------------");
+  }, [filterData]);
+  // useEffect(() => {
+  //   if (create === false && update === false) {
+  //     getClients(currentPage);
+  //   }
+  // }, [create, update]);
   useEffect(() => {
     setTotalRows(clients.total);
   }, [clients]);
@@ -163,9 +181,14 @@ const Clients = () => {
     setLoading(true);
     dispatch({
       type: ClientActions.DELETE_CLIENT,
-      payload: { id: row.id, page: currentPage, perPage: perPage },
+      payload: { id: row.id },
+      setLoading
     });
   };
+
+  console.info("--------------------");
+  console.info("client9999999999999 => ", client);
+  console.info("--------------------");
 
   const columns = [
     {
@@ -212,6 +235,7 @@ const Clients = () => {
                 dispatch({
                   type: ClientActions.APPROVE_CLIENT,
                   payload: row,
+                  setLoading
                 });
               } else {
                 toast.warn("Client already approved");
@@ -228,6 +252,7 @@ const Clients = () => {
                 dispatch({
                   type: ClientActions.DECLINED_CLIENT,
                   payload: row,
+                  setLoading
                 });
               } else {
                 toast.warn("Client already Declined");
@@ -335,25 +360,32 @@ const Clients = () => {
         setLoading,
         page: currentPage,
         perPage: perPage,
+        filterData: filterData,
       },
     });
   };
 
   const ClientUpdateHandler = () => {
-    setLoading(true);
+    // setLoading(true);
     // const fm = client;
     // fm.jobCategory_relation = JSON.stringify(client?.jobCategory_relation);
     // fm.industries_relation = JSON.stringify(client?.industries_relation);
-    dispatch({
-      type: ClientActions.UPDATE_CLIENT,
-      payload: {
-        id: client.id,
-        data: client,
-        setLoading,
-        page: currentPage,
-        perPage: perPage,
-      },
-    });
+    const data = clients?.results?.filter((item) => item?.id == client?.id);
+    const ObjData = Object.assign({}, ...data);
+    const isMatch = _.isMatch(ObjData, client);
+    if (isMatch == false) {
+      dispatch({
+        type: ClientActions.UPDATE_CLIENT,
+        payload: {
+          id: client.id,
+          data: client,
+          setLoading,
+          page: currentPage,
+          perPage: perPage,
+          filterData: filterData,
+        },
+      });
+    }
   };
 
   const Validations = async () => {
@@ -777,6 +809,7 @@ const Clients = () => {
             setFilterToggleMode={setFilterToggleMode}
             setFilterData={setFilterData}
             handleFilter={handleFilter}
+            filterKey={filterKey}
           />
         </Col>
         <Col
