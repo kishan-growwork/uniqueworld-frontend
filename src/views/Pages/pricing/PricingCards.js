@@ -16,6 +16,7 @@ import {
 } from "reactstrap";
 import qrCode from "../../../assets/images/code.jpeg";
 import { useSelector } from "react-redux";
+import { createPayment } from "../../../apis/payment";
 
 const PricingCards = ({
   data,
@@ -34,11 +35,11 @@ const PricingCards = ({
 
   useEffect(() => {
     const newDisabledIndexes = data?.reduce((indexes, item, index) => {
-        if (item?.id === planId) {
-          indexes = Array.from({ length: index + 1 }, (_, i) => {
-            return i == 0 ? 1 : i;
-          });
-        }
+      if (item?.id === planId) {
+        indexes = Array.from({ length: index + 1 }, (_, i) => {
+          return i == 0 ? 1 : i;
+        });
+      }
       return indexes;
     }, []);
     setDisabledIndexes(newDisabledIndexes);
@@ -87,8 +88,13 @@ const PricingCards = ({
                 </div>
                 <div>
                   <Button
-                    onClick={() => {
+                    onClick={async () => {
                       //  createOrderInstance(item)
+                      let resp = await createPayment(item);
+                      console.log("-------------------");
+                      console.log("resp", resp);
+                      console.log("-------------------");
+                      window.open(resp?.data);
                       setIsOpenPaymentQR(true);
                     }}
                     block

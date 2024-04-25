@@ -10,3 +10,7 @@ export const capturePayment = async (payload) => {
 export const paymentSuccessfulMail = async (payload) => {
   return await apiCall.post(`/payment/paymentMail/${payload?.id}`);
 };
+
+export const createPayment = async (payload) => {
+  return await apiCall.post("/payment/create", payload);
+};
