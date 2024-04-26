@@ -499,7 +499,7 @@ const PublicCandidate = () => {
               We appreciate your interest in our services and look forward to
               assist you in the business.
             </p>
-            <p className="text-center">
+            {/* <p className="text-center">
               You can Click on this whatsApp Group Link{" "}
               <a
                 href="https://chat.whatsapp.com/D7ltDYardBM34UCq2qCpih"
@@ -509,7 +509,7 @@ const PublicCandidate = () => {
               </a>{" "}
               and join with us where you can get only regular free New Job
               Openings so if you join this its advantaged for you.
-            </p>
+            </p> */}
           </ModalBody>
         </Modal>
       </div>
