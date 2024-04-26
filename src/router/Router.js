@@ -32,6 +32,7 @@ import { persistor } from "../redux/store";
 import Login from "../views/Pages/Login";
 import Pricing from "../views/Pages/LandingPage/Pricing/Pricing";
 import ClientRegistration from "../views/Pages/ClientRegistration";
+import Paymentstatus from "../views/Pages/Paymentstatus";
 
 const Router = () => {
   const { layout, setLayout, setLastLayout } = useLayout();
@@ -134,20 +135,20 @@ const Router = () => {
                               /*eslint-disable */
                               {...(route.appLayout
                                 ? {
-                                  appLayout: route.appLayout,
-                                }
+                                    appLayout: route.appLayout,
+                                  }
                                 : {})}
                               {...(route.meta
                                 ? {
-                                  routeMeta: route.meta,
-                                }
+                                    routeMeta: route.meta,
+                                  }
                                 : {})}
                               {...(route.className
                                 ? {
-                                  wrapperClass: route.className,
-                                }
+                                    wrapperClass: route.className,
+                                  }
                                 : {})}
-                            /*eslint-enable */
+                              /*eslint-enable */
                             >
                               {/* <Suspense fallback={null}> */}
                               <PrivateRoute
@@ -237,6 +238,11 @@ const Router = () => {
             render={() => <ShippingAndDelivery />}
           />
           <Route path={"/terms"} exact render={() => <TermsAndCondition />} />
+          <Route
+            path={"/paymentstatus"}
+            exact
+            render={() => <Paymentstatus />}
+          />
           {/* <Route
           exact
           path={"/"}

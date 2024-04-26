@@ -1,7 +1,12 @@
 import { all, takeEvery, put } from "redux-saga/effects";
 // import axios from "axios"
 import actions from "./actions";
-import { capturePayment, createOrderInstance, paymentSuccessfulMail } from "../../apis/payment";
+import {
+  capturePayment,
+  createOrderInstance,
+  paymentstatus,
+  paymentSuccessfulMail,
+} from "../../apis/payment";
 import { store } from "./../store";
 import { toast } from "react-toastify";
 
@@ -70,13 +75,30 @@ function* WATCH_CAPTURE_PAYMENT(action) {
 export function* WATCH_PAYMENT_SUCCESSFUL_MAIL(action) {
   try {
     setLoading(true);
-    const resp = yield paymentSuccessfulMail(action.payload)
+    const resp = yield paymentSuccessfulMail(action.payload);
     if (resp?.msg) {
       setLoading(false);
       toast.success("Your Plan Upgrade Successfully.");
     }
   } catch (err) {
-
+    setLoading(false);
+  }
+}
+export function* WATCH_PAYMENT_STATUS(action) {
+  try {
+    setLoading(true);
+    const resp = yield paymentstatus(action.payload);
+    if (resp) {
+      yield put({
+        type: actions.PAYMENT_SET_STATE,
+        payload: {
+          paymentstatus: resp,
+        },
+      });
+      setLoading(false);
+      // toast.success("Your Plan Upgrade Successfully.");
+    }
+  } catch (err) {
     setLoading(false);
   }
 }
@@ -86,5 +108,6 @@ export default function* rootSaga() {
     takeEvery(actions.CREATE_ORDER_INSTANCE, WATCH_CREATE_ORDER_INSTANCE),
     takeEvery(actions.CAPTURE_PAYMENT, WATCH_CAPTURE_PAYMENT),
     takeEvery(actions.PAYMENT_SUCCESSFUL_MAIL, WATCH_PAYMENT_SUCCESSFUL_MAIL),
+    takeEvery(actions.PAYMENT_STATUS, WATCH_PAYMENT_STATUS),
   ]);
 }
