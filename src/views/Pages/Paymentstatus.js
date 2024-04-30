@@ -112,7 +112,7 @@ const paymentstatus = () => {
       return tostify("Please Enter Street Address", error);
     else if (Town === undefined || Town?.length === 0)
       return tostify("Please Enter Town Address", error);
-    else if (zipcode?.length !== 10 || zipcode === undefined)
+    else if (zipcode?.length < 5 || zipcode === undefined)
       return tostify("Please Enter Valid zipcode", error);
 
     return error;
@@ -337,7 +337,7 @@ const paymentstatus = () => {
                     <Input
                       id="zipcode"
                       name="zipcode"
-                      maxLength={200}
+                      maxLength={10}
                       className="w-100"
                       type="text"
                       value={zipcode}
