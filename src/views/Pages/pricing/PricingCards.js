@@ -1,5 +1,6 @@
 import classnames from "classnames";
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Row,
   Col,
@@ -16,7 +17,7 @@ import {
 } from "reactstrap";
 import qrCode from "../../../assets/images/code.jpeg";
 import { useSelector } from "react-redux";
-import { createPayment } from "../../../apis/payment";
+// import { createPayment } from "../../../apis/payment";
 
 const PricingCards = ({
   data,
@@ -26,6 +27,8 @@ const PricingCards = ({
   planId,
   // createOrderInstance = () => {},
 }) => {
+  const history = useHistory();
+  const slug = localStorage.getItem("slug");
   const colsProps = { md: 4, xs: 12 };
   const themecolor = useSelector(
     (state) => state?.agency?.agencyDetail?.themecolor
@@ -90,12 +93,10 @@ const PricingCards = ({
                   <Button
                     onClick={async () => {
                       //  createOrderInstance(item)
-                      let resp = await createPayment(item);
-                      console.log("-------------------");
-                      console.log("resp", resp);
-                      console.log("-------------------");
-                      window.open(resp?.data);
-                      setIsOpenPaymentQR(true);
+                      history.push(`/${slug}/paymentstatus/${item?.id}`);
+                      // let resp = await createPayment(item);
+                      // window.open(resp?.data);
+                      // setIsOpenPaymentQR(true);
                     }}
                     block
                     disabled={disabledIndexes.includes(index)}

@@ -16,5 +16,5 @@ export const createPayment = async (payload) => {
 };
 
 export const paymentstatus = async (payload) => {
-  return await apiCall.post("paymentStatus/", payload);
+  return await apiCall.post("/payment/create", payload);
 };

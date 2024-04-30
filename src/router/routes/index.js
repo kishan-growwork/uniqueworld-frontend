@@ -37,7 +37,9 @@ const Routes = [
   {
     path: "/superadmin/profile",
     exact: true,
-    component: lazy(() => import("../../views/Pages/superAdminPages/ProfilePage.js")),
+    component: lazy(() =>
+      import("../../views/Pages/superAdminPages/ProfilePage.js")
+    ),
     permission: ["SuperAdmin"],
   },
   {
@@ -205,7 +207,19 @@ const Routes = [
     layout: "BlankLayout",
     permission: ["Admin", "Team Leader", "Public", "BDM", "Recruiter"],
   },
-
+  {
+    path: "/:slug/paymentstatus/:id",
+    exact: true,
+    component: lazy(() => import("../../views/Pages/Paymentstatus.js")),
+    permission: [
+      "Admin",
+      "Team Leader",
+      "Public",
+      "BDM",
+      "Recruiter",
+      "Client",
+    ],
+  },
   {
     path: "/resetpassword",
     exact: true,

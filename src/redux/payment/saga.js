@@ -102,6 +102,27 @@ export function* WATCH_PAYMENT_STATUS(action) {
     setLoading(false);
   }
 }
+export function* WATCH_CREATE_PAYMENT(action) {
+  try {
+    setLoading(true);
+    const resp = yield paymentstatus(action.payload);
+    if (resp) {
+      window.open(resp?.data);
+
+      // yield put({
+      //   type: actions.PAYMENT_SET_STATE,
+      //   payload: {
+      //     paymentstatus: resp,
+      //   },
+      // });
+      
+      setLoading(false);
+      // toast.success("Your Plan Upgrade Successfully.");
+    }
+  } catch (err) {
+    setLoading(false);
+  }
+}
 
 export default function* rootSaga() {
   yield all([
@@ -109,5 +130,6 @@ export default function* rootSaga() {
     takeEvery(actions.CAPTURE_PAYMENT, WATCH_CAPTURE_PAYMENT),
     takeEvery(actions.PAYMENT_SUCCESSFUL_MAIL, WATCH_PAYMENT_SUCCESSFUL_MAIL),
     takeEvery(actions.PAYMENT_STATUS, WATCH_PAYMENT_STATUS),
+    takeEvery(actions.CREATE_PAYMENT, WATCH_CREATE_PAYMENT),
   ]);
 }

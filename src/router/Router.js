@@ -32,7 +32,6 @@ import { persistor } from "../redux/store";
 import Login from "../views/Pages/Login";
 import Pricing from "../views/Pages/LandingPage/Pricing/Pricing";
 import ClientRegistration from "../views/Pages/ClientRegistration";
-import Paymentstatus from "../views/Pages/Paymentstatus";
 
 const Router = () => {
   const { layout, setLayout, setLastLayout } = useLayout();
@@ -238,11 +237,6 @@ const Router = () => {
             render={() => <ShippingAndDelivery />}
           />
           <Route path={"/terms"} exact render={() => <TermsAndCondition />} />
-          <Route
-            path={"/paymentstatus"}
-            exact
-            render={() => <Paymentstatus />}
-          />
           {/* <Route
           exact
           path={"/"}

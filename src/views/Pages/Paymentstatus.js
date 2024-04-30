@@ -1,6 +1,10 @@
 import { City, State } from "country-state-city";
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
+// import planActions from "../../../redux/plan/actions";
+import planActions from "../../redux/plan/actions";
+import { tostify } from "../../components/Tostify";
+import actions from "../../redux/payment/actions";
 
 import {
   Row,
@@ -13,13 +17,34 @@ import {
   CardHeader,
   Button,
 } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom/cjs/react-router-dom";
 
 const paymentstatus = () => {
+  const params = useParams();
+  const dispatch = useDispatch();
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState([]);
+  const [firstname, setfirstname] = useState("");
+  const [lastname, setlastname] = useState("");
+  const [email, setemail] = useState("");
+  const [Mobilenumber, setMobilenumber] = useState("");
+  const [Company, setCompany] = useState("");
+  const [gst, setgst] = useState("");
+  const [Street, setStreet] = useState("");
+  const [Town, setTown] = useState("");
+  const [zipcode, setzipcode] = useState("");
   const [selectedState, setSelectedState] = useState();
   const [selectedCity, setSelectedCity] = useState();
- 
+  const { planbyid } = useSelector((state) => state?.plans);
+
+  useEffect(() => {
+    dispatch({
+      type: planActions.GET_PLAN_BY_ID,
+      payload: params,
+    });
+  }, []);
+
   useEffect(() => {
     states?.map((ele) => {
       ele.label = ele.name;
@@ -47,6 +72,77 @@ const paymentstatus = () => {
     getStates();
   }, []);
 
+  let TotalAmount;
+  let tax = process.env.REACT_APP_TAX_PERSENTAGE;
+
+  if (planbyid && planbyid.price !== undefined) {
+    let taxAmount = (planbyid.price * tax) / 100;
+    TotalAmount = Math.round(Number(planbyid.price) + Number(taxAmount));
+  }
+
+  const Validations = async () => {
+    const error = false;
+    const regex =
+      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    if (firstname?.length < 2 || firstname === undefined)
+      return tostify("Please Enter Valid First Name", error);
+    else if (lastname?.length < 2 || lastname === undefined)
+      return tostify(" Please Enter Valid Last Name", error);
+    else if (
+      selectedState?.value == undefined ||
+      selectedState?.isoCode == undefined ||
+      selectedState?.label == undefined ||
+      selectedState?.length === 0 ||
+      selectedState == ""
+    )
+      return tostify("Please Enter Valid State", error);
+    else if (
+      selectedCity?.value == undefined ||
+      selectedCity?.stateCode == undefined ||
+      selectedCity?.label == undefined ||
+      selectedCity?.length === 0 ||
+      selectedCity == ""
+    )
+      return tostify("Please Enter Valid City", error);
+    else if (!email || regex.test(email) === false)
+      return tostify("  Please Enter Valid Email", error);
+    else if (Mobilenumber?.length !== 10 || Mobilenumber === undefined)
+      return tostify("Please Enter Valid Mobile Number", error);
+    else if (Street === undefined || Street?.length === 0)
+      return tostify("Please Enter Street Address", error);
+    else if (Town === undefined || Town?.length === 0)
+      return tostify("Please Enter Town Address", error);
+    else if (zipcode?.length !== 10 || zipcode === undefined)
+      return tostify("Please Enter Valid zipcode", error);
+
+    return error;
+  };
+  async function handlecreatepayment() {
+    const err = await Validations();
+    if (err === false) {
+      await dispatch({
+        type: actions.CREATE_PAYMENT,
+        payload: {
+          TotalAmount,
+          tax,
+          planbyid,
+          zipcode,
+          Town,
+          Street,
+          Company,
+          email,
+          lastname,
+          firstname,
+          Mobilenumber,
+          city: selectedCity,
+          state: selectedState,
+        },
+      });
+      // window.open(res?.data);
+      // setIsOpenPaymentQR(true);
+    }
+  }
+
   useEffect(() => {
     const getCities = async () => {
       try {
@@ -68,16 +164,54 @@ const paymentstatus = () => {
         style={{
           display: "flex",
           justifyContent: "center",
+          borderRadius: "1rem",
         }}
         className="container mt-2"
       >
-        <div className="card px-3">
+        <div
+          style={{
+            backgroundColor: "white",
+            borderRadius: "1rem",
+            boxShadow: "0 4px 24px 0 rgba(34, 41, 47, 0.1)",
+          }}
+          className="px-3"
+        >
           <div className="row">
             <div className="col-lg-7 card-body border-end">
               <h4 className="mt-2 mb-4">Billing Details</h4>
               <form>
                 <div className="row g-3">
-                  <Col md="12" className="mt-1">
+                  <Col md="6" className="mt-1">
+                    <Label id="firstname">First Name</Label>
+                    <Input
+                      id="firstname"
+                      name="firstname"
+                      maxLength={200}
+                      className="w-100"
+                      type="text"
+                      value={firstname}
+                      placeholder={"Enter FirstName"}
+                      onChange={(e) => {
+                        setfirstname(e.target.value);
+                      }}
+                    />
+                  </Col>
+                  <Col md="6" className="mt-1">
+                    <Label id="lastname">Last Name</Label>
+                    <Input
+                      id="lastname"
+                      name="lastname"
+                      maxLength={200}
+                      className="w-100"
+                      type="text"
+                      value={lastname}
+                      placeholder={"Enter lastname"}
+                      onChange={(e) => {
+                        setlastname(e.target.value);
+                      }}
+                    />
+                  </Col>
+                  <Col md="6" className="mt-1">
                     <Label>State</Label>
                     <Select
                       menuPlacement="auto"
@@ -93,22 +227,8 @@ const paymentstatus = () => {
                       }}
                     />
                   </Col>
-                  <Col md="12" className="mt-1">
+                  <Col md="6" className="mt-1">
                     <Label for="role-select">City</Label>
-                    {/* <Input
-                    id="city"
-                    className="w-100"
-                    type="text"
-                    maxLength={200}
-                    placeholder="Enter City"
-                    value={filter.city}
-                    onChange={(e) =>
-                      handleFilterChange(
-                        e.target.id,
-                        e.target.value.replace(/[^a-z  -]/gi, "")
-                      )
-                    }
-                  /> */}
                     <Select
                       menuPlacement="auto"
                       id="city"
@@ -122,30 +242,139 @@ const paymentstatus = () => {
                       }}
                     />
                   </Col>
-                  <div className="col-md-6">
-                    <label className="form-label" htmlFor="billings-zip">
-                      Billing Zip / Postal Code
-                    </label>
-                    <input
-                      type="text"
-                      id="billings-zip"
-                      className="form-control billings-zip-code"
-                      placeholder="Zip / Postal Code"
+                  <Col md="6" className="mt-1">
+                    <Label id="lastname">Email Address</Label>
+                    <Input
+                      id="Email"
+                      name="Email"
+                      maxLength={200}
+                      className="w-100"
+                      type="email"
+                      value={email}
+                      placeholder={"Enter Email"}
+                      onChange={(e) => {
+                        setemail(e.target.value);
+                      }}
                     />
-                  </div>
+                  </Col>
+                  <Col md="6" className="mt-1">
+                    <Label id="mobile">Mobile Number</Label>
+                    <Input
+                      id="mobile"
+                      name="mobile"
+                      maxLength={200}
+                      className="w-100"
+                      type="text"
+                      value={Mobilenumber}
+                      placeholder={"Enter Mobile Number"}
+                      onChange={(e) => {
+                        setMobilenumber(e.target.value.replace(/\D/g, ""));
+                      }}
+                    />
+                  </Col>
+                  <Col md="6" className="mt-1">
+                    <Label id="lastname">Company name (Optional)</Label>
+                    <Input
+                      id="Companyname"
+                      name="Companyname"
+                      maxLength={200}
+                      className="w-100"
+                      type="text"
+                      value={Company}
+                      placeholder={"Enter Companyname"}
+                      onChange={(e) => {
+                        setCompany(e.target.value);
+                      }}
+                    />
+                  </Col>
+                  <Col md="6" className="mt-1">
+                    <Label id="gstnumber">GST Number (Optional)</Label>
+                    <Input
+                      id="gstnumber"
+                      name="gstnumber"
+                      maxLength={200}
+                      className="w-100"
+                      type="text"
+                      value={gst}
+                      placeholder={"Enter Your gst Number"}
+                      onChange={(e) => {
+                        setgst(e.target.value);
+                      }}
+                    />
+                  </Col>
+                  <Col md="6" className="mt-1">
+                    <Label id="lastname">Street Address</Label>
+                    <Input
+                      id="StreetAddress"
+                      name="StreetAddress"
+                      maxLength={200}
+                      className="w-100"
+                      type="text"
+                      value={Street}
+                      placeholder={"Enter Street Address"}
+                      onChange={(e) => {
+                        setStreet(e.target.value);
+                      }}
+                    />
+                  </Col>
+                  <Col md="6" className="mt-1">
+                    <Label id="lastname">Town / City</Label>
+                    <Input
+                      id="TownCity"
+                      name="TownCity"
+                      maxLength={200}
+                      className="w-100"
+                      type="text"
+                      value={Town}
+                      placeholder={"Enter Town City"}
+                      onChange={(e) => {
+                        setTown(e.target.value);
+                      }}
+                    />
+                  </Col>
+                  <Col md="6" className="mt-1">
+                    <Label id="lastname">ZIP code</Label>
+                    <Input
+                      id="zipcode"
+                      name="zipcode"
+                      maxLength={200}
+                      className="w-100"
+                      type="text"
+                      value={zipcode}
+                      placeholder={"Enter ZIP code"}
+                      onChange={(e) => {
+                        setzipcode(e.target.value.replace(/\D/g, ""));
+                      }}
+                    />
+                  </Col>
                 </div>
               </form>
             </div>
             <div className="col-lg-5 card-body">
               <h4 className="mb-2">Order Summary</h4>
-              <div className="bg-lighter p-4 rounded mt-4">
-                <p className="mb-1">A simple start for everyone</p>
-                <div className="d-flex align-items-center">
-                  <h1 className="text-heading display-5 mb-1">$59.99</h1>
-                  <sub>/month</sub>
+              <div
+                style={{
+                  backgroundColor: "#F9F9FA",
+                  borderRadius: "1rem",
+                }}
+                className="bg-lighter p-3 mt-4"
+              >
+                <div className="d-flex align-items-center justify-content-center">
+                  <h1 className="text-heading display-5 mb-1">
+                    {`₹ ${planbyid?.price}`}
+                  </h1>
+                  <p
+                    style={{
+                      marginTop: "1rem",
+                      marginLeft: "5px",
+                    }}
+                  >{` for ${planbyid?.planFeature?.validate_days} days`}</p>
                 </div>
-                <div className="d-grid">
+                {/* <div className="d-grid">
                   <button
+                    style={{
+                      backgroundColor: "#E9E7FD",
+                    }}
                     type="button"
                     data-bs-target="#pricingModal"
                     data-bs-toggle="modal"
@@ -154,23 +383,27 @@ const paymentstatus = () => {
                     Change Plan
                   </button>
                 </div>
+                   */}
               </div>
               <div>
                 <div className="d-flex justify-content-between align-items-center mt-3">
                   <p className="mb-0">Subtotal</p>
-                  <h6 className="mb-0">$85.99</h6>
+                  <h4 className="mb-0">{planbyid?.price}</h4>
                 </div>
-                <div className="d-flex justify-content-between align-items-center mt-3">
+                <div className="d-flex justify-content-between align-items-center">
                   <p className="mb-0">Tax</p>
-                  <h6 className="mb-0">$4.99</h6>
+                  <h4 className="mb-0">{`% ${tax}`}</h4>
                 </div>
                 <hr />
-                <div className="d-flex justify-content-between align-items-center mt-3 pb-1">
+                <div className="d-flex justify-content-between align-items-center pb-1">
                   <p className="mb-0">Total</p>
-                  <h6 className="mb-0">$90.98</h6>
+                  <h4 className="mb-0">{`₹ ${TotalAmount}`}</h4>
                 </div>
                 <div className="d-grid mt-3">
-                  <button className="btn btn-success waves-effect waves-light">
+                  <button
+                    onClick={() => handlecreatepayment()}
+                    className="btn btn-success waves-effect waves-light"
+                  >
                     <span className="me-2">Proceed with Payment</span>
                     <i className="ti ti-arrow-right scaleX-n1-rtl" />
                   </button>
