@@ -221,10 +221,25 @@ const Routes = [
     ],
   },
   {
-    // path: "/:slug/payment/preview/:merchantTransactionId",
-    path: "/:slug/payment/preview",
+    path: "/:slug/payment/preview/:merchantTransactionid",
+    // path: "/:slug/payment/preview",
     exact: true,
     component: lazy(() => import("../../views/Pages/Paymentpreiview.js")),
+    permission: [
+      "Admin",
+      "Team Leader",
+      "Public",
+      "BDM",
+      "Recruiter",
+      "Client",
+    ],
+  },
+  {
+    path: "/print",
+    // path: "/:slug/payment/preview",
+    layout: "BlankLayout",
+    exact: true,
+    component: lazy(() => import("../../views/Pages/print.js")),
     permission: [
       "Admin",
       "Team Leader",

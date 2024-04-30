@@ -4,7 +4,8 @@ import actions from "./actions";
 import {
   capturePayment,
   createOrderInstance,
-  paymentstatus,
+  createPayment,
+  getPaymentDetails,
   paymentSuccessfulMail,
 } from "../../apis/payment";
 import { store } from "./../store";
@@ -105,7 +106,7 @@ export function* WATCH_PAYMENT_STATUS(action) {
 export function* WATCH_CREATE_PAYMENT(action) {
   try {
     setLoading(true);
-    const resp = yield paymentstatus(action.payload);
+    const resp = yield createPayment(action.payload);
     if (resp) {
       window.open(resp?.data);
 
@@ -123,6 +124,25 @@ export function* WATCH_CREATE_PAYMENT(action) {
     setLoading(false);
   }
 }
+export function* WATCH_GET_PAYMENTS_DETAILS(action) {
+  try {
+    setLoading(true);
+    const resp = yield getPaymentDetails(action.payload);
+    if (resp) {
+      yield put({
+        type: actions.PAYMENT_SET_STATE,
+        payload: {
+          paymentDetails: resp,
+        },
+      });
+      
+      setLoading(false);
+      // toast.success("Your Plan Upgrade Successfully.");
+    }
+  } catch (err) {
+    setLoading(false);
+  }
+}
 
 export default function* rootSaga() {
   yield all([
@@ -131,5 +151,6 @@ export default function* rootSaga() {
     takeEvery(actions.PAYMENT_SUCCESSFUL_MAIL, WATCH_PAYMENT_SUCCESSFUL_MAIL),
     takeEvery(actions.PAYMENT_STATUS, WATCH_PAYMENT_STATUS),
     takeEvery(actions.CREATE_PAYMENT, WATCH_CREATE_PAYMENT),
+    takeEvery(actions.GET_PAYMENTS_DETAILS, WATCH_GET_PAYMENTS_DETAILS),
   ]);
 }

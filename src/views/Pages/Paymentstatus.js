@@ -31,8 +31,8 @@ const paymentstatus = () => {
   const [Mobilenumber, setMobilenumber] = useState("");
   const [Company, setCompany] = useState("");
   const [gst, setgst] = useState("");
+  const [pannumber, setpannumber] = useState("");
   const [Street, setStreet] = useState("");
-  const [Town, setTown] = useState("");
   const [zipcode, setzipcode] = useState("");
   const [selectedState, setSelectedState] = useState();
   const [selectedCity, setSelectedCity] = useState();
@@ -88,30 +88,29 @@ const paymentstatus = () => {
       return tostify("Please Enter Valid First Name", error);
     else if (lastname?.length < 2 || lastname === undefined)
       return tostify(" Please Enter Valid Last Name", error);
-    else if (
-      selectedState?.value == undefined ||
-      selectedState?.isoCode == undefined ||
-      selectedState?.label == undefined ||
-      selectedState?.length === 0 ||
-      selectedState == ""
-    )
-      return tostify("Please Enter Valid State", error);
-    else if (
-      selectedCity?.value == undefined ||
-      selectedCity?.stateCode == undefined ||
-      selectedCity?.label == undefined ||
-      selectedCity?.length === 0 ||
-      selectedCity == ""
-    )
-      return tostify("Please Enter Valid City", error);
+ 
     else if (!email || regex.test(email) === false)
       return tostify("  Please Enter Valid Email", error);
     else if (Mobilenumber?.length !== 10 || Mobilenumber === undefined)
       return tostify("Please Enter Valid Mobile Number", error);
+      else if (
+        selectedState?.value == undefined ||
+        selectedState?.isoCode == undefined ||
+        selectedState?.label == undefined ||
+        selectedState?.length === 0 ||
+        selectedState == ""
+      )
+        return tostify("Please Enter Valid State", error);
+      else if (
+        selectedCity?.value == undefined ||
+        selectedCity?.stateCode == undefined ||
+        selectedCity?.label == undefined ||
+        selectedCity?.length === 0 ||
+        selectedCity == ""
+      )
+        return tostify("Please Enter Valid City", error);
     else if (Street === undefined || Street?.length === 0)
       return tostify("Please Enter Street Address", error);
-    else if (Town === undefined || Town?.length === 0)
-      return tostify("Please Enter Town Address", error);
     else if (zipcode?.length < 5 || zipcode === undefined)
       return tostify("Please Enter Valid zipcode", error);
 
@@ -124,15 +123,16 @@ const paymentstatus = () => {
         type: actions.CREATE_PAYMENT,
         payload: {
           TotalAmount,
+          price:planbyid?.price,
           tax,
           planbyid,
           zipcode,
-          Town,
-          Street,
+          pannumber,
+          address:Street,
           Company,
           email,
           lastname,
-          planId: params,
+          planId: params?.id,
           firstname,
           Mobilenumber,
           city: selectedCity,
@@ -274,9 +274,24 @@ const paymentstatus = () => {
                     />
                   </Col>
                   <Col md="6" className="mt-1">
+                    <Label id="pannumber">Pan number (Optional)</Label>
+                    <Input
+                      id="pannumber"
+                      name="pannumber"
+                      maxLength={200}
+                      className="w-100"
+                      type="text"
+                      value={pannumber}
+                      placeholder={"Enter Your gst Number"}
+                      onChange={(e) => {
+                        setpannumber(e.target.value);
+                      }}
+                    />
+                  </Col>
+                  <Col md="6" className="mt-1">
                     <Label>State</Label>
                     <Select
-                      menuPlacement="auto"
+                      menuPlacement="top"
                       id="state"
                       value={selectedState}
                       placeholder={"Select State"}
@@ -292,7 +307,7 @@ const paymentstatus = () => {
                   <Col md="6" className="mt-1">
                     <Label for="role-select">City</Label>
                     <Select
-                      menuPlacement="auto"
+                      menuPlacement="top"
                       id="city"
                       value={selectedCity}
                       placeholder={"Select City"}
@@ -305,7 +320,7 @@ const paymentstatus = () => {
                     />
                   </Col>
                   <Col md="6" className="mt-1">
-                    <Label id="lastname">Street Address</Label>
+                    <Label id="address">Address</Label>
                     <Input
                       id="StreetAddress"
                       name="StreetAddress"
@@ -313,24 +328,9 @@ const paymentstatus = () => {
                       className="w-100"
                       type="text"
                       value={Street}
-                      placeholder={"Enter Street Address"}
+                      placeholder={"Enter Address"}
                       onChange={(e) => {
                         setStreet(e.target.value);
-                      }}
-                    />
-                  </Col>
-                  <Col md="6" className="mt-1">
-                    <Label id="lastname">Town / City</Label>
-                    <Input
-                      id="TownCity"
-                      name="TownCity"
-                      maxLength={200}
-                      className="w-100"
-                      type="text"
-                      value={Town}
-                      placeholder={"Enter Town City"}
-                      onChange={(e) => {
-                        setTown(e.target.value);
                       }}
                     />
                   </Col>
