@@ -132,6 +132,7 @@ const paymentstatus = () => {
           Company,
           email,
           lastname,
+          planId: params,
           firstname,
           Mobilenumber,
           city: selectedCity,
@@ -211,37 +212,7 @@ const paymentstatus = () => {
                       }}
                     />
                   </Col>
-                  <Col md="6" className="mt-1">
-                    <Label>State</Label>
-                    <Select
-                      menuPlacement="auto"
-                      id="state"
-                      value={selectedState}
-                      placeholder={"Select State"}
-                      options={states}
-                      className="react-select"
-                      classNamePrefix="select"
-                      onChange={(e) => {
-                        setSelectedState(e);
-                        setSelectedCity("");
-                      }}
-                    />
-                  </Col>
-                  <Col md="6" className="mt-1">
-                    <Label for="role-select">City</Label>
-                    <Select
-                      menuPlacement="auto"
-                      id="city"
-                      value={selectedCity}
-                      placeholder={"Select City"}
-                      options={cities}
-                      className="react-select"
-                      classNamePrefix="select"
-                      onChange={(e) => {
-                        setSelectedCity(e);
-                      }}
-                    />
-                  </Col>
+
                   <Col md="6" className="mt-1">
                     <Label id="lastname">Email Address</Label>
                     <Input
@@ -299,6 +270,37 @@ const paymentstatus = () => {
                       placeholder={"Enter Your gst Number"}
                       onChange={(e) => {
                         setgst(e.target.value);
+                      }}
+                    />
+                  </Col>
+                  <Col md="6" className="mt-1">
+                    <Label>State</Label>
+                    <Select
+                      menuPlacement="auto"
+                      id="state"
+                      value={selectedState}
+                      placeholder={"Select State"}
+                      options={states}
+                      className="react-select"
+                      classNamePrefix="select"
+                      onChange={(e) => {
+                        setSelectedState(e);
+                        setSelectedCity("");
+                      }}
+                    />
+                  </Col>
+                  <Col md="6" className="mt-1">
+                    <Label for="role-select">City</Label>
+                    <Select
+                      menuPlacement="auto"
+                      id="city"
+                      value={selectedCity}
+                      placeholder={"Select City"}
+                      options={cities}
+                      className="react-select"
+                      classNamePrefix="select"
+                      onChange={(e) => {
+                        setSelectedCity(e);
                       }}
                     />
                   </Col>

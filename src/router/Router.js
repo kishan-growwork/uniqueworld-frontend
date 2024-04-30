@@ -206,6 +206,7 @@ const Router = () => {
               return <PublicCandidate />;
             }}
           />
+
           <Route
             path="/login"
             exact

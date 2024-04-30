@@ -221,6 +221,20 @@ const Routes = [
     ],
   },
   {
+    // path: "/:slug/payment/preview/:merchantTransactionId",
+    path: "/:slug/payment/preview",
+    exact: true,
+    component: lazy(() => import("../../views/Pages/Paymentpreiview.js")),
+    permission: [
+      "Admin",
+      "Team Leader",
+      "Public",
+      "BDM",
+      "Recruiter",
+      "Client",
+    ],
+  },
+  {
     path: "/resetpassword",
     exact: true,
     component: lazy(() => import("../../views/Pages/ResetPassword")),
