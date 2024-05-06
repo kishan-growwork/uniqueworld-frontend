@@ -18,7 +18,7 @@ function Paymentstatus() {
     fetchPaymentStatus();
   }, []);
   const details = useSelector(
-    (state) => state?.payment?.paymentDetails?.response?.response
+    (state) => state?.payment?.paymentstatus?.response?.response
   );
   const slug = localStorage.getItem("slug");
   const history = useHistory();
