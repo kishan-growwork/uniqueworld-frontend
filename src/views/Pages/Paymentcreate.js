@@ -87,7 +87,7 @@ const Paymentcreate = () => {
     getStates();
   }, []);
 
-  let TotalAmount;
+  let TotalAmount = 0;
   let tax = process.env.REACT_APP_TAX_PERSENTAGE;
 
   if (planbyid && planbyid.price !== undefined) {
@@ -349,7 +349,7 @@ const Paymentcreate = () => {
                     />
                   </Col>
                   <Col md="6" className="mt-1">
-                    <Label id="lastname">ZIP code</Label>
+                    <Label id="lastname">Pin Code</Label>
                     <Input
                       id="zipcode"
                       name="zipcode"
@@ -357,7 +357,7 @@ const Paymentcreate = () => {
                       className="w-100"
                       type="text"
                       value={zipcode}
-                      placeholder={"Enter ZIP code"}
+                      placeholder={"Enter Pin Code"}
                       onChange={(e) => {
                         setzipcode(e.target.value.replace(/\D/g, ""));
                       }}
