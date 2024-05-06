@@ -10,7 +10,7 @@ import {
   paymentSuccessfulMail,
 } from "../../apis/payment";
 import { store } from "./../store";
-import { toast } from "react-toastify";
+import { tostifyError } from "../../components/Tostify";
 
 async function setLoading(loading) {
   store.dispatch({
@@ -111,19 +111,22 @@ export function* WATCH_CREATE_PAYMENT(action) {
   try {
     setLoading(true);
     const resp = yield createPayment(action.payload);
-    if (resp) {
+
+    if (!resp.data) {
       window.open(resp?.data);
-
-      // yield put({
-      //   type: actions.PAYMENT_SET_STATE,
-      //   payload: {
-      //     paymentstatus: resp,
-      //   },
-      // });
-
       setLoading(false);
-      // toast.success("Your Plan Upgrade Successfully.");
+    } else {
+      tostifyError("something failed");
     }
+
+    // yield put({
+    //   type: actions.PAYMENT_SET_STATE,
+    //   payload: {
+    //     paymentstatus: resp,
+    //   },
+    // });
+
+    // toast.success("Your Plan Upgrade Successfully.");
   } catch (err) {
     setLoading(false);
   }
