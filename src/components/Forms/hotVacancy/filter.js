@@ -117,9 +117,6 @@ const Filter = ({
       document.removeEventListener("keydown", keyDownHandler);
     };
   }, []);
-  console.info("-------------------------------");
-  console.info("filter => ", filter);
-  console.info("-------------------------------");
   const genderOptions = [
     { value: "male", id: "gender", label: "Male" },
     { value: "female", id: "gender", label: "Female" },
@@ -308,7 +305,6 @@ const Filter = ({
                 classNamePrefix="select"
                 theme={selectThemeColors}
                 onChange={(e) => {
-                
                   setFilter({
                     ...filter,
                     ["salaryRangeStart"]: e.start,

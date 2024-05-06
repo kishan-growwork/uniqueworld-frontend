@@ -1,107 +1,192 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom/cjs/react-router-dom";
+import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom";
 import actions from "../../redux/payment/actions";
 
 const Paymentpreiview = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const params = useParams();
   const details = useSelector(
-    (state) => state?.payment?.paymentDetails?.response
+    (state) => state?.payment?.paymentstatus?.response
   );
-  let invoiceto = ""
-  if(details?.Company!==null&&details?.Company!==""&&details?.Company!==null){
-    invoiceto = details?.Company
+  let invoiceto = "";
+  if (
+    details?.Company !== null &&
+    details?.Company !== "" &&
+    details?.Company !== "null"
+  ) {
+    invoiceto = details?.Company;
+  } else {
+    invoiceto = `${
+      details?.firstname && details?.firstname != null
+        ? details?.firstname
+        : null
+    } ${
+      details?.lastname && details?.lastname != null ? details?.lastname : null
+    }`;
   }
-  else{
-    invoiceto = `${details?.firstname} ${details?.lastname}`
-  }
-  console.info("--------------------");
-  console.info("details => ", details);
-  console.info("--------------------");
-  // const agencysaddress =
-  //   "335-336, Fortune High Street, Green City Road, Near Madhuvan Circle, Adajan, Surat - 395009";
-  useEffect(async () => {
-    await dispatch({
-      type: actions.GET_PAYMENTS_DETAILS,
-      payload: { transactionId: params?.merchantTransactionid },
-    });
+  const slug = localStorage.getItem("slug");
+  useEffect(() => {
+    const fetchPaymentDetails = async () => {
+      await dispatch({
+        type: actions.GET_PAYMENTS_DETAILS,
+        payload: { transactionId: params?.merchantTransactionid },
+      });
+    };
+    fetchPaymentDetails();
   }, []);
   return (
     <>
-      <div>
+      <div className="d-flex gap-3">
+        <div>
+          <p
+            onClick={() => history.push(`/${slug}/pricing`)}
+            style={{
+              textDecoration: "underline",
+              cursor: "pointer",
+            }}
+          >
+            Go back
+          </p>
+        </div>
+        <div>
+          <button
+            onClick={() =>
+              history.push(`/${slug}/invoice/${params?.merchantTransactionid}`)
+            }
+            style={{
+              textDecoration: "underline",
+              cursor: "pointer",
+              border: "none",
+              backgroundColor: "white",
+            }}
+          >
+            Download PDF
+          </button>
+        </div>
+      </div>
+      <div
+        style={{
+          position: "relative",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            right: "3rem",
+            top: "1rem",
+            zIndex: "99999999999",
+          }}
+        >
+          <h3
+            style={{
+              textAlign: "right",
+            }}
+            className="invoice-title"
+          >
+            <b>Invoice</b>
+          </h3>
+          <p
+            style={{
+              textAlign: "right",
+              marginBottom: "0",
+            }}
+            className="invoice-title"
+          >
+            Invoice no:<b> {`# ${details?.invoicenumber}`}</b>
+          </p>
+          <div className="invoice-date-wrapper d-flex gap-1">
+            <p className="invoice-date-title">Date Issued:</p>
+            <p className="invoice-date">{details?.createdAt?.slice(0, 10)}</p>
+          </div>
+        </div>
         <div className="content-wrapper p-0 animate__animated animate__fadeIn">
           <div className="invoice-preview-wrapper">
             <div className="invoice-preview row">
               <div className="col-sm-12 col-md-12 col-xl-12">
                 <div className="invoice-preview-card card">
                   <div className="invoice-padding pb-0 card-body">
-                    <h4 className="invoice-title">Invoice from:</h4>
                     <div className="d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0">
                       <div>
+                        <p className="mb-25 card-text mt-5"> </p>
+                        <h4 className="invoice-title">From:</h4>
+                        <p className="mb-25 card-text">Unique World</p>
                         <p className="mb-25 card-text">
-                          Trade name: Unique World
+                          335-336, Fortune High Street, <br /> Green City Road,
+                          <br /> Near Madhuvan Circle, <br />
+                          Adajan, Surat - 395009
                         </p>
                         <p className="mb-25 card-text">
                           GST No: 24AMVPG6524E1Z0
                         </p>
-                        <p className="mb-25 card-text">
-                          Address: 335-336, Fortune High Street, <br /> Green
-                          City Road, <br /> Near Madhuvan Circle, <br />
-                          Adajan, Surat - 395009
-                        </p>
-                      </div>
-                      <div className="mt-md-0 mt-2">
-                        <h4 className="invoice-title">
-                          Invoice <span className="invoice-number">#4987</span>
-                        </h4>
-                        <div className="invoice-date-wrapper d-flex gap-1">
-                          <p className="invoice-date-title">Date Issued:</p>
-                          <p className="invoice-date">
-                            {details?.createdAt?.slice(0, 10)}
-                          </p>
-                        </div>
                       </div>
                     </div>
                   </div>
                   <hr className="invoice-spacing" />
                   <div className="d-flex justify-content-between px-2">
-                  <div>
-                    <div className="d-flex justify-content-between flex-md-row flex-column invoice-spacing mb-2">
-                      <div>
-                    <h4 className="invoice-title">Invoice to:</h4>
-                        <p className="mb-25 card-text">
-                          Trade name: {invoiceto}
-                        </p>
-                        <p className="mb-25 card-text">
-                          GST No: 24AMVPG6524E1Z0
-                        </p>
-                        <p className="mb-25 card-text">
-                          Address: 335-336, Fortune High Street, <br /> Green
-                          City Road, <br /> Near Madhuvan Circle, <br />
-                          Adajan, Surat - 395009
-                        </p>
+                    <div>
+                      <div className="d-flex justify-content-between flex-md-row flex-column invoice-spacing mb-2">
+                        <div>
+                          <h4 className="invoice-title">To:</h4>
+                          <p className="mb-25 card-text">{invoiceto}</p>
+                          <p class="mb-25 card-text">
+                            {details?.gst !== "" &&
+                            details?.gst !== null &&
+                            details?.gst !== undefined
+                              ? `GST No: ${details?.gst}`
+                              : null}
+                          </p>
+
+                          <p className="mb-25 card-text">
+                            State: {details?.state}
+                          </p>
+                          <p className="mb-25 card-text">
+                            City: {details?.city}
+                          </p>
+                          <p className="mb-25 card-text">
+                            Address: {details?.address}
+                          </p>
+                          <p className="mb-25 card-text">
+                            pincode: {details?.pincode}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div>
-                    <div className="d-flex justify-content-between flex-md-row flex-column invoice-spacing mb-2">
-                      <div>
-                    <h4 className="invoice-title">Invoice from:</h4>
-                        <p className="mb-25 card-text">
-                          Trade name:
-                        </p>
-                        <p className="mb-25 card-text">
-                          GST No: 24AMVPG6524E1Z0
-                        </p>
-                        <p className="mb-25 card-text">
-                          Address: 335-336, Fortune High Street, <br /> Green
-                          City Road, <br /> Near Madhuvan Circle, <br />
-                          Adajan, Surat - 395009
-                        </p>
+                    <div>
+                      <div className="d-flex justify-content-between flex-md-row flex-column invoice-spacing mb-2">
+                        <div>
+                          <h4 className="invoice-title">Payment Details:</h4>
+                          <p className="mb-25 card-text">
+                            Payment state:
+                            <span
+                              style={
+                                details?.response?.data?.state == "COMPLETED"
+                                  ? {
+                                      color: "green",
+                                      fontWeight: "bold",
+                                    }
+                                  : { color: "red" }
+                              }
+                            >
+                              {details?.response?.data?.state}
+                            </span>
+                          </p>
+                          <p className="mb-25 card-text">
+                            Type:{" "}
+                            {details?.response?.data?.paymentInstrument?.type}
+                          </p>
+                          <p className="mb-25 card-text">
+                            MerchantTransactionId: <br />
+                            {details?.response?.data?.merchantTransactionId}
+                          </p>
+                          <p className="mb-25 card-text">
+                            TransactionId: <br />
+                            {details?.response?.data?.transactionId}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
                   </div>
                   <div className="table-responsive">
                     <table className="table">
@@ -133,67 +218,12 @@ const Paymentpreiview = () => {
                       </tbody>
                     </table>
                   </div>
-                  {/* <div className="invoice-padding pb-0 card-body">
-                    <div className="invoice-sales-total-wrapper row">
-                      <div
-                        order="[object Object]"
-                        className="mt-md-0 mt-3 col-md-6"
-                      >
-                        <p className="mb-0 card-text">
-                          <span className="fw-bold">Salesperson:</span>{" "}
-                          <span className="ms-75">Alfie Solomons</span>
-                        </p>
-                      </div>
-                      {/* <div className="d-flex justify-content-end col-md-6">
-                        <div className="invoice-total-wrapper gap-3">
-                          <div className="invoice-total-item gap-4 d-flex justify-content-between">
-                            <p className="invoice-total-title">Subtotal:</p>
-                            <p className="invoice-total-amount">$1800</p>
-                          </div>
-                          <div className="invoice-total-item d-flex justify-content-between">
-                            <p className="invoice-total-title">Discount:</p>
-                            <p className="invoice-total-amount">$28</p>
-                          </div>
-                          <div className="invoice-total-item d-flex justify-content-between">
-                            <p className="invoice-total-title">Tax:</p>
-                            <p className="invoice-total-amount">21%</p>
-                          </div>
-                          <hr className="my-50" />
-                          <div className="invoice-total-item d-flex justify-content-between">
-                            <p className="invoice-total-title">Total:</p>
-                            <p className="invoice-total-amount">$1690</p>
-                          </div>
-                        </div>
-                      </div> */}
-                  {/* </div>
-                  </div> */}
-                  {/* <div className="invoice-padding pt-0 card-body">
-                    <div className="row">
-                      <div className="col-sm-12">
-                        <span className="fw-bold">Note: </span>
-                        <span>
-                          It was a pleasure working with you and your team. We
-                          hope you will keep us in mind for future freelance
-                          projects. Thank You!
-                        </span>
-                      </div>
-                    </div>
-                  </div> */}
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {/* <div className="col-sm-12 col-md-4 col-xl-3">
-        <div className="invoice-action-wrapper card">
-          <div className="card-body justify-content-center align-items-center">
-            <button className="mb-75 btn btn-outline-secondary d-block w-100">
-              Download
-            </button>
-          </div>
-        </div>
-      </div> */}
     </>
   );
 };

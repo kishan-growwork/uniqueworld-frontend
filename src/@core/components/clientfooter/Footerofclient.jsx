@@ -16,9 +16,6 @@ const FooterOfClient = () => {
     fetchData();
   }, []);
   const location = useLocation().pathname;
-  console.info("-------------------------------");
-  console.info("location => ", location);
-  console.info("-------------------------------");
 
   return role === "Client" ? (
     <>

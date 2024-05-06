@@ -6,6 +6,7 @@ import {
   createOrderInstance,
   createPayment,
   getPaymentDetails,
+  // paymentstatus,
   paymentSuccessfulMail,
 } from "../../apis/payment";
 import { store } from "./../store";
@@ -88,12 +89,15 @@ export function* WATCH_PAYMENT_SUCCESSFUL_MAIL(action) {
 export function* WATCH_PAYMENT_STATUS(action) {
   try {
     setLoading(true);
-    const resp = yield paymentstatus(action.payload);
+    const resp = yield paymentstatus(action.payload); //after the api is working this need to be uncommented
+    // const resp = yield getPaymentDetails(action.payload); // this need to be commented
+
     if (resp) {
       yield put({
         type: actions.PAYMENT_SET_STATE,
         payload: {
           paymentstatus: resp,
+          // paymentDetails: resp,
         },
       });
       setLoading(false);
@@ -116,7 +120,7 @@ export function* WATCH_CREATE_PAYMENT(action) {
       //     paymentstatus: resp,
       //   },
       // });
-      
+
       setLoading(false);
       // toast.success("Your Plan Upgrade Successfully.");
     }
@@ -135,7 +139,7 @@ export function* WATCH_GET_PAYMENTS_DETAILS(action) {
           paymentDetails: resp,
         },
       });
-      
+
       setLoading(false);
       // toast.success("Your Plan Upgrade Successfully.");
     }

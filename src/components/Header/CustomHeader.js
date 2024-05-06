@@ -46,9 +46,6 @@ const CustomHeader = ({
   const [composeOpen, setComposeOpen] = useState(false);
   const slug = localStorage.getItem("slug");
   const auth = useSelector((state) => state?.auth);
-  console.info("----------------------------");
-  console.info("auth =>", auth?.user?.agency?.isDownloadAble);
-  console.info("----------------------------");
   // useEffect(() => {
   //   if (filterData?.mobile) {
   //     setMobile(filterData?.mobile);

@@ -208,9 +208,9 @@ const Routes = [
     permission: ["Admin", "Team Leader", "Public", "BDM", "Recruiter"],
   },
   {
-    path: "/:slug/paymentstatus/:id",
+    path: "/:slug/payment/create/:id",
     exact: true,
-    component: lazy(() => import("../../views/Pages/Paymentstatus.js")),
+    component: lazy(() => import("../../views/Pages/Paymentcreate.js")),
     permission: [
       "Admin",
       "Team Leader",
@@ -228,18 +228,32 @@ const Routes = [
     permission: [
       "Admin",
       "Team Leader",
-      "Public",
+      // "Public",
       "BDM",
       "Recruiter",
       "Client",
     ],
   },
   {
-    path: "/print",
+    path: "/:slug/invoice/:merchantTransactionid",
     // path: "/:slug/payment/preview",
-    layout: "BlankLayout",
     exact: true,
-    component: lazy(() => import("../../views/Pages/print.js")),
+    layout: "BlankLayout",
+    component: lazy(() => import("../../views/Pages/Invoice.js")),
+    permission: [
+      "Admin",
+      "Team Leader",
+      // "Public",
+      "BDM",
+      "Recruiter",
+      "Client",
+    ],
+  },
+  {
+    path: "/:slug/payment/status/:merchantTransactionid",
+    // path: "/:slug/payment/preview",
+    exact: true,
+    component: lazy(() => import("../../views/Pages/Paymentstatus.js")),
     permission: [
       "Admin",
       "Team Leader",

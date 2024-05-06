@@ -80,7 +80,10 @@ const canvasStyles = {
   left: 0,
 };
 
-const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false }) => {
+const SecondPage = ({
+  isSavedCandidates = false,
+  bestMatchesCandidate = false,
+}) => {
   const { width } = useBreakpoint();
   const colRef = useRef(null);
   const history = useHistory();
@@ -144,9 +147,9 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
   const [currentPage, setCurrentPage] = useState(1);
   const [showWPModal, setShowWPModal] = useState(false);
 
-  console.info('--------------------')
-  console.info('totalRows => ', totalRows )
-  console.info('--------------------')
+  console.info("--------------------");
+  console.info("totalRows => ", totalRows);
+  console.info("--------------------");
 
   // useLayoutEffect(() => {
   //   // if (bestMatchesCandidate) {
@@ -156,7 +159,6 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
   //     });
   //   // }
   // }, [isBestMatches])
-  
 
   const toggle = (index) => {
     const newCollapseStates = [...isOpen];
@@ -220,8 +222,7 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
       setCandidateList(bestMatchesCandidates?.results);
       setLoading(false);
     }
-  }, [bestMatchesCandidates])
-  
+  }, [bestMatchesCandidates]);
 
   const getCandidates = async (page) => {
     setLoading(true);
@@ -356,7 +357,7 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
     } else {
       setTotalRows(candidates.total);
     }
-  }, [bestMatchesCandidates,candidates]);
+  }, [bestMatchesCandidates, candidates]);
 
   const interviewRequest = async (candidate) => {
     dispatch({
@@ -548,7 +549,6 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
         else if (row?.interviewStatus === "shortlisted") color = "info";
         else if (row?.interviewStatus === "trail") color = "dark";
         else if (row?.interviewStatus === "reschedule") color = "warning";
-
         return (
           <Badge
             Badge
@@ -1560,6 +1560,8 @@ const SecondPage = ({ isSavedCandidates = false, bestMatchesCandidate = false })
           />
           <ModalBody>
             You Can't Download Resume More Than 5, Please Upgrade Your Plan!!
+            <br />
+            Contact :{` ${auth?.user?.agency?.phoneNumber}`}
           </ModalBody>
           <ModalFooter>
             <Button

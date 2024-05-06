@@ -1,422 +1,142 @@
-import { City, State } from "country-state-city";
-import React, { useEffect, useState } from "react";
-import Select from "react-select";
-// import planActions from "../../../redux/plan/actions";
-import planActions from "../../redux/plan/actions";
-import { tostify } from "../../components/Tostify";
-import actions from "../../redux/payment/actions";
-
-import {
-  Row,
-  Col,
-  Card,
-  Input,
-  Label,
-  CardBody,
-  CardTitle,
-  CardHeader,
-  Button,
-} from "reactstrap";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom/cjs/react-router-dom";
+import actions from "../../redux/payment/actions";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { ImCross } from "react-icons/im";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 
-const paymentstatus = () => {
-  const params = useParams();
+function Paymentstatus() {
   const dispatch = useDispatch();
-  const [cities, setCities] = useState([]);
-  const [states, setStates] = useState([]);
-  const [firstname, setfirstname] = useState("");
-  const [lastname, setlastname] = useState("");
-  const [email, setemail] = useState("");
-  const [Mobilenumber, setMobilenumber] = useState("");
-  const [Company, setCompany] = useState("");
-  const [gst, setgst] = useState("");
-  const [pannumber, setpannumber] = useState("");
-  const [Street, setStreet] = useState("");
-  const [zipcode, setzipcode] = useState("");
-  const [selectedState, setSelectedState] = useState();
-  const [selectedCity, setSelectedCity] = useState();
-  const { planbyid } = useSelector((state) => state?.plans);
-
+  const params = useParams();
   useEffect(() => {
-    dispatch({
-      type: planActions.GET_PLAN_BY_ID,
-      payload: params,
-    });
-  }, []);
-
-  useEffect(() => {
-    states?.map((ele) => {
-      ele.label = ele.name;
-      ele.value = ele.name;
-      ele.key = "state";
-    });
-  }, [states]);
-  useEffect(() => {
-    cities?.map((ele) => {
-      ele.label = ele.name;
-      ele.value = ele.name;
-      ele.key = "city";
-    });
-  }, [cities]);
-  useEffect(() => {
-    const getStates = async () => {
-      try {
-        const result = await State.getStatesOfCountry("IN");
-        setStates(result);
-      } catch (error) {
-        setStates([]);
-      }
-    };
-
-    getStates();
-  }, []);
-
-  let TotalAmount;
-  let tax = process.env.REACT_APP_TAX_PERSENTAGE;
-
-  if (planbyid && planbyid.price !== undefined) {
-    let taxAmount = (planbyid.price * tax) / 100;
-    TotalAmount = Math.round(Number(planbyid.price) + Number(taxAmount));
-  }
-
-  const Validations = async () => {
-    const error = false;
-    const regex =
-      /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    if (firstname?.length < 2 || firstname === undefined)
-      return tostify("Please Enter Valid First Name", error);
-    else if (lastname?.length < 2 || lastname === undefined)
-      return tostify(" Please Enter Valid Last Name", error);
- 
-    else if (!email || regex.test(email) === false)
-      return tostify("  Please Enter Valid Email", error);
-    else if (Mobilenumber?.length !== 10 || Mobilenumber === undefined)
-      return tostify("Please Enter Valid Mobile Number", error);
-      else if (
-        selectedState?.value == undefined ||
-        selectedState?.isoCode == undefined ||
-        selectedState?.label == undefined ||
-        selectedState?.length === 0 ||
-        selectedState == ""
-      )
-        return tostify("Please Enter Valid State", error);
-      else if (
-        selectedCity?.value == undefined ||
-        selectedCity?.stateCode == undefined ||
-        selectedCity?.label == undefined ||
-        selectedCity?.length === 0 ||
-        selectedCity == ""
-      )
-        return tostify("Please Enter Valid City", error);
-    else if (Street === undefined || Street?.length === 0)
-      return tostify("Please Enter Street Address", error);
-    else if (zipcode?.length < 5 || zipcode === undefined)
-      return tostify("Please Enter Valid zipcode", error);
-
-    return error;
-  };
-  async function handlecreatepayment() {
-    const err = await Validations();
-    if (err === false) {
+    const fetchPaymentStatus = async () => {
       await dispatch({
-        type: actions.CREATE_PAYMENT,
-        payload: {
-          TotalAmount,
-          price:planbyid?.price,
-          tax,
-          planbyid,
-          zipcode,
-          pannumber,
-          address:Street,
-          Company,
-          email,
-          lastname,
-          planId: params?.id,
-          firstname,
-          Mobilenumber,
-          city: selectedCity,
-          state: selectedState,
-        },
+        type: actions.PAYMENT_STATUS,
+        payload: { transactionId: params?.merchantTransactionid },
       });
-      // window.open(res?.data);
-      // setIsOpenPaymentQR(true);
-    }
-  }
-
-  useEffect(() => {
-    const getCities = async () => {
-      try {
-        const result = await City.getCitiesOfState(
-          "IN",
-          selectedState?.isoCode
-        );
-        setCities(result);
-      } catch (error) {
-        setCities([]);
-      }
     };
-
-    getCities();
-  }, [selectedState]);
+    fetchPaymentStatus();
+  }, []);
+  const details = useSelector(
+    (state) => state?.payment?.paymentDetails?.response?.response
+  );
+  const slug = localStorage.getItem("slug");
+  const history = useHistory();
   return (
     <>
       <div
         style={{
-          display: "flex",
-          justifyContent: "center",
-          borderRadius: "1rem",
+          backgroundColor: "#f7fafc",
+          marginTop: "5rem",
         }}
-        className="container mt-2"
       >
         <div
           style={{
-            backgroundColor: "white",
-            borderRadius: "1rem",
-            boxShadow: "0 4px 24px 0 rgba(34, 41, 47, 0.1)",
+            backgroundColor: "#ffffff",
+            padding: "24px",
+            margin: "0 auto",
+            maxWidth: "768px",
+            borderRadius: "2rem",
+            boxShadow: " rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
+            textAlign: "center",
           }}
-          className="px-3"
         >
-          <div className="row">
-            <div className="col-lg-7 card-body border-end">
-              <h4 className="mt-2 mb-4">Billing Details</h4>
-              <form>
-                <div className="row g-3">
-                  <Col md="6" className="mt-1">
-                    <Label id="firstname">First Name</Label>
-                    <Input
-                      id="firstname"
-                      name="firstname"
-                      maxLength={200}
-                      className="w-100"
-                      type="text"
-                      value={firstname}
-                      placeholder={"Enter FirstName"}
-                      onChange={(e) => {
-                        setfirstname(e.target.value);
-                      }}
-                    />
-                  </Col>
-                  <Col md="6" className="mt-1">
-                    <Label id="lastname">Last Name</Label>
-                    <Input
-                      id="lastname"
-                      name="lastname"
-                      maxLength={200}
-                      className="w-100"
-                      type="text"
-                      value={lastname}
-                      placeholder={"Enter lastname"}
-                      onChange={(e) => {
-                        setlastname(e.target.value);
-                      }}
-                    />
-                  </Col>
-
-                  <Col md="6" className="mt-1">
-                    <Label id="lastname">Email Address</Label>
-                    <Input
-                      id="Email"
-                      name="Email"
-                      maxLength={200}
-                      className="w-100"
-                      type="email"
-                      value={email}
-                      placeholder={"Enter Email"}
-                      onChange={(e) => {
-                        setemail(e.target.value);
-                      }}
-                    />
-                  </Col>
-                  <Col md="6" className="mt-1">
-                    <Label id="mobile">Mobile Number</Label>
-                    <Input
-                      id="mobile"
-                      name="mobile"
-                      maxLength={200}
-                      className="w-100"
-                      type="text"
-                      value={Mobilenumber}
-                      placeholder={"Enter Mobile Number"}
-                      onChange={(e) => {
-                        setMobilenumber(e.target.value.replace(/\D/g, ""));
-                      }}
-                    />
-                  </Col>
-                  <Col md="6" className="mt-1">
-                    <Label id="lastname">Company name (Optional)</Label>
-                    <Input
-                      id="Companyname"
-                      name="Companyname"
-                      maxLength={200}
-                      className="w-100"
-                      type="text"
-                      value={Company}
-                      placeholder={"Enter Companyname"}
-                      onChange={(e) => {
-                        setCompany(e.target.value);
-                      }}
-                    />
-                  </Col>
-                  <Col md="6" className="mt-1">
-                    <Label id="gstnumber">GST Number (Optional)</Label>
-                    <Input
-                      id="gstnumber"
-                      name="gstnumber"
-                      maxLength={200}
-                      className="w-100"
-                      type="text"
-                      value={gst}
-                      placeholder={"Enter Your gst Number"}
-                      onChange={(e) => {
-                        setgst(e.target.value);
-                      }}
-                    />
-                  </Col>
-                  <Col md="6" className="mt-1">
-                    <Label id="pannumber">Pan number (Optional)</Label>
-                    <Input
-                      id="pannumber"
-                      name="pannumber"
-                      maxLength={200}
-                      className="w-100"
-                      type="text"
-                      value={pannumber}
-                      placeholder={"Enter Your gst Number"}
-                      onChange={(e) => {
-                        setpannumber(e.target.value);
-                      }}
-                    />
-                  </Col>
-                  <Col md="6" className="mt-1">
-                    <Label>State</Label>
-                    <Select
-                      menuPlacement="top"
-                      id="state"
-                      value={selectedState}
-                      placeholder={"Select State"}
-                      options={states}
-                      className="react-select"
-                      classNamePrefix="select"
-                      onChange={(e) => {
-                        setSelectedState(e);
-                        setSelectedCity("");
-                      }}
-                    />
-                  </Col>
-                  <Col md="6" className="mt-1">
-                    <Label for="role-select">City</Label>
-                    <Select
-                      menuPlacement="top"
-                      id="city"
-                      value={selectedCity}
-                      placeholder={"Select City"}
-                      options={cities}
-                      className="react-select"
-                      classNamePrefix="select"
-                      onChange={(e) => {
-                        setSelectedCity(e);
-                      }}
-                    />
-                  </Col>
-                  <Col md="6" className="mt-1">
-                    <Label id="address">Address</Label>
-                    <Input
-                      id="StreetAddress"
-                      name="StreetAddress"
-                      maxLength={200}
-                      className="w-100"
-                      type="text"
-                      value={Street}
-                      placeholder={"Enter Address"}
-                      onChange={(e) => {
-                        setStreet(e.target.value);
-                      }}
-                    />
-                  </Col>
-                  <Col md="6" className="mt-1">
-                    <Label id="lastname">ZIP code</Label>
-                    <Input
-                      id="zipcode"
-                      name="zipcode"
-                      maxLength={10}
-                      className="w-100"
-                      type="text"
-                      value={zipcode}
-                      placeholder={"Enter ZIP code"}
-                      onChange={(e) => {
-                        setzipcode(e.target.value.replace(/\D/g, ""));
-                      }}
-                    />
-                  </Col>
-                </div>
-              </form>
-            </div>
-            <div className="col-lg-5 card-body">
-              <h4 className="mb-2">Order Summary</h4>
-              <div
+          {details?.code == "PAYMENT_SUCCESS" ? (
+            <svg
+              viewBox="0 0 24 24"
+              style={{
+                color: "green",
+                fill: "#34d399",
+                width: "64px",
+                height: "70px",
+                margin: "0 auto 24px",
+                display: "block",
+              }}
+            >
+              <path
+                fill="currentColor"
+                d="M12,0A12,12,0,1,0,24,12,12.014,12.014,0,0,0,12,0Zm6.927,8.2-6.845,9.289a1.011,1.011,0,0,1-1.43.188L5.764,13.769a1,1,0,1,1,1.25-1.562l4.076,3.261,6.227-8.451A1,1,0,1,1,18.927,8.2Z"
+              ></path>
+            </svg>
+          ) : (
+            <div
+              style={{
+                marginBottom: "2rem",
+              }}
+            >
+              <ImCross
                 style={{
-                  backgroundColor: "#F9F9FA",
-                  borderRadius: "1rem",
+                  backgroundColor: "red",
+                  borderRadius: "3rem",
+                  padding: "8px",
+                  fontSize: "4rem",
+                  color: "white",
                 }}
-                className="bg-lighter p-3 mt-4"
+              />
+            </div>
+          )}
+
+          <div style={{ textAlign: "center" }}>
+            <h3
+              style={{
+                fontSize: "24px",
+                color: "#1f2937",
+                fontWeight: "600",
+                textAlign: "center",
+              }}
+            >
+              {details?.code == "PAYMENT_SUCCESS" ? (
+                <>Payment Done!</>
+              ) : (
+                <>Payment failed!</>
+              )}
+            </h3>
+            <p style={{ color: "#4b5563", marginTop: "8px" }}>
+              {details?.code == "PAYMENT_SUCCESS" ? (
+                <>{`transactionId: ${details?.data?.transactionId}`}</>
+              ) : null}
+            </p>
+            <p style={{ color: "#4b5563", marginTop: "8px" }}>
+              {details?.code == "PAYMENT_SUCCESS" ? (
+                <>Thank you for completing your secure online payment.</>
+              ) : (
+                <>Your Payment was not Completed.</>
+              )}
+            </p>
+            <div>
+              <p
+                onClick={() =>
+                  history.push(
+                    `/${slug}/payment/preview/${params?.merchantTransactionid}`
+                  )
+                }
+                style={{
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                }}
               >
-                <div className="d-flex align-items-center justify-content-center">
-                  <h1 className="text-heading display-5 mb-1">
-                    {`₹ ${planbyid?.price}`}
-                  </h1>
-                  <p
-                    style={{
-                      marginTop: "1rem",
-                      marginLeft: "5px",
-                    }}
-                  >{` for ${planbyid?.planFeature?.validate_days} days`}</p>
-                </div>
-                {/* <div className="d-grid">
-                  <button
-                    style={{
-                      backgroundColor: "#E9E7FD",
-                    }}
-                    type="button"
-                    data-bs-target="#pricingModal"
-                    data-bs-toggle="modal"
-                    className="btn btn-label-primary waves-effect"
-                  >
-                    Change Plan
-                  </button>
-                </div>
-                   */}
-              </div>
-              <div>
-                <div className="d-flex justify-content-between align-items-center mt-3">
-                  <p className="mb-0">Subtotal</p>
-                  <h4 className="mb-0">{planbyid?.price}</h4>
-                </div>
-                <div className="d-flex justify-content-between align-items-center">
-                  <p className="mb-0">Tax</p>
-                  <h4 className="mb-0">{`% ${tax}`}</h4>
-                </div>
-                <hr />
-                <div className="d-flex justify-content-between align-items-center pb-1">
-                  <p className="mb-0">Total</p>
-                  <h4 className="mb-0">{`₹ ${TotalAmount}`}</h4>
-                </div>
-                <div className="d-grid mt-3">
-                  <button
-                    onClick={() => handlecreatepayment()}
-                    className="btn btn-success waves-effect waves-light"
-                  >
-                    <span className="me-2">Proceed with Payment</span>
-                    <i className="ti ti-arrow-right scaleX-n1-rtl" />
-                  </button>
-                </div>
-              </div>
+                View receipt
+              </p>
+            </div>
+            <div style={{ paddingTop: "20px", textAlign: "center" }}>
+              <a
+                onClick={() => history.push(`/${slug}/pricing`)}
+                style={{
+                  backgroundColor: "#4f46e5",
+                  color: "#ffffff",
+                  fontWeight: "600",
+                  padding: "12px 24px",
+                  borderRadius: "4px",
+                  textDecoration: "none",
+                }}
+              >
+                GO BACK
+              </a>
             </div>
           </div>
         </div>
       </div>
     </>
   );
-};
-
-export default paymentstatus;
+}
+export default Paymentstatus;

@@ -93,7 +93,10 @@ const PricingCards = ({
                   <Button
                     onClick={async () => {
                       //  createOrderInstance(item)
-                      history.push(`/${slug}/paymentstatus/${item?.id}`);
+                      item?.planName == "Enterprises" ||
+                      item?.planName == "Professionals"
+                        ? history.push(`/${slug}/payment/create/${item?.id}`)
+                        : null;
                       // let resp = await createPayment(item);
                       // window.open(resp?.data);
                       // setIsOpenPaymentQR(true);

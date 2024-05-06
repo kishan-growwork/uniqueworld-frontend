@@ -9,8 +9,8 @@ const initialState = {
   isSuccessPayment: null,
   isError: null,
   isLoading: false,
-  paymentstatus: {},
-  paymentDetails: {},
+  paymentstatus: null,
+  paymentDetails: null,
 };
 
 export const paymentReducer = (state = initialState, action) => {
