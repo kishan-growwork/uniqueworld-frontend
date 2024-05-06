@@ -182,7 +182,7 @@ const Paymentcreate = () => {
           justifyContent: "center",
           borderRadius: "1rem",
         }}
-        className="container mt-2"
+        className="mt-2"
       >
         <div
           style={{
