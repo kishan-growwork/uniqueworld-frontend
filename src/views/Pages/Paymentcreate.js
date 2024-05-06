@@ -87,14 +87,6 @@ const Paymentcreate = () => {
     getStates();
   }, []);
 
-  let TotalAmount = 0;
-  let tax = process.env.REACT_APP_TAX_PERSENTAGE;
-
-  if (planbyid && planbyid.price !== undefined) {
-    let taxAmount = (planbyid.price * tax) / 100;
-    TotalAmount = Math.round(Number(planbyid.price) + Number(taxAmount));
-  }
-
   const Validations = async () => {
     const error = false;
     const regex =
@@ -136,9 +128,9 @@ const Paymentcreate = () => {
       await dispatch({
         type: actions.CREATE_PAYMENT,
         payload: {
-          TotalAmount,
+          totalAmountWithTax,
           price: planbyid?.price,
-          tax,
+          tax: planbyid?.Tax,
           // planId: planbyid?.id,
           pincode: zipcode,
           pannumber,
@@ -158,6 +150,8 @@ const Paymentcreate = () => {
       // setIsOpenPaymentQR(true);
     }
   }
+
+  const totalAmountWithTax = Math.round(planbyid?.totalAmountWithTax);
 
   useEffect(() => {
     const getCities = async () => {
@@ -408,12 +402,12 @@ const Paymentcreate = () => {
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
                   <p className="mb-0">Tax</p>
-                  <h4 className="mb-0">{`% ${tax}`}</h4>
+                  <h4 className="mb-0">{`% ${planbyid?.Tax}`}</h4>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between align-items-center pb-1">
                   <p className="mb-0">Total</p>
-                  <h4 className="mb-0">{`₹ ${TotalAmount}`}</h4>
+                  <h4 className="mb-0">{`₹ ${totalAmountWithTax}`}</h4>
                 </div>
                 <div className="d-grid mt-3">
                   <button
