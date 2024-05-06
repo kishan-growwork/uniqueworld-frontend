@@ -13,7 +13,9 @@ const FooterOfClient = () => {
       let numberof = await getstatistics();
       setNumberofemp(numberof);
     }
-    fetchData();
+    if (role === "Client") {
+      fetchData();
+    }
   }, []);
   const location = useLocation().pathname;
 

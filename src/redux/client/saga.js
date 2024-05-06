@@ -49,7 +49,7 @@ export function* WATCH_CREATE_CLIENT(action) {
     const resp = yield getClientAPI({
       page: action.payload?.page,
       perPage: action.payload?.perPage,
-      filterData: [],
+      filterData: action?.payload?.filterData,
     });
     resp.isSuccess = true;
     yield put({
@@ -80,7 +80,7 @@ export function* WATCH_UPDATE_CLIENT(action) {
     const resp = yield getClientAPI({
       page: action.payload?.page,
       perPage: action.payload?.perPage,
-      filterData: [],
+      filterData: action?.payload?.filterData,
     });
     resp.isSuccess = true;
     resp.loading = false;
@@ -92,19 +92,19 @@ export function* WATCH_UPDATE_CLIENT(action) {
 }
 
 export function* WATCH_DELETE_CLIENT(action) {
+  const clientResults = yield select((state) => state?.client);
   const data = yield deleteClientAPI(action.payload);
   if (data) {
-    const resp = yield getClientAPI({
-      page: action.payload?.page,
-      perPage: action.payload?.perPage,
-      filterData: [],
-    });
-    resp.isSuccess = true;
+   const data = clientResults?.results.filter(item => item.id !== action.payload?.id);
     yield put({
       type: actions.SET_CLIENT,
-      payload: resp,
+      payload: {
+        results: data
+      },
     });
+    action?.setLoading(false)
   }
+  action?.setLoading(false)
 }
 
 export function* WATCH_FILTER_CLIENT(action) {
@@ -116,6 +116,7 @@ export function* WATCH_FILTER_CLIENT(action) {
 }
 
 export function* WATCH_APPROVE_CLIENT(action) {
+  const clientResults = yield select((state) => state?.client);
   const resp = yield approveClient(action.payload);
   if (resp?.constraint) {
     yield put({
@@ -123,23 +124,38 @@ export function* WATCH_APPROVE_CLIENT(action) {
       payload: resp,
     });
   } else if (resp) {
-    const resp = yield getClientAPI({ page: 1, perPage: 10, filterData: [] });
+    const index = clientResults?.results?.findIndex(
+      (item) => item.id === action.payload?.id
+    );
+    if (index !== -1) {
+      clientResults.results[index].action = "approved";
+    }
     yield put({
       type: actions.SET_CLIENT,
-      payload: resp,
+      payload: clientResults,
     });
+    action?.setLoading(false)
   }
+  action?.setLoading(false)
 }
 export function* WATCH_DECLINED_CLIENT(action) {
+  const clientResults = yield select((state) => state?.client);
   const resp = yield declinedClient(action.payload);
 
   if (resp) {
-    const resp = yield getClientAPI({ page: 1, perPage: 10, filterData: [] });
+    const index = clientResults?.results?.findIndex(
+      (item) => item.id === action.payload?.id
+    );
+    if (index !== -1) {
+      clientResults.results[index].action = "declined";
+    }
     yield put({
       type: actions.SET_CLIENT,
-      payload: resp,
+      payload: clientResults,
     });
+    action?.setLoading(false)
   }
+  action?.setLoading(false)
 }
 export function* PUBLIC_CLIENT(action) {
   const resp = yield publicClient(action.payload);

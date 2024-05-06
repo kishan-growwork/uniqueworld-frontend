@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Col, Form, Input, Label, Row } from "reactstrap";
 import { selectThemeColors } from "@utils";
 import Select from "react-select";
-import actions from "../../../redux/industries/actions";
+// import actions from "../../../redux/industries/actions";
 import { Formik } from "formik";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  // useDispatch,
+  useSelector
+} from "react-redux";
 import course from "./../Course";
 import { toast } from "react-toastify";
-import jobCategoryActions from "../../../redux/jobCategory/actions";
+// import jobCategoryActions from "../../../redux/jobCategory/actions";
 
 const Professional = ({
   candidate,
@@ -19,7 +22,7 @@ const Professional = ({
   const jobCategory = useSelector((state) => state.jobCategory.results);
   const industries = useSelector((state) => state.industries);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [quelification, setQuelification] = useState();
   const [field, setField] = useState();
   const [industriesOptions, setIndustriesOptions] = useState([]);
@@ -31,15 +34,6 @@ const Professional = ({
   const [jobCategoryOptions, setJobCategoryOptions] = useState([]);
   const [jobCat, setJobCat] = useState();
   const [eng, setEng] = useState([]);
-
-  useEffect(() => {
-    dispatch({
-      type: actions.GET_ALL_INDUSTRIES,
-    });
-    dispatch({
-      type: jobCategoryActions.GET_ALL_JOBCAT,
-    });
-  }, []);
 
   useEffect(() => {
     if (jobCategory?.length > 0) {
