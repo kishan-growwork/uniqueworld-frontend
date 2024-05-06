@@ -70,6 +70,7 @@ import { allAccessEmail } from "../../constant/constant";
 import jobcategoryActions from "./../../redux/jobCategory/actions";
 import industriesActions from "./../../redux/industries/actions";
 import WhatsappDialog from "../../components/Dialog/WhatsappDialog";
+import _ from "lodash";
 
 const canvasStyles = {
   position: "fixed",
@@ -146,10 +147,6 @@ const SecondPage = ({
   const [isDisabledAllFields, setIsDisabledAllFields] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [showWPModal, setShowWPModal] = useState(false);
-
-  console.info("--------------------");
-  console.info("totalRows => ", totalRows);
-  console.info("--------------------");
 
   // useLayoutEffect(() => {
   //   // if (bestMatchesCandidate) {
@@ -298,15 +295,20 @@ const SecondPage = ({
   };
 
   useEffect(() => {
+    getCandidates(currentPage);
+  }, [])
+
+  useEffect(() => {
     if (
-      filterData.length !== 0 &&
+      filterKey(filterData).length !== 0 &&
       create === false &&
       update === false &&
       show === false
     ) {
       getCandidates(currentPage);
     }
-  }, [filterData, create, update, show]);
+  }, [filterData]);
+
   useEffect(() => {
     if (!show) {
       setCandidate([]);
@@ -343,7 +345,7 @@ const SecondPage = ({
   };
 
   useEffect(() => {
-    if (update === true || create === true) {
+    if (create === true) {
       clearStates();
     }
   }, [candidates]);
@@ -377,7 +379,8 @@ const SecondPage = ({
     setLoading(true);
     dispatch({
       type: CandidateActions.DELETE_CANDIDATE,
-      payload: { id: row.id, page: currentPage, perPage: perPage },
+      payload: { id: row.id },
+      setLoading
     });
   };
 
@@ -1029,45 +1032,55 @@ const SecondPage = ({
     setLoading(true);
     delete candidate.interviews;
 
-    const typeResume = typeof candidate?.resume;
-    const typeImage = typeof candidate?.image;
+    const data = candidates?.results?.filter(
+      (item) => item?.id == candidate?.id
+    );
+    const ObjData = Object.assign({}, ...data);
+    const isMatch = _.isMatch(ObjData, candidate);
 
-    if (typeImage === "object" && candidate?.image !== null) {
-      // const resp = await uploadFiles(candidate?.image)
-      // candidate.image = `https:${resp.url}`
-      const resp = await awsUploadAssetsWithResp(candidate?.image);
-      candidate.image = `${resp.url}`;
-    }
+    if (isMatch == false) {
+      const typeResume = typeof candidate?.resume;
+      const typeImage = typeof candidate?.image;
 
-    if (typeResume === "object" && candidate?.resume !== null) {
-      // const resp = await uploadFiles(candidate?.resume)/
-      // candidate.resume = `https:${resp.url}`
-      const resp = await awsUploadAssetsWithResp(candidate?.resume);
-      candidate.resume = `${resp.url}`;
-    }
-
-    const fm = new FormData();
-    for (const key in candidate) {
-      if (key === "professional") {
-        fm.append("professional", JSON.stringify(candidate[key]));
-      } else if (key === "industries_relation") {
-        fm.append("industries_relation", JSON.stringify(candidate[key]));
-      } else if (key === "status") {
-        fm.append(key, "view");
-      } else {
-        fm.append(key, candidate[key]);
+      if (typeImage === "object" && candidate?.image !== null) {
+        // const resp = await uploadFiles(candidate?.image)
+        // candidate.image = `https:${resp.url}`
+        const resp = await awsUploadAssetsWithResp(candidate?.image);
+        candidate.image = `${resp.url}`;
       }
-    }
 
-    await dispatch({
-      type: CandidateActions.UPDATE_CANDIDATE,
-      payload: {
-        id: candidate.id,
-        data: fm,
-        page: currentPage,
-        perPage: perPage,
-      },
-    });
+      if (typeResume === "object" && candidate?.resume !== null) {
+        // const resp = await uploadFiles(candidate?.resume)/
+        // candidate.resume = `https:${resp.url}`
+        const resp = await awsUploadAssetsWithResp(candidate?.resume);
+        candidate.resume = `${resp.url}`;
+      }
+
+      const fm = new FormData();
+      for (const key in candidate) {
+        if (key === "professional") {
+          fm.append("professional", JSON.stringify(candidate[key]));
+        } else if (key === "industries_relation") {
+          fm.append("industries_relation", JSON.stringify(candidate[key]));
+        } else if (key === "status") {
+          fm.append(key, "view");
+        } else {
+          fm.append(key, candidate[key]);
+        }
+      }
+
+      await dispatch({
+        type: CandidateActions.UPDATE_CANDIDATE,
+        payload: {
+          id: candidate.id,
+          data: fm,
+          page: currentPage,
+          perPage: perPage,
+        },
+      });
+    } else {
+      setLoading(false);
+    }
   };
 
   const Validations = async () => {
@@ -1801,6 +1814,7 @@ const SecondPage = ({
             setFilterToggleMode={setFilterToggleMode}
             setFilterData={setFilterData}
             handleFilter={handleFilter}
+            filterKey={filterKey}
           />
         </Col>
 

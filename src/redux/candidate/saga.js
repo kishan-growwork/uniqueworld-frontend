@@ -40,7 +40,7 @@ export function* WATCH_GET_SAVED_CANDIDATE(action) {
     });
     const { agencyDetail } = yield select((state) => state?.agency);
     action.payload.filterData.dataMergePermission =
-    agencyDetail?.permission?.dataMerge;
+      agencyDetail?.permission?.dataMerge;
     const resp = yield getSavedCandidateAPI(action.payload);
     yield put({
       type: actions.SET_CANDIDATE,
@@ -138,9 +138,9 @@ export function* WATCH_GET_BEST_MATCHES_CANDIDATE(action) {
     }
     yield put({
       type: actions.SET_CANDIDATE,
-       payload: {
-      bestMatchesCandidates: resp
-       }
+      payload: {
+        bestMatchesCandidates: resp,
+      },
     });
   } catch (err) {
     yield put({
@@ -225,16 +225,21 @@ export function* WATCH_UPDATE_CANDIDATE(action) {
 }
 
 export function* WATCH_DELETE_CANDIDATE(action) {
-  yield deleteCandidateAPI(action.payload);
-  const resp = yield getCandidateAPI({
-    page: action.payload?.page,
-    perPage: action.payload?.perPage,
-    filterData: [],
-  });
-  yield put({
-    type: actions.SET_CANDIDATE,
-    payload: resp,
-  });
+  const candidateResults = yield select((state) => state?.candidate);
+  const resp = yield deleteCandidateAPI(action.payload);
+
+  if (resp?.msg == 'success') {
+    const data = candidateResults?.results.filter(item => item.id !== action.payload?.id);
+    yield put({
+      type: actions.SET_CANDIDATE,
+      payload: {
+        results: data
+      },
+    });
+    action?.setLoading(false)
+  } else {
+    action?.setLoading(false)
+  }
 }
 
 export function* WATCH_FILTER_CANDIDATE(action) {
@@ -245,7 +250,22 @@ export function* WATCH_FILTER_CANDIDATE(action) {
   });
 }
 export function* WATCH_CANDIDATE_STATUS(action) {
-  yield candidateStatus(action.payload);
+  const candidateResults = yield select((state) => state?.candidate);
+  const resp = yield candidateStatus(action.payload);
+  if (resp) {
+
+  
+  const index = candidateResults?.results?.findIndex(
+    (item) => item.id === action.payload?.id
+  );
+  if (index !== -1) {
+    candidateResults.results[index].status = "view";
+  }
+  yield put({
+    type: actions.SET_CANDIDATE,
+    payload: candidateResults,
+  });
+}
 }
 export function* UPDATE_CANDIDATE_PUBLIC(action) {
   const data = yield updateCandidatePublicAPI(action.payload);
@@ -328,7 +348,10 @@ export default function* rootSaga() {
     takeEvery(actions.CREATE_CANDIDATE_CSV, WATCH_CREATE_CANDIDATE_CSV),
     takeEvery(actions.GET_CANDIDATE, WATCH_GET_CANDIDATE),
     takeEvery(actions.GET_CLIENT_CANDIDATE, WATCH_GET_CLIENT_CANDIDATE),
-    takeEvery(actions.GET_BEST_MATCHES_CANDIDATE, WATCH_GET_BEST_MATCHES_CANDIDATE),
+    takeEvery(
+      actions.GET_BEST_MATCHES_CANDIDATE,
+      WATCH_GET_BEST_MATCHES_CANDIDATE
+    ),
     takeEvery(actions.UPDATE_CANDIDATE, WATCH_UPDATE_CANDIDATE),
     takeEvery(actions.UPDATE_CANDIDATE_PUBLIC, UPDATE_CANDIDATE_PUBLIC),
     takeEvery(actions.DELETE_CANDIDATE, WATCH_DELETE_CANDIDATE),
