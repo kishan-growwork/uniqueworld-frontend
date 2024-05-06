@@ -296,7 +296,7 @@ const SecondPage = ({
 
   useEffect(() => {
     getCandidates(currentPage);
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (
@@ -380,7 +380,7 @@ const SecondPage = ({
     dispatch({
       type: CandidateActions.DELETE_CANDIDATE,
       payload: { id: row.id },
-      setLoading
+      setLoading,
     });
   };
 
@@ -2242,10 +2242,10 @@ const SecondPage = ({
                 selectableRowsHighlight
                 // clearSelectedRows={isSent || isNotSent}
                 onSelectedRowsChange={(e) => {
-                  setTimeout(() => {
-                    setPromiseLoading(true);
-                  }, 10);
                   handleselected(e);
+                  // setTimeout(() => {
+                  setPromiseLoading(true);
+                  // }, 10);
                 }}
                 fixedHeader={true}
                 progressPending={loading || getSavedCandidateLoader}
