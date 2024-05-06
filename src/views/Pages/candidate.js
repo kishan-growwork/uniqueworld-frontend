@@ -156,7 +156,6 @@ const SecondPage = ({
   //     });
   //   // }
   // }, [isBestMatches])
-  
 
   const toggle = (index) => {
     const newCollapseStates = [...isOpen];
@@ -220,8 +219,7 @@ const SecondPage = ({
       setCandidateList(bestMatchesCandidates?.results);
       setLoading(false);
     }
-  }, [bestMatchesCandidates])
-  
+  }, [bestMatchesCandidates]);
 
   const getCandidates = async (page) => {
     setLoading(true);
@@ -554,7 +552,6 @@ const SecondPage = ({
         else if (row?.interviewStatus === "shortlisted") color = "info";
         else if (row?.interviewStatus === "trail") color = "dark";
         else if (row?.interviewStatus === "reschedule") color = "warning";
-
         return (
           <Badge
             Badge
@@ -1576,6 +1573,8 @@ const SecondPage = ({
           />
           <ModalBody>
             You Can't Download Resume More Than 5, Please Upgrade Your Plan!!
+            <br />
+            Contact :{` ${auth?.user?.agency?.phoneNumber}`}
           </ModalBody>
           <ModalFooter>
             <Button

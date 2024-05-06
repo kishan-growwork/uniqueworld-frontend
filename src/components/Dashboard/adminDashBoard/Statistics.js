@@ -138,6 +138,7 @@ const Statistics = ({ setYear, setMonth, candidate, year, month, loading }) => {
           <Input
             type="select"
             id="year-input"
+            disabled={loading}
             value={year ? year : "Year Filter"}
             onFocus={() => setIsfocus("year")}
             onBlur={() => setIsfocus(null)}
@@ -164,6 +165,7 @@ const Statistics = ({ setYear, setMonth, candidate, year, month, loading }) => {
           <Input
             className="mx-50"
             type="select"
+            disabled={loading}
             id="rows-per-page"
             value={month ? month : "Month Filter"}
             onFocus={() => setIsfocus("month")}

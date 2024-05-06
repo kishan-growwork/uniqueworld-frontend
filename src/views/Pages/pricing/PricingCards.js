@@ -1,5 +1,6 @@
 import classnames from "classnames";
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Row,
   Col,
@@ -16,6 +17,7 @@ import {
 } from "reactstrap";
 import qrCode from "../../../assets/images/code.jpeg";
 import { useSelector } from "react-redux";
+// import { createPayment } from "../../../apis/payment";
 
 const PricingCards = ({
   data,
@@ -25,6 +27,8 @@ const PricingCards = ({
   planId,
   // createOrderInstance = () => {},
 }) => {
+  const history = useHistory();
+  const slug = localStorage.getItem("slug");
   const colsProps = { md: 4, xs: 12 };
   const themecolor = useSelector(
     (state) => state?.agency?.agencyDetail?.themecolor
@@ -34,11 +38,11 @@ const PricingCards = ({
 
   useEffect(() => {
     const newDisabledIndexes = data?.reduce((indexes, item, index) => {
-        if (item?.id === planId) {
-          indexes = Array.from({ length: index + 1 }, (_, i) => {
-            return i == 0 ? 1 : i;
-          });
-        }
+      if (item?.id === planId) {
+        indexes = Array.from({ length: index + 1 }, (_, i) => {
+          return i == 0 ? 1 : i;
+        });
+      }
       return indexes;
     }, []);
     setDisabledIndexes(newDisabledIndexes);
@@ -87,9 +91,15 @@ const PricingCards = ({
                 </div>
                 <div>
                   <Button
-                    onClick={() => {
+                    onClick={async () => {
                       //  createOrderInstance(item)
-                      setIsOpenPaymentQR(true);
+                      item?.planName == "Enterprises" ||
+                      item?.planName == "Professionals"
+                        ? history.push(`/${slug}/payment/create/${item?.id}`)
+                        : null;
+                      // let resp = await createPayment(item);
+                      // window.open(resp?.data);
+                      // setIsOpenPaymentQR(true);
                     }}
                     block
                     disabled={disabledIndexes.includes(index)}

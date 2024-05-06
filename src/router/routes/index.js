@@ -37,7 +37,9 @@ const Routes = [
   {
     path: "/superadmin/profile",
     exact: true,
-    component: lazy(() => import("../../views/Pages/superAdminPages/ProfilePage.js")),
+    component: lazy(() =>
+      import("../../views/Pages/superAdminPages/ProfilePage.js")
+    ),
     permission: ["SuperAdmin"],
   },
   {
@@ -205,7 +207,62 @@ const Routes = [
     layout: "BlankLayout",
     permission: ["Admin", "Team Leader", "Public", "BDM", "Recruiter"],
   },
-
+  {
+    path: "/:slug/payment/create/:id",
+    exact: true,
+    component: lazy(() => import("../../views/Pages/Paymentcreate.js")),
+    permission: [
+      "Admin",
+      "Team Leader",
+      "Public",
+      "BDM",
+      "Recruiter",
+      "Client",
+    ],
+  },
+  {
+    path: "/:slug/payment/preview/:merchantTransactionid",
+    // path: "/:slug/payment/preview",
+    exact: true,
+    component: lazy(() => import("../../views/Pages/Paymentpreiview.js")),
+    permission: [
+      "Admin",
+      "Team Leader",
+      // "Public",
+      "BDM",
+      "Recruiter",
+      "Client",
+    ],
+  },
+  {
+    path: "/:slug/invoice/:merchantTransactionid",
+    // path: "/:slug/payment/preview",
+    exact: true,
+    layout: "BlankLayout",
+    component: lazy(() => import("../../views/Pages/Invoice.js")),
+    permission: [
+      "Admin",
+      "Team Leader",
+      // "Public",
+      "BDM",
+      "Recruiter",
+      "Client",
+    ],
+  },
+  {
+    path: "/:slug/payment/status/:merchantTransactionid",
+    // path: "/:slug/payment/preview",
+    exact: true,
+    component: lazy(() => import("../../views/Pages/Paymentstatus.js")),
+    permission: [
+      "Admin",
+      "Team Leader",
+      "Public",
+      "BDM",
+      "Recruiter",
+      "Client",
+    ],
+  },
   {
     path: "/resetpassword",
     exact: true,

@@ -11,9 +11,11 @@ import CandidateCard from "./CandidateCard";
 import TodayInterview from "./TodayInterview";
 import { useSelector } from "react-redux";
 import CardMeetup from "../adminDashBoard/CardMeetup";
+import useBreakpoint from "../../../utility/hooks/useBreakpoints";
 const RecruiterDashBoard = () => {
+  const { width } = useBreakpoint();
   const tempCandidate = useSelector((state) => state.candidate);
-  const { agencyDetail } = useSelector((state) => state?.agency)
+  const { agencyDetail } = useSelector((state) => state?.agency);
   // statistics
   const [year, setYear] = useState(0);
   const [month, setMonth] = useState(0);
@@ -69,7 +71,12 @@ const RecruiterDashBoard = () => {
         </Col>
       </Row>
       <Row>
-        <Col xl="4" sm="12">
+        <Col
+          lg="4"
+          md="4"
+          sm="12"
+          style={width < 768 ? { padding: "0px" } : {}}
+        >
           <Statistics
             cols={{ md: "3", sm: "6", xs: "12" }}
             setYear={setYear}
@@ -79,13 +86,13 @@ const RecruiterDashBoard = () => {
             month={month}
           />
         </Col>
-        <Col lg="4" sm="12">
+        <Col lg="4" sm="12" style={width < 768 ? { padding: "0px" } : {}}>
           <TodayInterview
             title={"Today's Interviews"}
             todaysInterview={todaysInterview}
           />
         </Col>
-        <Col lg="4" sm="12">
+        <Col lg="4" sm="12" style={width < 768 ? { padding: "0px" } : {}}>
           <CandidateCard title={"Candidates"} candidate={candidate} />
         </Col>
       </Row>

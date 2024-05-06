@@ -40,14 +40,11 @@ export const getAgencyDashboard = async () => {
 }
 
 export const getAgencyDashboardTableData = async (payload) => {
-  console.info("----------------------------")
-  console.info("payload =>", payload)
-  console.info("----------------------------")
-  return await apiCall.post(`/superAdmin/agencylist`, payload)
-}
+
+  return await apiCall.post(`/superAdmin/agencylist`, payload);
+};
 export const updateAgencyValidity = async (payload) => {
-  console.info("-------------------------------")
-  console.info("payload => ", payload)
-  console.info("-------------------------------")
-  return await apiCall.post(`/superAdmin/updatevalidity`, payload)
-}
+  return await apiCall.post(`/superAdmin/updatevalidity`, payload);
+};
+
+

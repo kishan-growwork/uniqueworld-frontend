@@ -16,7 +16,6 @@ import Professional from "../Forms/Candidates/Professional";
 // import Education from '../Forms/Candidates/Education'
 // import Experience from '../Forms/Candidates/Experience'
 import Attachment_File from "../Forms/Candidates/Attachment_File";
-import { useHistory } from "react-router-dom";
 import { Country, State, City } from "country-state-city";
 import { useSelector } from "react-redux";
 import Loader from "./Loader";
@@ -42,7 +41,6 @@ const Candidate = ({
   setIsDisabledAllFields,
   loading,
 }) => {
-  const history = useHistory();
   // const { user } = useSelector((state) => state.auth);
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState([]);
@@ -120,9 +118,6 @@ const Candidate = ({
     (state) => state?.agency?.agencyDetail?.themecolor
   );
   const [focus, setIsfocus] = useState(null);
-  console.info("-------------------------------");
-  console.info("history => ", history);
-  console.info("-------------------------------");
   // const [isdashboard, setisdashboard] = useState(false);
 
   function pushfunction() {

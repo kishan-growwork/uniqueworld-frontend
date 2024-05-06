@@ -5,6 +5,7 @@ const initialState = {
   currentPlan: null,
   isLoading: false,
   error: false,
+  planbyid: null,
 };
 
 export const planReducer = (state = initialState, action) => {
