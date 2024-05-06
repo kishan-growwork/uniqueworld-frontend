@@ -112,7 +112,7 @@ export function* WATCH_CREATE_PAYMENT(action) {
     setLoading(true);
     const resp = yield createPayment(action.payload);
 
-    if (resp.data) {
+    if (resp?.data) {
       window.open(resp?.data);
       setLoading(false);
     } else {
