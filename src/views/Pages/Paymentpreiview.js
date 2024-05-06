@@ -8,7 +8,7 @@ const Paymentpreiview = () => {
   const history = useHistory();
   const params = useParams();
   const details = useSelector(
-    (state) => state?.payment?.paymentstatus?.response
+    (state) => state?.payment?.paymentDetails?.response
   );
   let invoiceto = "";
   if (
