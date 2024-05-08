@@ -423,9 +423,14 @@ const Paymentcreate = () => {
                 <div className="d-flex justify-content-between align-items-center">
                   <p className="mb-0">
                     Tax
-                    <sub className="bold d-flex  justify-content-between align-items-center">{` ( ${planbyid?.Tax}% ) `}</sub>
+                    <span
+                      style={{
+                        fontSize: "12px",
+                      }}
+                      className="bold justify-content-between align-items-center"
+                    >{` ( ${planbyid?.Tax}% ) `}</span>
                   </p>
-                  <h4 className="mb-0">{`₹ ${totalTaxAmount}`}</h4>
+                  <h4 className="mb-0">{`${totalTaxAmount}`}</h4>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between align-items-center pb-1">
