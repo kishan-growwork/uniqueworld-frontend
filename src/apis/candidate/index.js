@@ -7,9 +7,6 @@ import apiCall from "../../utility/axiosInterceptor";
 // }
 
 export const getCandidateAPI = async (payload) => {
-  console.info("--------------------");
-  console.info("payload => ", payload);
-  console.info("--------------------");
   return await apiCall
     .post(
       `/candidates?page=${payload.page || 1}&perPage=${payload.perPage || 10}`,
@@ -20,9 +17,6 @@ export const getCandidateAPI = async (payload) => {
     });
 };
 export const getSavedCandidateAPI = async (payload) => {
-  console.info("--------------------");
-  console.info("payload => ", payload);
-  console.info("--------------------");
   return await apiCall
     .post(
       `/candidate/savedcandidate?page=${payload.page || 1}&perPage=${
@@ -49,9 +43,11 @@ export const getClientCandidateAPI = async (payload, planId) => {
 export const getBestMatchesCandidateAPI = async (payload, planId) => {
   return await apiCall
     .post(
-      `/clients/bestmatchcandidate?planId=${planId}&page=${payload.page || 1}&perPage=${
-        payload.perPage || 10
-      }&isSavedCandidates=${payload?.isSavedCandidates || false}`,
+      `/clients/bestmatchcandidate?planId=${planId}&page=${
+        payload.page || 1
+      }&perPage=${payload.perPage || 10}&isSavedCandidates=${
+        payload?.isSavedCandidates || false
+      }`,
       payload.filterData
     )
     .then((res) => {

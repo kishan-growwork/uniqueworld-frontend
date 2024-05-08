@@ -18,10 +18,6 @@ const FooterOfClient = () => {
     }
   }, []);
   const location = useLocation().pathname;
-  console.info("-------------------------------");
-  console.info("location => ", location);
-  console.info("-------------------------------");
-
   return role === "Client" ? (
     <>
       {role === "Client" &&
