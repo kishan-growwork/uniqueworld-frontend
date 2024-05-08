@@ -26,9 +26,6 @@ function WhatsappDialog({
   clientData,
   WPnumber,
 }) {
-  console.info("----------------------------");
-  console.info("WPnumber =>", WPnumber);
-  console.info("----------------------------");
   const themecolor = useSelector(
     (state) => state?.agency?.agencyDetail?.themecolor
   );
