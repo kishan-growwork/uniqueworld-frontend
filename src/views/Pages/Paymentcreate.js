@@ -151,7 +151,12 @@ const Paymentcreate = () => {
     }
   }
 
-  const totalAmountWithTax = Math.round(planbyid?.totalAmountWithTax);
+  const totalTaxAmount = Math.round(planbyid?.taxAmount);
+  const totalAmountWithTax =
+    Number(totalTaxAmount) + Number(planbyid?.priceNumeric);
+  console.info("-------------------------------");
+  console.info("totalTaxAmount => ", totalTaxAmount);
+  console.info("-------------------------------");
 
   useEffect(() => {
     const getCities = async () => {
@@ -188,7 +193,7 @@ const Paymentcreate = () => {
         >
           <div className="row">
             <div className="col-lg-7 card-body border-end">
-              <h4 className="mt-2 mb-4">Billing Details</h4>
+              <h4 className=" mb-4">Billing Details</h4>
               <form>
                 <div className="row g-3">
                   <Col md="6" className="mt-1">
@@ -369,16 +374,31 @@ const Paymentcreate = () => {
                 }}
                 className="bg-lighter p-3 mt-4"
               >
-                <div className="d-flex align-items-center justify-content-center">
+                <div className="d-flex flex-column justify-content-center text-left">
                   <h1 className="text-heading display-5 mb-1">
                     {`₹ ${planbyid?.price}`}
                   </h1>
-                  <p
+                  <p className="fs-6">Unlimited Interview Request</p>
+                  <p className="fs-6">
+                    {`Validate For ${planbyid?.planFeature?.validate_days} Days`}
+                  </p>
+                  <p className="fs-6">
+                    New Upgrade Profile Shown On Top Priority
+                  </p>
+                  <p className="fs-6">Downloading With Saved Profile</p>
+                  <p className="fs-6">
+                    Unlimited New Candidates Response By Mail Notification
+                  </p>
+                  <p className="fs-6">
+                    Unlimited New Candidates Response By WhatsApp Notification
+                  </p>
+                  {/* <p
+                    className=".fs-6 text"
                     style={{
                       marginTop: "1rem",
                       marginLeft: "5px",
                     }}
-                  >{` for ${planbyid?.planFeature?.validate_days} days`}</p>
+                  >{` for ${planbyid?.planFeature?.validate_days} days`}</p> */}
                 </div>
                 {/* <div className="d-grid">
                   <button
@@ -401,8 +421,11 @@ const Paymentcreate = () => {
                   <h4 className="mb-0">{planbyid?.price}</h4>
                 </div>
                 <div className="d-flex justify-content-between align-items-center">
-                  <p className="mb-0">Tax</p>
-                  <h4 className="mb-0">{`% ${planbyid?.Tax}`}</h4>
+                  <p className="mb-0">
+                    Tax
+                    <sub className="bold d-flex  justify-content-between align-items-center">{` ( ${planbyid?.Tax}% ) `}</sub>
+                  </p>
+                  <h4 className="mb-0">{`₹ ${totalTaxAmount}`}</h4>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between align-items-center pb-1">
