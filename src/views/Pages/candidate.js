@@ -2125,6 +2125,7 @@ const SecondPage = ({
                                       onClick={() => toggle(index)}
                                       style={{
                                         color: themecolor,
+                                        cursor: "pointer",
                                       }}
                                     >
                                       View Less
@@ -2136,7 +2137,10 @@ const SecondPage = ({
                                     <div
                                       className="view-collapse"
                                       onClick={() => toggle(index)}
-                                      style={{ color: themecolor }}
+                                      style={{
+                                        color: themecolor,
+                                        cursor: "pointer",
+                                      }}
                                     >
                                       View More
                                       <ChevronDown size={17} />

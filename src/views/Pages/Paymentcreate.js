@@ -52,7 +52,7 @@ const Paymentcreate = () => {
     setStreet(user?.BillingDetails?.address);
     setzipcode(user?.BillingDetails?.pincode);
   }, [user]);
-
+  const theamcolour = localStorage.getItem("themecolor");
   useEffect(() => {
     dispatch({
       type: planActions.GET_PLAN_BY_ID,
@@ -375,10 +375,28 @@ const Paymentcreate = () => {
                 className="bg-lighter p-3 mt-4"
               >
                 <div className="d-flex flex-column justify-content-center text-left">
-                  <h1 className="text-heading display-5 mb-1">
+                  <h3 className="mb-2 bold">{planbyid?.planName}</h3>
+                  <h1
+                    style={{
+                      color: theamcolour,
+                    }}
+                    className="text-heading display-5 mb-1"
+                  >
                     {`₹ ${planbyid?.price}`}
                   </h1>
-                  <p className="fs-6">Unlimited Interview Request</p>
+                  <ul>
+                    <li>Unlimited Interview Request</li>
+                    <li>
+                      {" "}
+                      {`Validate For ${planbyid?.planFeature?.validate_days} Days`}
+                    </li>
+                    <li>New Upgrade Profile Shown On Top Priority</li>
+                    <li>Downloading With Saved Profile</li>
+                    <li>
+                      Unlimited New Candidates Response By Mail Notification
+                    </li>
+                  </ul>
+                  {/* <p className="fs-6">Unlimited Interview Request</p>
                   <p className="fs-6">
                     {`Validate For ${planbyid?.planFeature?.validate_days} Days`}
                   </p>
@@ -391,7 +409,7 @@ const Paymentcreate = () => {
                   </p>
                   <p className="fs-6">
                     Unlimited New Candidates Response By WhatsApp Notification
-                  </p>
+                  </p> */}
                   {/* <p
                     className=".fs-6 text"
                     style={{
@@ -439,8 +457,12 @@ const Paymentcreate = () => {
                 </div>
                 <div className="d-grid mt-3">
                   <button
+                    style={{
+                      backgroundColor: theamcolour,
+                      color: "white",
+                    }}
                     onClick={() => handlecreatepayment()}
-                    className="btn btn-success waves-effect waves-light"
+                    className="btn waves-effect waves-light"
                   >
                     <span className="me-2">Proceed with Payment</span>
                     <i className="ti ti-arrow-right scaleX-n1-rtl" />
