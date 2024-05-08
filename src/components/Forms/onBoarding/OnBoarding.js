@@ -909,21 +909,21 @@ const OnBoarding = ({
         </Col>
         <Col lg={6} xs={12} xl={4}>
           <div>
-            <Label id="PL_SL_CL">PL/SL/CL (Paid/Sick/Casual leave)</Label>
+            <Label id="plSlCl">PL/SL/CL (Paid/Sick/Casual leave)</Label>
             <Input
               disabled={isRecruiter}
-              id="PL_SL_CL"
-              onFocus={() => setIsfocus("PL_SL_CL")}
+              id="plSlCl"
+              onFocus={() => setIsfocus("plSlCl")}
               onBlur={() => setIsfocus(null)}
               style={{
-                borderColor: focus === "PL_SL_CL" && themecolor,
+                borderColor: focus === "plSlCl" && themecolor,
               }}
-              name="PL_SL_CL"
+              name="plSlCl"
               className="w-100"
               maxLength={7}
               type="text"
               placeholder={"Enter leave"}
-              value={onBoarding?.PL_SL_CL}
+              value={onBoarding?.plSlCl}
               onChange={(e) =>
                 setOnBoarding({
                   ...onBoarding,
@@ -958,21 +958,21 @@ const OnBoarding = ({
         </Col>
         <Col lg={6} xs={12} xl={4}>
           <div>
-            <Label id="pf_esic">PF/ESIC</Label>
+            <Label id="pfEsic">PF/ESIC</Label>
             <Input
               disabled={isRecruiter}
-              id="pf_esic"
-              onFocus={() => setIsfocus("pf_esic")}
+              id="pfEsic"
+              onFocus={() => setIsfocus("pfEsic")}
               onBlur={() => setIsfocus(null)}
               style={{
-                borderColor: focus === "pf_esic" && themecolor,
+                borderColor: focus === "pfEsic" && themecolor,
               }}
-              name="pf_esic"
+              name="pfEsic"
               className="w-100"
               type="text"
               maxLength={8}
               placeholder={"Enter PF/ESIC"}
-              value={onBoarding?.pf_esic}
+              value={onBoarding?.pfEsic}
               onChange={(e) =>
                 setOnBoarding({
                   ...onBoarding,

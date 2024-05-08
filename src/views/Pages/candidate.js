@@ -548,7 +548,6 @@ const SecondPage = ({
         else if (row?.interviewStatus === "shortlisted") color = "info";
         else if (row?.interviewStatus === "trail") color = "dark";
         else if (row?.interviewStatus === "reschedule") color = "warning";
-
         return (
           <Badge
             Badge
@@ -1574,6 +1573,8 @@ const SecondPage = ({
           />
           <ModalBody>
             You Can't Download Resume More Than 5, Please Upgrade Your Plan!!
+            <br />
+            Contact :{` ${auth?.user?.agency?.phoneNumber}`}
           </ModalBody>
           <ModalFooter>
             <Button
@@ -2124,6 +2125,7 @@ const SecondPage = ({
                                       onClick={() => toggle(index)}
                                       style={{
                                         color: themecolor,
+                                        cursor: "pointer",
                                       }}
                                     >
                                       View Less
@@ -2135,7 +2137,10 @@ const SecondPage = ({
                                     <div
                                       className="view-collapse"
                                       onClick={() => toggle(index)}
-                                      style={{ color: themecolor }}
+                                      style={{
+                                        color: themecolor,
+                                        cursor: "pointer",
+                                      }}
                                     >
                                       View More
                                       <ChevronDown size={17} />
@@ -2241,10 +2246,10 @@ const SecondPage = ({
                 selectableRowsHighlight
                 // clearSelectedRows={isSent || isNotSent}
                 onSelectedRowsChange={(e) => {
-                  setTimeout(() => {
-                    setPromiseLoading(true);
-                  }, 10);
                   handleselected(e);
+                  // setTimeout(() => {
+                  setPromiseLoading(true);
+                  // }, 10);
                 }}
                 fixedHeader={true}
                 progressPending={loading || getSavedCandidateLoader}

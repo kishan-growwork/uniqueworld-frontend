@@ -611,7 +611,6 @@ const HotVacancy = () => {
                               <Edit size={17} className="mx-1" />
                             </div>
                           </div>
-                         
                         </CardHeader>
                         <CardBody
                           style={{
@@ -634,7 +633,10 @@ const HotVacancy = () => {
                                   <div
                                     className="view-collapse"
                                     onClick={() => toggle(index)}
-                                    style={{ color: themecolor }}
+                                    style={{
+                                      color: themecolor,
+                                      cursor: "pointer",
+                                    }}
                                   >
                                     View Less
                                     <ChevronUp size={17} />{" "}
@@ -645,7 +647,10 @@ const HotVacancy = () => {
                                   <div
                                     className="view-collapse"
                                     onClick={() => toggle(index)}
-                                    style={{ color: themecolor }}
+                                    style={{
+                                      color: themecolor,
+                                      cursor: "pointer",
+                                    }}
                                   >
                                     View More
                                     <ChevronDown size={17} />

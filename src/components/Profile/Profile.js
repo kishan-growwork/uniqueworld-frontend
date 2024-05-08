@@ -25,6 +25,7 @@ import AgencyDetails from "./AgencyDetails";
 import { useSelector } from "react-redux";
 import ApplyLink from "./ApplyLink";
 import WhatsApp from "./WhatsApp";
+import Billingaddress from "./Billingaddress";
 // import userActions from "../../redux/user/actions";
 const AccountTabs = () => {
   // const role = useSelector(state => state.role)
@@ -62,6 +63,7 @@ const AccountTabs = () => {
                         <TabPane tabId="1"></TabPane>
                         <TabPane tabId="2"></TabPane>
                         <TabPane tabId="3"></TabPane>
+                        <TabPane tabId="4"></TabPane>
                       </TabContent>
                     </Col>
                   </Row>
@@ -70,6 +72,7 @@ const AccountTabs = () => {
               {activeTab == "1" && <ProfileDetails />}
               {activeTab == "2" && <AgencyDetails />}
               {activeTab == "3" && <WhatsApp />}
+              {activeTab == "4" && <Billingaddress />}
             </Card>
           </Fragment>
           <Fragment>
@@ -83,6 +86,7 @@ const AccountTabs = () => {
           <Card>
             <CardHeader className="border-bottom">
               <CardTitle tag="h4"> Profile Details</CardTitle>
+              <CardTitle tag="h4"> Billing Details</CardTitle>
             </CardHeader>
             <ProfileDetails />
           </Card>

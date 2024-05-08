@@ -4,13 +4,11 @@ import { Nav, NavItem, NavLink } from "reactstrap";
 // ** Icons Imports
 import { User, Anchor, Share2 } from "react-feather";
 import useBreakpoint from "../../utility/hooks/useBreakpoints";
+import { City, State } from "country-state-city";
 
 const ProfileTabs = ({ activeTab, toggleTab, themecolor }) => {
   const { width } = useBreakpoint();
-  console.info("-------------------------------");
-  console.info("width => ", width);
-  console.info("-------------------------------");
-  return width > 625 ? (
+  return width > 800 ? (
     <Nav
       pills
       className="mb-2"
@@ -75,13 +73,33 @@ const ProfileTabs = ({ activeTab, toggleTab, themecolor }) => {
           <span className="fw-bold">WhatsApp</span>
         </NavLink>
       </NavItem>
+      {/* <NavItem>
+        <NavLink
+          active={activeTab === "4"}
+          onClick={() => toggleTab("4")}
+          style={
+            activeTab === "4"
+              ? {
+                  backgroundColor: themecolor,
+                  color: "white",
+                  borderColor: themecolor,
+                  boxShadow: "0 4px 18px -4px" + themecolor,
+                }
+              : {}
+          }
+        >
+          <Anchor size={18} className="me-50" />
+          <span className="fw-bold">Billing Details</span>
+        </NavLink>
+      </NavItem> */}
     </Nav>
   ) : (
     <div
       style={{
         display: "flex",
-        fontSize: "11px",
+        fontSize: "2.3vw",
         justifyContent: "space-between",
+        // gap: "2rem",
         width: "75vw",
         marginBottom: "1rem",
       }}
@@ -93,8 +111,9 @@ const ProfileTabs = ({ activeTab, toggleTab, themecolor }) => {
           activeTab === "1"
             ? {
                 color: themecolor,
+                cursor: "pointer",
               }
-            : {}
+            : { cursor: "pointer" }
         }
       >
         Profile Details
@@ -106,8 +125,9 @@ const ProfileTabs = ({ activeTab, toggleTab, themecolor }) => {
           activeTab === "2"
             ? {
                 color: themecolor,
+                cursor: "pointer",
               }
-            : {}
+            : { cursor: "pointer" }
         }
       >
         Agency Details
@@ -120,12 +140,28 @@ const ProfileTabs = ({ activeTab, toggleTab, themecolor }) => {
             ? {
                 color: themecolor,
                 textWrap: "wrap",
+                cursor: "pointer",
               }
-            : {}
+            : { cursor: "pointer" }
         }
       >
         WhatsApp
       </div>
+      {/* <div
+        active={activeTab === "4"}
+        onClick={() => toggleTab("4")}
+        style={
+          activeTab === "4"
+            ? {
+                color: themecolor,
+                cursor: "pointer",
+                textWrap: "wrap",
+              }
+            : { cursor: "pointer" }
+        }
+      >
+        Billing Address
+      </div> */}
     </div>
   );
 };

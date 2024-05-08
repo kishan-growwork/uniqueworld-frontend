@@ -1,9 +1,16 @@
 import { all, takeEvery, put } from "redux-saga/effects";
 // import axios from "axios"
 import actions from "./actions";
-import { capturePayment, createOrderInstance, paymentSuccessfulMail } from "../../apis/payment";
+import {
+  capturePayment,
+  createOrderInstance,
+  createPayment,
+  getPaymentDetails,
+  // paymentstatus,
+  paymentSuccessfulMail,
+} from "../../apis/payment";
 import { store } from "./../store";
-import { toast } from "react-toastify";
+import { tostifyError } from "../../components/Tostify";
 
 async function setLoading(loading) {
   store.dispatch({
@@ -70,13 +77,76 @@ function* WATCH_CAPTURE_PAYMENT(action) {
 export function* WATCH_PAYMENT_SUCCESSFUL_MAIL(action) {
   try {
     setLoading(true);
-    const resp = yield paymentSuccessfulMail(action.payload)
+    const resp = yield paymentSuccessfulMail(action.payload);
     if (resp?.msg) {
       setLoading(false);
       toast.success("Your Plan Upgrade Successfully.");
     }
   } catch (err) {
+    setLoading(false);
+  }
+}
+export function* WATCH_PAYMENT_STATUS(action) {
+  try {
+    setLoading(true);
+    const resp = yield paymentstatus(action.payload); //after the api is working this need to be uncommented
+    // const resp = yield getPaymentDetails(action.payload); // this need to be commented
 
+    if (resp) {
+      yield put({
+        type: actions.PAYMENT_SET_STATE,
+        payload: {
+          paymentstatus: resp,
+          // paymentDetails: resp,
+        },
+      });
+      setLoading(false);
+      // toast.success("Your Plan Upgrade Successfully.");
+    }
+  } catch (err) {
+    setLoading(false);
+  }
+}
+export function* WATCH_CREATE_PAYMENT(action) {
+  try {
+    setLoading(true);
+    const resp = yield createPayment(action.payload);
+
+    if (resp?.data) {
+      window.open(resp?.data);
+      setLoading(false);
+    } else {
+      tostifyError("something failed");
+    }
+
+    // yield put({
+    //   type: actions.PAYMENT_SET_STATE,
+    //   payload: {
+    //     paymentstatus: resp,
+    //   },
+    // });
+
+    // toast.success("Your Plan Upgrade Successfully.");
+  } catch (err) {
+    setLoading(false);
+  }
+}
+export function* WATCH_GET_PAYMENTS_DETAILS(action) {
+  try {
+    setLoading(true);
+    const resp = yield getPaymentDetails(action.payload);
+    if (resp) {
+      yield put({
+        type: actions.PAYMENT_SET_STATE,
+        payload: {
+          paymentDetails: resp,
+        },
+      });
+
+      setLoading(false);
+      // toast.success("Your Plan Upgrade Successfully.");
+    }
+  } catch (err) {
     setLoading(false);
   }
 }
@@ -86,5 +156,8 @@ export default function* rootSaga() {
     takeEvery(actions.CREATE_ORDER_INSTANCE, WATCH_CREATE_ORDER_INSTANCE),
     takeEvery(actions.CAPTURE_PAYMENT, WATCH_CAPTURE_PAYMENT),
     takeEvery(actions.PAYMENT_SUCCESSFUL_MAIL, WATCH_PAYMENT_SUCCESSFUL_MAIL),
+    takeEvery(actions.PAYMENT_STATUS, WATCH_PAYMENT_STATUS),
+    takeEvery(actions.CREATE_PAYMENT, WATCH_CREATE_PAYMENT),
+    takeEvery(actions.GET_PAYMENTS_DETAILS, WATCH_GET_PAYMENTS_DETAILS),
   ]);
 }

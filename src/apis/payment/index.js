@@ -10,3 +10,15 @@ export const capturePayment = async (payload) => {
 export const paymentSuccessfulMail = async (payload) => {
   return await apiCall.post(`/payment/paymentMail/${payload?.id}`);
 };
+
+export const createPayment = async (payload) => {
+  return await apiCall.post("/payment/create", payload);
+};
+
+export const getPaymentDetails = async (payload) => {
+  return await apiCall.post("/payment/details", payload);
+};
+
+export const paymentstatus = async (payload) => {
+  return await apiCall.post("/payment/Status", payload);
+};

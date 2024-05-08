@@ -45,3 +45,4 @@ export const getAgencyDashboardTableData = async (payload) => {
 export const updateAgencyValidity = async (payload) => {
   return await apiCall.post(`/superAdmin/updatevalidity`, payload);
 };
+

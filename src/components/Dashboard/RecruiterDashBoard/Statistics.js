@@ -92,7 +92,21 @@ const Statistics = ({ setYear, setMonth, candidate, year, month }) => {
   const renderData = () => {
     return data.map((item, index) => {
       return (
-        <Col key={index} md={6} className="mb-5">
+        <Col
+          key={index}
+          lg={6}
+          xs={6}
+          xl={6}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "left",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+          }}
+          className="mb-5"
+        >
           <div className="d-flex align-items-center">
             <Avatar color={item.color} icon={item.icon} className="me-2" />
             <div className="my-auto">
