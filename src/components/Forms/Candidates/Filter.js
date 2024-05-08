@@ -62,9 +62,9 @@ const Filter = ({
   handleFilterToggleMode = () => {},
   handleFilter = () => {},
   clear,
-  setclear = () => { },
-  filterKey = () => { },
-  filterData
+  setclear = () => {},
+  filterKey = () => {},
+  filterData,
   // handleClearr,
 }) => {
   const { clients } = useSelector((state) => state.auth.user);
@@ -372,6 +372,7 @@ const Filter = ({
 
   const handleClear = () => {
     const data = {};
+    setSalaryRange("");
     setQuelification({ value: "", label: "Select Qualification" });
     setGender({ value: "", label: "Select Gender" });
     setEnglish({ value: "", label: "Select English" });
@@ -434,7 +435,7 @@ const Filter = ({
         });
       }
     } else {
-      setLoading(false)
+      setLoading(false);
     }
     setFilterData([]);
     setSubCourse({ label: "Select Field" });

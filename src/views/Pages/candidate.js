@@ -94,10 +94,6 @@ const SecondPage = ({
   const location = useLocation().search;
   const auth = useSelector((state) => state?.auth);
   const { client } = useSelector((state) => state);
-  console.info("--------------------");
-  console.info("params => ", params?.pathname?.includes("/best-matches"));
-  console.info("--------------------");
-  const isBestMatches = params?.pathname?.includes("/best-matches");
   const {
     currentPlan,
     currentSubscription,
@@ -156,7 +152,6 @@ const SecondPage = ({
   //     });
   //   // }
   // }, [isBestMatches])
-  
 
   const toggle = (index) => {
     const newCollapseStates = [...isOpen];
@@ -209,19 +204,18 @@ const SecondPage = ({
   }, [candidates]);
 
   useEffect(() => {
-    if (candidates?.results && isBestMatches == false) {
+    if (candidates?.results && bestMatchesCandidate == false) {
       setCandidateList(candidates?.results);
       setLoading(false);
     }
   }, [candidates?.results]);
 
   useEffect(() => {
-    if (bestMatchesCandidates?.results && isBestMatches == true) {
+    if (bestMatchesCandidates?.results && bestMatchesCandidate == true) {
       setCandidateList(bestMatchesCandidates?.results);
       setLoading(false);
     }
-  }, [bestMatchesCandidates])
-  
+  }, [bestMatchesCandidates]);
 
   const getCandidates = async (page) => {
     setLoading(true);
@@ -262,7 +256,7 @@ const SecondPage = ({
           },
         });
       } else {
-        if (isBestMatches == true) {
+        if (bestMatchesCandidate == true) {
           dispatch({
             type: CandidateActions.GET_BEST_MATCHES_CANDIDATE,
             payload: {
@@ -298,7 +292,7 @@ const SecondPage = ({
 
   useEffect(() => {
     getCandidates(currentPage);
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (
@@ -356,7 +350,7 @@ const SecondPage = ({
   //   setTotalRows(candidates.total);
   // }, [candidates]);
   useEffect(() => {
-    if (bestMatchesCandidates?.total && isBestMatches == true) {
+    if (bestMatchesCandidates?.total && bestMatchesCandidate == true) {
       setTotalRows(bestMatchesCandidates.total);
     } else {
       setTotalRows(candidates.total);
@@ -382,7 +376,7 @@ const SecondPage = ({
     dispatch({
       type: CandidateActions.DELETE_CANDIDATE,
       payload: { id: row.id },
-      setLoading
+      setLoading,
     });
   };
 
@@ -1212,7 +1206,7 @@ const SecondPage = ({
           },
         });
       } else {
-        if (isBestMatches == true) {
+        if (bestMatchesCandidate == true) {
           dispatch({
             type: CandidateActions.GET_BEST_MATCHES_CANDIDATE,
             payload: {
@@ -1235,7 +1229,6 @@ const SecondPage = ({
         }
       }
     } else {
-      console.log("elseeeeeeeeeeeeeeeee", data);
       await dispatch({
         type: CandidateActions.GET_CANDIDATE,
         payload: {
@@ -1490,7 +1483,12 @@ const SecondPage = ({
   const endPage = Math.min(totalPages, startPage + 4);
   const visiblePageNumbers = pageNumbers.slice(startPage - 1, endPage);
   function filterKey(data) {
-    const notIncludedKeys = ["industriesId", "userId", "dataMergePermission"];
+    const notIncludedKeys = [
+      "industriesId",
+      "userId",
+      "dataMergePermission",
+      "salaryRangeEnd",
+    ];
     if (auth?.user?.clients) {
       notIncludedKeys.push("jobCategoryId");
     }
@@ -1628,7 +1626,7 @@ const SecondPage = ({
           <b>
             {isSavedCandidates
               ? "Saved Candidates"
-              : isBestMatches == true
+              : bestMatchesCandidate == true
               ? "Best Matches Candidates"
               : "Candidates"}{" "}
           </b>
