@@ -93,7 +93,7 @@ const SecondPage = ({
   const dispatch = useDispatch();
   const location = useLocation().search;
   const auth = useSelector((state) => state?.auth);
-  // const { client } = useSelector((state) => state);
+  const { client } = useSelector((state) => state);
   const {
     currentPlan,
     currentSubscription,
