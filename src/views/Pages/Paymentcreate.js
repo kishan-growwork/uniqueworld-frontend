@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom/cjs/react-router-dom";
 
 const Paymentcreate = () => {
+  const slug = localStorage.getItem("slug");
   const params = useParams();
   const dispatch = useDispatch();
   const [cities, setCities] = useState([]);
@@ -131,6 +132,7 @@ const Paymentcreate = () => {
           totalAmountWithTax,
           price: planbyid?.price,
           tax: planbyid?.Tax,
+          slug: slug,
           // planId: planbyid?.id,
           pincode: zipcode,
           pannumber,
