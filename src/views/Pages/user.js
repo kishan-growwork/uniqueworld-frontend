@@ -875,7 +875,10 @@ const User = () => {
                                   <div
                                     className="view-collapse"
                                     onClick={() => toggle(index)}
-                                    style={{ color: themecolor }}
+                                    style={{
+                                      color: themecolor,
+                                      cursor: "pointer",
+                                    }}
                                   >
                                     View Less
                                     <ChevronUp size={17} />{" "}
@@ -886,7 +889,10 @@ const User = () => {
                                   <div
                                     className="view-collapse"
                                     onClick={() => toggle(index)}
-                                    style={{ color: themecolor }}
+                                    style={{
+                                      color: themecolor,
+                                      cursor: "pointer",
+                                    }}
                                   >
                                     View More
                                     <ChevronDown size={17} />

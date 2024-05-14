@@ -182,7 +182,7 @@ const Clients = () => {
     dispatch({
       type: ClientActions.DELETE_CLIENT,
       payload: { id: row.id },
-      setLoading
+      setLoading,
     });
   };
 
@@ -235,7 +235,7 @@ const Clients = () => {
                 dispatch({
                   type: ClientActions.APPROVE_CLIENT,
                   payload: row,
-                  setLoading
+                  setLoading,
                 });
               } else {
                 toast.warn("Client already approved");
@@ -252,7 +252,7 @@ const Clients = () => {
                 dispatch({
                   type: ClientActions.DECLINED_CLIENT,
                   payload: row,
-                  setLoading
+                  setLoading,
                 });
               } else {
                 toast.warn("Client already Declined");
@@ -994,7 +994,10 @@ const Clients = () => {
                                     <div
                                       className="view-collapse"
                                       onClick={() => toggle(index)}
-                                      style={{ color: themecolor }}
+                                      style={{
+                                        color: themecolor,
+                                        cursor: "pointer",
+                                      }}
                                     >
                                       View Less
                                       <ChevronUp size={17} />{" "}
@@ -1005,7 +1008,10 @@ const Clients = () => {
                                     <div
                                       className="view-collapse"
                                       onClick={() => toggle(index)}
-                                      style={{ color: themecolor }}
+                                      style={{
+                                        color: themecolor,
+                                        cursor: "pointer",
+                                      }}
                                     >
                                       View More
                                       <ChevronDown size={17} />

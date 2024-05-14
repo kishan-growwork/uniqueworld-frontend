@@ -104,19 +104,21 @@ function Paymentstatus() {
               )}
             </p>
             <div>
-              <p
-                onClick={() =>
-                  history.push(
-                    `/${slug}/payment/preview/${params?.merchantTransactionid}`
-                  )
-                }
-                style={{
-                  textDecoration: "underline",
-                  cursor: "pointer",
-                }}
-              >
-                View receipt
-              </p>
+              {details?.code == "PAYMENT_SUCCESS" ? (
+                <p
+                  onClick={() =>
+                    history.push(
+                      `/${slug}/payment/preview/${params?.merchantTransactionid}`
+                    )
+                  }
+                  style={{
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                >
+                  View receipt
+                </p>
+              ) : null}
             </div>
             <div style={{ paddingTop: "20px", textAlign: "center" }}>
               <a
