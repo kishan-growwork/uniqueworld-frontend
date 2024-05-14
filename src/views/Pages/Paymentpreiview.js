@@ -10,6 +10,9 @@ const Paymentpreiview = () => {
   const details = useSelector(
     (state) => state?.payment?.paymentDetails?.response
   );
+  console.info("-------------------------------");
+  console.info("details => ", details);
+  console.info("-------------------------------");
   let invoiceto = "";
   if (
     details?.Company !== null &&

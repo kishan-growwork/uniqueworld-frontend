@@ -6,6 +6,7 @@ import {
   createOrderInstance,
   createPayment,
   getPaymentDetails,
+  paymentstatus,
   // paymentstatus,
   paymentSuccessfulMail,
 } from "../../apis/payment";
