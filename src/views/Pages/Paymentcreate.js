@@ -436,11 +436,21 @@ const Paymentcreate = () => {
                    */}
               </div>
               <div>
-                <div className="d-flex justify-content-between align-items-center mt-3">
+                <div
+                  style={{
+                    margin: "10px",
+                  }}
+                  className="d-flex justify-content-between align-items-center"
+                >
                   <p className="mb-0">Subtotal</p>
-                  <h4 className="mb-0">{planbyid?.price}</h4>
+                  <h4 className="mb-0">{`₹ ${planbyid?.price}`}</h4>
                 </div>
-                <div className="d-flex justify-content-between align-items-center">
+                <div
+                  style={{
+                    margin: "10px",
+                  }}
+                  className="d-flex justify-content-between align-items-center m-[10px]"
+                >
                   <p className="mb-0">
                     Tax
                     <span
@@ -450,7 +460,7 @@ const Paymentcreate = () => {
                       className="bold justify-content-between align-items-center"
                     >{` ( ${planbyid?.Tax}% ) `}</span>
                   </p>
-                  <h4 className="mb-0">{`${totalTaxAmount}`}</h4>
+                  <h4 className="mb-0">{`₹ ${totalTaxAmount}`}</h4>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between align-items-center pb-1">
