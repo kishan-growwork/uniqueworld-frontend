@@ -17,9 +17,10 @@ function Paymentstatus() {
     };
     fetchPaymentStatus();
   }, []);
-  const details = useSelector(
-    (state) => state?.payment?.paymentstatus?.response?.response
-  );
+  const details = useSelector((state) => state?.payment?.paymentstatus?.data);
+  console.info("-------------------------------");
+  console.info("details => ", details);
+  console.info("-------------------------------");
   const slug = localStorage.getItem("slug");
   const history = useHistory();
   return (
