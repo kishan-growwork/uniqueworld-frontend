@@ -23,7 +23,8 @@ const Invoice = () => {
   if (
     details?.Company !== null &&
     details?.Company !== "" &&
-    details?.Company !== "null"
+    details?.Company !== "null" &&
+    details?.Company !== undefined
   ) {
     invoiceto = details?.Company;
   } else {
@@ -35,6 +36,7 @@ const Invoice = () => {
       details?.lastname && details?.lastname != null ? details?.lastname : null
     }`;
   }
+
   class ComponentToPrint extends React.Component {
     render() {
       return (
@@ -209,7 +211,7 @@ const Invoice = () => {
                           </b>
                         </td>
                         <td style={{ padding: "0.75rem" }}>
-                          <span className="fw-bold">{`₹ ${details?.price}`}</span>
+                          <span className="fw-bold">{`₹ ${details?.plans?.price}`}</span>
                         </td>
                         <td style={{ padding: "0.75rem" }}>
                           <span className="fw-bold">{`${details?.tax} %`}</span>
