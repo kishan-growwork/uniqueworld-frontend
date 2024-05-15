@@ -17,7 +17,8 @@ const Paymentpreiview = () => {
   if (
     details?.Company !== null &&
     details?.Company !== "" &&
-    details?.Company !== "null"
+    details?.Company !== "null" &&
+    details?.Company !== undefined
   ) {
     invoiceto = details?.Company;
   } else {
