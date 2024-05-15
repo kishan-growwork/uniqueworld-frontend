@@ -163,25 +163,26 @@ const Invoice = () => {
                         <span
                           style={{
                             color:
-                              details?.response?.data?.state === "COMPLETED"
+                              details?.servertoserverRes?.state === "COMPLETED"
                                 ? "green"
                                 : "red",
                             fontWeight: "bold",
                           }}
                         >
-                          {details?.response?.data?.state}
+                          {details?.servertoserverRes?.state}
                         </span>
                       </p>
                       <p className="mb-25 card-text">
-                        Type: {details?.response?.data?.paymentInstrument?.type}
+                        Type:{" "}
+                        {details?.servertoserverRes?.paymentInstrument?.type}
                       </p>
                       <p className="mb-25 card-text">
                         MerchantTransactionId: <br />
-                        {details?.response?.data?.merchantTransactionId}
+                        {details?.servertoserverRes?.merchantTransactionId}
                       </p>
                       <p className="mb-25 card-text">
                         TransactionId: <br />
-                        {details?.response?.data?.transactionId}
+                        {details?.servertoserverRes?.transactionId}
                       </p>
                     </div>
                   </div>
