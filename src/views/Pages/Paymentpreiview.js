@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom";
 import actions from "../../redux/payment/actions";
+import { Button } from "reactstrap";
 
 const Paymentpreiview = () => {
   const dispatch = useDispatch();
@@ -10,9 +11,6 @@ const Paymentpreiview = () => {
   const details = useSelector(
     (state) => state?.payment?.paymentDetails?.response
   );
-  console.info("-------------------------------");
-  console.info("details => ", details);
-  console.info("-------------------------------");
   let invoiceto = "";
   if (
     details?.Company !== null &&
@@ -40,10 +38,17 @@ const Paymentpreiview = () => {
     };
     fetchPaymentDetails();
   }, []);
+  const themecolor = useSelector(
+    (state) => state?.agency?.agencyDetail?.themecolor
+  );
   return (
     <>
       <div className="d-flex gap-3">
-        <div>
+        <div
+          style={{
+            marginTop: "0.5rem",
+          }}
+        >
           <p
             onClick={() => history.push(`/${slug}/pricing`)}
             style={{
@@ -53,21 +58,6 @@ const Paymentpreiview = () => {
           >
             Go back
           </p>
-        </div>
-        <div>
-          <button
-            onClick={() =>
-              history.push(`/${slug}/invoice/${params?.merchantTransactionid}`)
-            }
-            style={{
-              textDecoration: "underline",
-              cursor: "pointer",
-              border: "none",
-              backgroundColor: "white",
-            }}
-          >
-            Download PDF
-          </button>
         </div>
       </div>
       <div
@@ -230,6 +220,26 @@ const Paymentpreiview = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Button
+          onClick={() =>
+            history.push(`/${slug}/invoice/${params?.merchantTransactionid}`)
+          }
+          style={{
+            padding: "10px",
+            backgroundColor: themecolor,
+            color: "white",
+          }}
+          color="default"
+        >
+          Download Invoice
+        </Button>
       </div>
     </>
   );

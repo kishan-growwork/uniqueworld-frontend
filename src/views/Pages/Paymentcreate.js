@@ -156,9 +156,6 @@ const Paymentcreate = () => {
   const totalTaxAmount = Math.round(planbyid?.taxAmount);
   const totalAmountWithTax =
     Number(totalTaxAmount) + Number(planbyid?.priceNumeric);
-  console.info("-------------------------------");
-  console.info("totalTaxAmount => ", totalTaxAmount);
-  console.info("-------------------------------");
 
   useEffect(() => {
     const getCities = async () => {

@@ -114,7 +114,7 @@ export function* WATCH_CREATE_PAYMENT(action) {
     const resp = yield createPayment(action.payload);
 
     if (resp?.data) {
-      window.open(resp?.data);
+      window.open(resp?.data, "_self");
       setLoading(false);
     } else {
       tostifyError("something failed");
