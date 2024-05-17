@@ -143,9 +143,9 @@ export default [
   },
   {
     id: "Price",
-    title: "Price",
+    title: "Pricing",
     icon: <CreditCard size={20} />,
     navLink: "/pricing",
-    permission: ["Client"],
+    permission: ["Client", "Public"],
   },
 ];
