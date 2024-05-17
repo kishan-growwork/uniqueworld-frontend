@@ -229,16 +229,15 @@ const SecondPage = ({
         data.industriesId = industriesId;
       });
       if (!filterData?.jobCategoryId) {
-        const jobCategoryId = [];
+        const jobCategoryId = []; 
         auth?.user?.clients?.jobCategory_relation?.map((ele) => {
           jobCategoryId.push(ele?.jobCategoryId);
           data.jobCategoryId = jobCategoryId;
         });
       }
-      if (filterJobCategory?.length > 0) {
+      if (filterJobCategory?.length) {
         data.filterJobCategoryId = filterJobCategory;
-        // delete data.jobCategoryId;
-      }
+       }
     } else {
       if (jobCategoryId.length > 0) {
         data.jobCategoryId = jobCategoryId;
@@ -258,7 +257,7 @@ const SecondPage = ({
       } else {
         if (bestMatchesCandidate == true) {
           dispatch({
-            type: CandidateActions.GET_BEST_MATCHES_CANDIDATE,
+            type: CandidateActions.GET_BEST_MATCHES_CANDIDATE, 
             payload: {
               filterData: data,
               page,
@@ -296,7 +295,7 @@ const SecondPage = ({
 
   useEffect(() => {
     if (
-      filterKey(filterData).length !== 0 &&
+      Object.keys(filterData).length &&
       create === false &&
       update === false &&
       show === false
@@ -310,7 +309,7 @@ const SecondPage = ({
       setCandidate([]);
       setIndustriesData([]);
     }
-  }, [show]);
+  }, [show]); 
 
   const clearStates = () => {
     if (candidates === "candidates_email_unique") {
