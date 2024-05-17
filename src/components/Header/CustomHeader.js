@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -17,6 +17,7 @@ import {
   X,
   Mail,
   MoreVertical,
+  Search,
 } from "react-feather";
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
@@ -27,7 +28,7 @@ import actions from "../../redux/candidate/actions";
 import { tostifySuccess } from "../Tostify";
 import { useLocation } from "react-router-dom";
 import ComposeEmail from "../ComposeEmail/ComposeEmail";
-import { debounce } from "lodash";
+// import { debounce } from "lodash";
 import useBreakpoint from "../../utility/hooks/useBreakpoints";
 const CustomHeader = ({
   store,
@@ -57,16 +58,16 @@ const CustomHeader = ({
   //   }
   // }, [filterData]);
 
-  const debounceOnChangeForMobileNumber = useCallback(
-    debounce((q) => {
-      if (q) {
-        setFilterData({ mobile: q });
-      } else {
-        setFilterData({});
-      }
-    }, 300),
-    []
-  );
+  // const debounceOnChangeForMobileNumber = useCallback(
+  //   debounce((q) => {
+  //     if (q) {
+  //       setFilterData({ mobile: q });
+  //     } else {
+  //       setFilterData({});
+  //     }
+  //   }, 300),
+  //   []
+  // );
   const professionalField = [
     "jobCategoryId",
     "industriesId",
@@ -219,6 +220,7 @@ const CustomHeader = ({
         <Col xl="6" className="d-flex align-items-center p-0">
           <Col>
             {location === `/${slug}/candidate` ? (
+              <div style={{position: "relative"}}>
               <Input
                 id="filterMobile"
                 type="text"
@@ -239,13 +241,26 @@ const CustomHeader = ({
                         borderColor: focus === "filterMobile" && themecolor,
                       }
                 }
+                onKeyDown={(e) => {
+                  if (e.keyCode === 13) {
+                    setFilterData({ mobile: e.target.value.replace(/\D/g, "") })
+                  }
+                }}
                 onChange={(e) => {
                   setMobile(e.target.value.replace(/\D/g, ""));
-                  debounceOnChangeForMobileNumber(
-                    e.target.value.replace(/\D/g, "")
-                  );
+                  console.info('--------------------')
+                  console.info('e.target.value => ', e.target.value )
+                  console.info('--------------------')
+                  if (e.target.value.replace(/\D/g, "") == "") {
+                    setFilterData({ mobile: e.target.value.replace(/\D/g, "") })
+                  }
+                  // debounceOnChangeForMobileNumber(
+                  //   e.target.value.replace(/\D/g, "")
+                  // );
                 }}
               />
+              <Search style={{position: "absolute", top: "7px", right: "52%"}} onClick={() => setFilterData({ mobile: mobile })}/>
+              </div>
             ) : null}
           </Col>
 

@@ -34,6 +34,7 @@ const InterviewForm = ({
   const location = useLocation().search;
   const first = new URLSearchParams(location).get("first");
   const last = new URLSearchParams(location).get("last");
+  const candidateIdURL = new URLSearchParams(location).get("id");
   const [selectCompany, setSelectCompany] = useState();
   const [clientOptions, setClientOptions] = useState([]);
   const [date, setDate] = useState();
@@ -43,6 +44,10 @@ const InterviewForm = ({
   const [statusOp, setStatusOp] = useState();
   const [disableField, setDisableField] = useState(false);
   const { agencyDetail } = useSelector((state) => state?.agency);
+
+  console.info("--------------------");
+  console.info("candidateIdURL => ", candidateIdURL);
+  console.info("--------------------");
 
   const getCandidate = async (text) => {
     const payload = {
@@ -155,12 +160,14 @@ const InterviewForm = ({
   }, [candidates, clients, show, getCompany]);
 
   const loadOptions = async (inputValue, callback) => {
-    try {
-      const data = await getCandidate(inputValue);
-      callback(data || []);
-    } catch (error) {
-      console.error("Error loading options:", error);
-      callback([]);
+    if (candidateIdURL == null) {
+      try {
+        const data = await getCandidate(inputValue);
+        callback(data || []);
+      } catch (error) {
+        console.error("Error loading options:", error);
+        callback([]);
+      }
     }
   };
 

@@ -109,7 +109,7 @@ const Filter = ({
         setFilterToggleMode(false);
       }
       if (event.key === "Enter") {
-        document.getElementById("handleFilterData").click();
+        document.getElementById("handleFilterData")?.click();
       }
     };
     document.addEventListener("keydown", keyDownHandler);
