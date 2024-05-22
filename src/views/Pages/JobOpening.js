@@ -156,11 +156,14 @@ const JobOpening = () => {
     })();
   }, []);
 
+  console.info("----------------------------");
+  console.info("create =>", create);
+  console.info("----------------------------");
+
   useEffect(() => {
-    if (create === false && update === false) {
-      getjobOpening(currentPage);
-    }
-  }, [create, update]);
+    console.log("hereeeeeeeeeee");
+    getjobOpening(currentPage);
+  }, []);
 
   useEffect(() => {
     if (!show) setJobOpening([]);

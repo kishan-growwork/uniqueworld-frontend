@@ -19,7 +19,6 @@ import { useDispatch, useSelector } from "react-redux";
 import actions from "../redux/auth/actions";
 import PublicCandidate from "../views/Pages/PublicCandidate";
 import PublicClient from "../views/Pages/PublicClient";
-import { check_token } from "../apis/auth";
 import LandingPage from "../views/Pages/LandingPage/LandingPage";
 import Policy from "../views/Pages/FooterPolicy/Policy";
 import Error from "../views/Error";
@@ -28,7 +27,6 @@ import ContactUs from "../views/Pages/FooterPolicy/ContactUs";
 import TermsAndCondition from "../views/Pages/FooterPolicy/TermsAndCondition";
 import ShippingAndDelivery from "../views/Pages/FooterPolicy/ShippingAndDelivery";
 import { Button, Form, Modal, ModalBody, ModalHeader } from "reactstrap";
-import { persistor } from "../redux/store";
 import Login from "../views/Pages/Login";
 import Pricing from "../views/Pages/LandingPage/Pricing/Pricing";
 import ClientRegistration from "../views/Pages/ClientRegistration";
@@ -45,21 +43,21 @@ const Router = () => {
 
   const currentActiveItem = null;
 
-  useEffect(() => {
-    async function fetchData() {
-      const token = localStorage.getItem("token");
-      if (token) {
-        const check_token_timeOut = await check_token(token);
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const token = localStorage.getItem("token");
+  //     if (token) {
+  //       const check_token_timeOut = await check_token(token);
 
-        if (check_token_timeOut.expired != false) {
-          localStorage.clear();
-          window.localStorage.removeItem("persist:root");
-          persistor.pause();
-        }
-      }
-    }
-    fetchData();
-  }, [user]);
+  //       if (check_token_timeOut.expired != false) {
+  //         localStorage.clear();
+  //         window.localStorage.removeItem("persist:root");
+  //         persistor.pause();
+  //       }
+  //     }
+  //   }
+  //   fetchData();
+  // }, [user]);
 
   const LayoutRoutesAndPaths = (layout) => {
     const LayoutRoutes = [];
@@ -134,20 +132,20 @@ const Router = () => {
                               /*eslint-disable */
                               {...(route.appLayout
                                 ? {
-                                  appLayout: route.appLayout,
-                                }
+                                    appLayout: route.appLayout,
+                                  }
                                 : {})}
                               {...(route.meta
                                 ? {
-                                  routeMeta: route.meta,
-                                }
+                                    routeMeta: route.meta,
+                                  }
                                 : {})}
                               {...(route.className
                                 ? {
-                                  wrapperClass: route.className,
-                                }
+                                    wrapperClass: route.className,
+                                  }
                                 : {})}
-                            /*eslint-enable */
+                              /*eslint-enable */
                             >
                               {/* <Suspense fallback={null}> */}
                               <PrivateRoute

@@ -17,7 +17,7 @@ import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { useDispatch, useSelector } from "react-redux";
 import Scrollbars from "react-custom-scrollbars";
 import { selectThemeColors } from "../../../utility/Utils";
-import actions from "./../../../redux/jobCategory/actions";
+import actions from "./../../../redux/user/actions";
 import { Country, State, City } from "country-state-city";
 import useBreakpoint from "../../../utility/hooks/useBreakpoints";
 
@@ -154,7 +154,7 @@ const Filter = ({
     setSelectedState("");
     setSelectedCity("");
     await dispatch({
-      type: actions.GET_JOBCAT,
+      type: actions.GET_USER,
       payload: {
         filterData: [],
         page: 1,

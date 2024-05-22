@@ -220,46 +220,55 @@ const CustomHeader = ({
         <Col xl="6" className="d-flex align-items-center p-0">
           <Col>
             {location === `/${slug}/candidate` ? (
-              <div style={{position: "relative"}}>
-              <Input
-                id="filterMobile"
-                type="text"
-                maxLength={10}
-                placeholder="Enter Mobile"
-                value={mobile}
-                onFocus={() => setIsfocus("filterMobile")}
-                onBlur={() => setIsfocus(null)}
-                style={
-                  width <= 768
-                    ? {
-                        width: "180%",
-                        borderRadius: "10px",
-                        borderColor: focus === "filterMobile" && themecolor,
-                      }
-                    : {
-                        width: "50%",
-                        borderColor: focus === "filterMobile" && themecolor,
-                      }
-                }
-                onKeyDown={(e) => {
-                  if (e.keyCode === 13) {
-                    setFilterData({ mobile: e.target.value.replace(/\D/g, "") })
+              <div style={{ position: "relative" }}>
+                <Input
+                  id="filterMobile"
+                  type="text"
+                  maxLength={10}
+                  placeholder="Enter Mobile"
+                  value={mobile}
+                  onFocus={() => setIsfocus("filterMobile")}
+                  onBlur={() => setIsfocus(null)}
+                  style={
+                    width <= 768
+                      ? {
+                          width: "180%",
+                          borderRadius: "10px",
+                          borderColor: focus === "filterMobile" && themecolor,
+                        }
+                      : {
+                          width: "50%",
+                          borderColor: focus === "filterMobile" && themecolor,
+                        }
                   }
-                }}
-                onChange={(e) => {
-                  setMobile(e.target.value.replace(/\D/g, ""));
-                  console.info('--------------------')
-                  console.info('e.target.value => ', e.target.value )
-                  console.info('--------------------')
-                  if (e.target.value.replace(/\D/g, "") == "") {
-                    setFilterData({ mobile: e.target.value.replace(/\D/g, "") })
-                  }
-                  // debounceOnChangeForMobileNumber(
-                  //   e.target.value.replace(/\D/g, "")
-                  // );
-                }}
-              />
-              <Search style={{position: "absolute", top: "7px", right: "52%"}} onClick={() => setFilterData({ mobile: mobile })}/>
+                  onKeyDown={(e) => {
+                    if (e.keyCode === 13) {
+                      setFilterData({
+                        mobile: e.target.value.replace(/\D/g, ""),
+                      });
+                    }
+                  }}
+                  onChange={(e) => {
+                    setMobile(e.target.value.replace(/\D/g, ""));
+                    console.info("--------------------");
+                    console.info("e.target.value => ", e.target.value);
+                    console.info("--------------------");
+                    if (e.target.value.replace(/\D/g, "") == "") {
+                      setFilterData({
+                        mobile: e.target.value.replace(/\D/g, ""),
+                      });
+                    }
+                  }}
+                />
+                <Search
+                  style={{
+                    position: "absolute",
+                    cursor: "pointer",
+                    top: "7px",
+                    right: "52%",
+                  }}
+                  onClick={() => setFilterData({ mobile: mobile })}
+                />
               </div>
             ) : null}
           </Col>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Select from "react-select";
 import { Row, Col, Input, Label } from "reactstrap";
 import { selectThemeColors } from "@utils";
@@ -6,8 +6,7 @@ import Flatpickr from "react-flatpickr";
 import "@styles/react/libs/flatpickr/flatpickr.scss";
 import moment from "moment";
 import { useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import actions from "../../../redux/client/actions";
+import { useSelector } from "react-redux";
 import { getCandidateAPI } from "../../../apis/candidate";
 import AsyncSelect from "react-select/async";
 
@@ -28,7 +27,6 @@ const InterviewForm = ({
   setInterviewValidation,
   handleChange = () => {},
 }) => {
-  const dispatch = useDispatch();
   const getCompany = useSelector((state) => state.client);
   const [selectCandidate, setSelectCandidate] = useState();
   const location = useLocation().search;
@@ -56,7 +54,10 @@ const InterviewForm = ({
         firstname: text,
       },
     };
-    const resp = await getCandidateAPI(payload);
+    let resp;
+    if (text.length >= 2) {
+      resp = await getCandidateAPI(payload);
+    }
     const data = resp?.results?.map((ele) => {
       ele.label = `${ele.firstname} ${ele.lastname}`;
       ele.value = ele?.id;
@@ -65,12 +66,6 @@ const InterviewForm = ({
     });
     return data || [];
   };
-
-  useEffect(() => {
-    dispatch({
-      type: actions.GET_All_CLIENT,
-    });
-  }, []);
 
   useEffect(() => {
     if (create) {
@@ -162,7 +157,10 @@ const InterviewForm = ({
   const loadOptions = async (inputValue, callback) => {
     if (candidateIdURL == null) {
       try {
-        const data = await getCandidate(inputValue);
+        let data;
+        if (inputValue.length >= 2) {
+          data = await getCandidate(inputValue);
+        }
         callback(data || []);
       } catch (error) {
         console.error("Error loading options:", error);
@@ -171,13 +169,29 @@ const InterviewForm = ({
     }
   };
 
+  function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
+  const debouncedHandleChange = useCallback(
+    debounce((e) => {
+      setSelectCandidate(e);
+      handleChange(e, "candidate");
+      setSelectCandidateValidation(e.value);
+    }, 100),
+    []
+  );
   const handleInputChange = (newValue) => {
     const val = newValue.replace(/\W/g, "");
     return val;
   };
   const [focus, setIsfocus] = useState(null);
   const themecolor = localStorage.getItem("themecolor");
-
   return (
     <div>
       <Row className="gy-1 pt-75">
@@ -201,11 +215,7 @@ const InterviewForm = ({
               defaultOptions
               onInputChange={handleInputChange}
               theme={selectThemeColors}
-              onChange={(e) => {
-                setSelectCandidate(e);
-                handleChange(e, "candidate");
-                setSelectCandidateValidation(e.value);
-              }}
+              onChange={debouncedHandleChange}
             />
           </div>
         </Col>

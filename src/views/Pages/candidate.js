@@ -1479,6 +1479,16 @@ const SecondPage = ({
     (_, index) => index + 1
   );
 
+  function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
+
   const startPage = Math.max(1, currentPage - 2);
   const endPage = Math.min(totalPages, startPage + 4);
   const visiblePageNumbers = pageNumbers.slice(startPage - 1, endPage);
