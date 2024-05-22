@@ -14,8 +14,10 @@ import "@styles/base/pages/page-misc.scss";
 import { useSelector } from "react-redux";
 
 const Error = () => {
-  const { user } = useSelector((state) => state.user);
-
+  const { user, isExpired } = useSelector((state) => state.user);
+  console.info("-------------------------------");
+  console.info("isExpired => ", isExpired);
+  console.info("-------------------------------");
   // ** Hooks
   const { skin } = useSkin();
   const slugId = localStorage.getItem("slug");
@@ -41,23 +43,43 @@ const Error = () => {
           <p className="mb-2">
             Oops! 😖 The requested URL was not found on this server.
           </p>
-          <Button
-            tag={Link}
-            to={
-              user?.role?.name === "Client"
-                ? `/${slugId}/candidate`
-                : `/${slugId}/dashboard`
-            }
-            color="defult"
-            className="btn-sm-block mb-2"
-            style={{ backgroundColor: themecolor, color: "white" }}
-          >
-            {user?.role?.name === "Client" ? (
-              <>Back To Candidate</>
-            ) : (
-              <>Back to home</>
-            )}
-          </Button>
+          {isExpired == true ? (
+            <Button
+              tag={Link}
+              to={
+                user?.role?.name === "Client"
+                  ? `/${slugId}/pricing`
+                  : `/${slugId}/dashboard`
+              }
+              color="defult"
+              className="btn-sm-block mb-2"
+              style={{ backgroundColor: themecolor, color: "white" }}
+            >
+              {user?.role?.name === "Client" ? (
+                <>Back To Pricing</>
+              ) : (
+                <>Back to home</>
+              )}
+            </Button>
+          ) : (
+            <Button
+              tag={Link}
+              to={
+                user?.role?.name === "Client"
+                  ? `/${slugId}/candidate`
+                  : `/${slugId}/dashboard`
+              }
+              color="defult"
+              className="btn-sm-block mb-2"
+              style={{ backgroundColor: themecolor, color: "white" }}
+            >
+              {user?.role?.name === "Client" ? (
+                <>Back To Candidate</>
+              ) : (
+                <>Back to home</>
+              )}
+            </Button>
+          )}
           <img className="img-fluid" src={source} alt="Not authorized page" />
         </div>
       </div>

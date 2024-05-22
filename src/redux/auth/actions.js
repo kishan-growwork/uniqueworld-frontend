@@ -12,5 +12,6 @@ const actions = {
   CHANGE_PASSWORD: "CHANGE_PASSWORD",
   AUTH_LOADING: "AUTH_LOADING",
   UPDATE_AUTH_STATE: "UPDATE_AUTH_STATE",
+  IS_EXPIRE: "IS_EXPIRE",
 };
 export default actions;

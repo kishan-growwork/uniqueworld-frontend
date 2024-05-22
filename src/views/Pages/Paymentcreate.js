@@ -5,6 +5,7 @@ import Select from "react-select";
 import planActions from "../../redux/plan/actions";
 import { tostify } from "../../components/Tostify";
 import actions from "../../redux/payment/actions";
+import actionsauth from "../../redux/auth/actions";
 
 import {
   Row,
@@ -21,8 +22,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom/cjs/react-router-dom";
 
 const Paymentcreate = () => {
-  const params = useParams();
+  const { isExpire } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+  const params = useParams();
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState([]);
   const [firstname, setfirstname] = useState("");
@@ -125,6 +127,14 @@ const Paymentcreate = () => {
   async function handlecreatepayment() {
     const err = await Validations();
     if (err === false) {
+      if (isExpire) {
+        dispatch({
+          type: actionsauth.SET_STATE,
+          payload: {
+            isExpire: false,
+          },
+        });
+      }
       await dispatch({
         type: actions.CREATE_PAYMENT,
         payload: {

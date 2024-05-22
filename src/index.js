@@ -45,7 +45,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 // ** Service Worker
 import * as serviceWorker from "./serviceWorker";
-import { SpeedInsights } from "@vercel/speed-insights/react"
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 // ** Lazy load app
 const LazyApp = lazy(() => import("./App"));
@@ -53,8 +53,8 @@ const LazyApp = lazy(() => import("./App"));
 const root = createRoot(document.getElementById("root"));
 
 root.render(
-  <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
+  <PersistGate loading={null} persistor={persistor}>
+    <Provider store={store}>
       <Suspense fallback={<Spinner />}>
         <ThemeContext>
           <LazyApp />
@@ -62,8 +62,8 @@ root.render(
           <SpeedInsights />
         </ThemeContext>
       </Suspense>
-    </PersistGate>
-  </Provider>
+    </Provider>
+  </PersistGate>
 );
 
 // If you want your app to work offline and load faster, you can change

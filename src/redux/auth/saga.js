@@ -27,6 +27,17 @@ export function* WATCH_SIGN_IN(action) {
   yield loading(true);
   try {
     const resp = yield loginAPI(action.payload);
+    if (resp?.data?.msg == "Please Update Your Plan") {
+      yield put({
+        type: actions.IS_EXPIRE,
+        payload: true,
+      });
+    } else {
+      yield put({
+        type: actions.IS_EXPIRE,
+        payload: false,
+      });
+    }
     if (resp?.data?.token) {
       const token = resp?.data?.token;
       localStorage.setItem("token", token);
@@ -63,22 +74,18 @@ export function* WATCH_SIGN_IN(action) {
           },
         });
       } else {
-        if (resp?.msg == "Please Update Your Plan") {
-          
-        } else {
-          toast.error(
-            <>
-              <div className="toastify-body">
-                <ul className="list-unstyled mb-0">
-                  <li key={resp?.msg}>
-                    <strong>Oops</strong>: {resp?.msg}
-                  </li>
-                </ul>
-              </div>
-            </>,
-            { icon: true, hideProgressBar: true }
-          );
-        }
+        toast.error(
+          <>
+            <div className="toastify-body">
+              <ul className="list-unstyled mb-0">
+                <li key={resp?.msg}>
+                  <strong>Oops</strong>: {resp?.msg}
+                </li>
+              </ul>
+            </div>
+          </>,
+          { icon: true, hideProgressBar: true }
+        );
       }
     }
   } catch (err) {

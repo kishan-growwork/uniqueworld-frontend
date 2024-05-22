@@ -36,7 +36,7 @@ import ClientRegistration from "../views/Pages/ClientRegistration";
 const Router = () => {
   const { layout, setLayout, setLastLayout } = useLayout();
   const { transition, setTransition } = useRouterTransition();
-  const { user } = useSelector((state) => state.user);
+  const { user, isExpire } = useSelector((state) => state.auth);
 
   const DefaultLayout =
     layout === "horizontal" ? "HorizontalLayout" : "VerticalLayout";
@@ -70,18 +70,29 @@ const Router = () => {
           route.layout === layout ||
           (route.layout === undefined && DefaultLayout === layout)
         ) {
-          if (user !== null) {
-            if (route.permission.includes(user?.role?.name) === true) {
+          if (isExpire == true) {
+            if (
+              user?.role?.name == "Client" &&
+              route?.path?.includes("/:slug/pricing")
+            ) {
               LayoutRoutes.push(route);
               LayoutPaths.push(route.path);
             }
           } else {
-            LayoutRoutes.push(route);
-            LayoutPaths.push(route.path);
+            if (user !== null) {
+              if (route.permission.includes(user?.role?.name) === true) {
+                LayoutRoutes.push(route);
+                LayoutPaths.push(route.path);
+              }
+            } else {
+              LayoutRoutes.push(route);
+              LayoutPaths.push(route.path);
+            }
           }
         }
       });
     }
+
     return { LayoutRoutes, LayoutPaths };
   };
 

@@ -165,7 +165,7 @@ const Routes = [
     path: "/:slug/pricing",
     exact: true,
     component: lazy(() => import("../../views/Pages/pricing/index")),
-    permission: ["Client"],
+    permission: ["Public", "Client"],
   },
   {
     path: "/:slug/saved-candidates",

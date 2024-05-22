@@ -16,7 +16,8 @@ import {
   ModalBody,
 } from "reactstrap";
 import qrCode from "../../../assets/images/code.jpeg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import actions from "../../../redux/auth/actions";
 // import { createPayment } from "../../../apis/payment";
 
 const PricingCards = ({
@@ -33,8 +34,25 @@ const PricingCards = ({
   const themecolor = useSelector(
     (state) => state?.agency?.agencyDetail?.themecolor
   );
+  const { isExpire } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
   const [disabledIndexes, setDisabledIndexes] = useState([]);
   const [isOpenPaymentQR, setIsOpenPaymentQR] = useState(false);
+
+  function handleclick(item) {
+    dispatch({
+      type: actions.SET_STATE,
+      payload: {
+        createPayment: true,
+      },
+    });
+    if (item?.planName == "Enterprises" || item?.planName == "Professionals")
+      history.push(`/${slug}/payment/create/${item?.id}`);
+    else {
+      
+    }
+  }
 
   useEffect(() => {
     const newDisabledIndexes = data?.reduce((indexes, item, index) => {
@@ -92,17 +110,12 @@ const PricingCards = ({
                 <div>
                   <Button
                     onClick={async () => {
-                      //  createOrderInstance(item)
-                      item?.planName == "Enterprises" ||
-                      item?.planName == "Professionals"
-                        ? history.push(`/${slug}/payment/create/${item?.id}`)
-                        : null;
-                      // let resp = await createPayment(item);
-                      // window.open(resp?.data);
-                      // setIsOpenPaymentQR(true);
+                      handleclick(item);
                     }}
                     block
-                    disabled={disabledIndexes.includes(index)}
+                    disabled={
+                      isExpire == false && disabledIndexes.includes(index)
+                    }
                     outline={item?.planName !== "Enterprises"}
                     color={
                       item?.plan_feature_id === plan_feature_id
@@ -111,7 +124,13 @@ const PricingCards = ({
                     }
                     style={{ backgroundColor: themecolor, color: "white" }}
                   >
-                    {item?.plan_feature_id === plan_feature_id
+                    {isExpire
+                      ? item?.plan_feature_id == plan_feature_id
+                        ? "Renew"
+                        : item?.plan_feature_id === plan_feature_id
+                        ? "Your current plan"
+                        : "Subscribe Now"
+                      : item?.plan_feature_id === plan_feature_id
                       ? "Your current plan"
                       : "Subscribe Now"}
                   </Button>

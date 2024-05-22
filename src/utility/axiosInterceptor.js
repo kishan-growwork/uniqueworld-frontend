@@ -41,8 +41,11 @@ apiCall.interceptors.response.use(
   async (resp) => {
     if (resp?.data?.msg === "invalid token or expired token") {
       localStorage.clear();
-        window.localStorage.removeItem('persist:root');
-        persistor.pause()
+      console.info("-------------------------------");
+      console.info("1 => ", 1);
+      console.info("-------------------------------");
+      window.localStorage.removeItem("persist:root");
+      persistor.pause();
     }
     if (resp?.data?.token) {
       const token = resp?.data?.token;
