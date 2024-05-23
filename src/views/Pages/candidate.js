@@ -235,15 +235,16 @@ const SecondPage = ({
           data.jobCategoryId = jobCategoryId;
         });
       }
-      if (filterJobCategory?.length > 0) {
-        data.filterJobCategoryId = filterJobCategory;
-        // delete data.jobCategoryId;
-      }
+      // if (filterJobCategory?.length > 0) {
+      //   data.filterJobCategoryId = filterJobCategory;
+      //   // delete data.jobCategoryId;
+      // }
     } else {
       if (jobCategoryId.length > 0) {
         data.jobCategoryId = jobCategoryId;
       }
     }
+
     if (auth?.user?.clients?.id) {
       if (isSavedCandidates) {
         dispatch({
@@ -303,6 +304,9 @@ const SecondPage = ({
     ) {
       getCandidates(currentPage);
     }
+    // if (filterJobCategory?.length > 0) {
+    //   getCandidates(currentPage);
+    // }
   }, [filterData]);
 
   useEffect(() => {
@@ -1254,6 +1258,7 @@ const SecondPage = ({
   const [clear, setclear] = useState(false);
   const handleClear = () => {
     setclear(true);
+    // setFilterJobCategory([]);
   };
   const setclearstate = (clear) => {
     setclear(clear);
@@ -1810,6 +1815,7 @@ const SecondPage = ({
           }}
         >
           <Filter
+            filterJobCategory={filterJobCategory}
             isSavedCandidates={isSavedCandidates}
             handleFilterToggleMode={handleFilterToggleMode}
             clear={clear}
