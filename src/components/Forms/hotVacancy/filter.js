@@ -20,6 +20,7 @@ import useBreakpoint from "../../../utility/hooks/useBreakpoints";
 import jobCategoryActions from "./../../../redux/jobCategory/actions";
 import industriesActions from "./../../../redux/industries/actions";
 import hotVacancyActions from "../../../redux/hotVacancy/actions";
+// import hotVacancyActions from "../../../redux/hotVacancy/actions";
 
 const initialState = {
   companyName: "",
@@ -100,7 +101,8 @@ const Filter = ({
   };
   useEffect(() => {
     if (clear == true) {
-      handleClear();
+      setFilter(initialState);
+      setclear(false);
     }
   }, [clear]);
   useEffect(() => {
@@ -109,7 +111,7 @@ const Filter = ({
         setFilterToggleMode(false);
       }
       if (event.key === "Enter") {
-        document.getElementById("handleFilterData").click();
+        document.getElementById("handleFilterData")?.click();
       }
     };
     document.addEventListener("keydown", keyDownHandler);
@@ -117,9 +119,7 @@ const Filter = ({
       document.removeEventListener("keydown", keyDownHandler);
     };
   }, []);
-  console.info("-------------------------------");
-  console.info("filter => ", filter);
-  console.info("-------------------------------");
+
   const genderOptions = [
     { value: "male", id: "gender", label: "Male" },
     { value: "female", id: "gender", label: "Female" },
@@ -308,7 +308,6 @@ const Filter = ({
                 classNamePrefix="select"
                 theme={selectThemeColors}
                 onChange={(e) => {
-                
                   setFilter({
                     ...filter,
                     ["salaryRangeStart"]: e.start,

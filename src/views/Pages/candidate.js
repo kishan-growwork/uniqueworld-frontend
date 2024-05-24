@@ -235,14 +235,16 @@ const SecondPage = ({
           data.jobCategoryId = jobCategoryId;
         });
       }
-      if (filterJobCategory?.length) {
-        data.filterJobCategoryId = filterJobCategory;
-       }
+      // if (filterJobCategory?.length > 0) {
+      //   data.filterJobCategoryId = filterJobCategory;
+      //   // delete data.jobCategoryId;
+      // }
     } else {
       if (jobCategoryId.length > 0) {
         data.jobCategoryId = jobCategoryId;
       }
     }
+
     if (auth?.user?.clients?.id) {
       if (isSavedCandidates) {
         dispatch({
@@ -302,6 +304,9 @@ const SecondPage = ({
     ) {
       getCandidates(currentPage);
     }
+    // if (filterJobCategory?.length > 0) {
+    //   getCandidates(currentPage);
+    // }
   }, [filterData]);
 
   useEffect(() => {
@@ -1253,6 +1258,7 @@ const SecondPage = ({
   const [clear, setclear] = useState(false);
   const handleClear = () => {
     setclear(true);
+    // setFilterJobCategory([]);
   };
   const setclearstate = (clear) => {
     setclear(clear);
@@ -1477,6 +1483,16 @@ const SecondPage = ({
     { length: totalPages },
     (_, index) => index + 1
   );
+
+  function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
 
   const startPage = Math.max(1, currentPage - 2);
   const endPage = Math.min(totalPages, startPage + 4);
@@ -1799,6 +1815,7 @@ const SecondPage = ({
           }}
         >
           <Filter
+            filterJobCategory={filterJobCategory}
             isSavedCandidates={isSavedCandidates}
             handleFilterToggleMode={handleFilterToggleMode}
             clear={clear}
