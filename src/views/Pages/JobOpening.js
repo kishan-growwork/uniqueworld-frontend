@@ -570,24 +570,6 @@ const JobOpening = () => {
   const renderStates = (JobOpenings) => {
     const statesArr = [
       {
-        title: "Link",
-        value:
-          (
-            <CopyToClipboard
-              onCopy={() => setCopy(true)}
-              text={` http://${window.location.host}/${slug}/candidate/apply?id=${JobOpenings?.id}&user=${loginUser?.id}`}
-            >
-              <p
-                style={{
-                  cursor: "pointer",
-                  color: "blueviolet",
-                  marginBottom: "0px",
-                }}
-              >{` https://${window.location.host}/${slug}/candidate/apply?id=${JobOpenings?.id}`}</p>
-            </CopyToClipboard>
-          ) || "-",
-      },
-      {
         title: "job Category",
         value: JobOpenings?.jobCategory?.jobCategory || "-",
       },
@@ -717,6 +699,10 @@ const JobOpening = () => {
   const deleteStyle = {
     backgroundColor: hoverIndex == 3 && `${themecolor}30`,
     color: hoverIndex == 3 && themecolor,
+  };
+  const bestMatchesStyle = {
+    backgroundColor: hoverIndex == 4 && `${themecolor}30`,
+    color: hoverIndex == 4 && themecolor,
   };
   return (
     <>
@@ -897,6 +883,17 @@ const JobOpening = () => {
                                 onClick={() => handleDeleteClick(result)}
                               >
                                 Delete
+                              </DropdownItem>
+                              <DropdownItem
+                                className="w-100"
+                                style={bestMatchesStyle}
+                                onMouseEnter={() => setHoverIndex(4)}
+                                onMouseLeave={() => setHoverIndex(0)}
+                                onClick={() => {
+                                  result?.status != "Inactive" && handleBestMatches(result);
+                                }}
+                              >
+                                Best Matches
                               </DropdownItem>
                             </DropdownMenu>
                           </UncontrolledDropdown>
