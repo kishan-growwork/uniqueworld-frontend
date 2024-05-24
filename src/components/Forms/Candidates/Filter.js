@@ -363,6 +363,11 @@ const Filter = ({
         return ele.value;
       });
     }
+    if (jobCategory?.length > 0) {
+      filterdata.jobCategoryId = jobCategory.map((ele) => {
+        return ele.value;
+      });
+    }
     if (interviewStatus?.value?.length > 0) {
       filterdata.interviewStatus = interviewStatus.value;
     }
