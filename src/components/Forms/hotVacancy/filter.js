@@ -119,10 +119,6 @@ const Filter = ({
       document.removeEventListener("keydown", keyDownHandler);
     };
   }, []);
-<<<<<<< HEAD
-=======
-
->>>>>>> 021a07d03ff1d1848d9b499eb42a18d75bdbc0d2
   const genderOptions = [
     { value: "male", id: "gender", label: "Male" },
     { value: "female", id: "gender", label: "Female" },
