@@ -59,12 +59,12 @@ export function* WATCH_UPDATE_ONBOARDING(action) {
 }
 
 export function* WATCH_DELETE_ONBOARDING(action) {
-  const msg = yield deleteOnBoardingAPI(action.payload);
-  if (msg) {
+  const data = yield deleteOnBoardingAPI(action.payload);
+  if (data.msg == "success") {
     const user = JSON.parse(localStorage.getItem("user"));
     const resp = yield getOnBoardingAPI({
-      page: currentPage,
-      perPage: perPage,
+      page: 1,
+      perPage: 10,
       filterData: [],
       userId: user?.id,
     });

@@ -106,7 +106,9 @@ const Lead = () => {
   }, [show]);
 
   useEffect(() => {
-    getLead(1);
+    if (filterData && Object.keys(filterData).length > 0) {
+      getLead(1);
+    }
   }, [filterData]);
 
   useEffect(() => {
