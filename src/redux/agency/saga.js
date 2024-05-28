@@ -10,6 +10,7 @@ import {
   getAgencycount,
   updateAgency,
   getAgencyDashboardTableData,
+  getTransaction,
 } from "../../apis/agency";
 
 export function* loading(state) {
@@ -96,6 +97,19 @@ export function* WATCH_GET_AGENCY_DETAIL_BY_SLUG(action) {
   }
   yield loading(false);
 }
+export function* WATCH_GET_TRANSACTION(action) {
+  yield loading(true);
+  try {
+    const resp = yield getTransaction(action.payload);
+    yield put({
+      type: agencyActions.SET_TRANSACTION,
+      payload: resp,
+    });
+  } catch (err) {
+    yield loading(false);
+  }
+  yield loading(false);
+}
 
 export function* WATCH_GET_AGENCY_COUNT() {
   yield loading(true);
@@ -151,6 +165,7 @@ export default function* rootSaga() {
     ),
     takeEvery(agencyActions.GET_AGENCY_COUNT, WATCH_GET_AGENCY_COUNT),
     takeEvery(agencyActions.GET_AGENCY_DASHBOARD, WATCH_GET_AGENCY_DASHBOARD),
+    takeEvery(agencyActions.GET_TRANSACTION, WATCH_GET_TRANSACTION),
     takeEvery(
       agencyActions.GET_AGENCY_DASHBOARD_TABLE_DATA,
       WATCH_GET_AGENCY_DASHBOARD_TABLE_DATA

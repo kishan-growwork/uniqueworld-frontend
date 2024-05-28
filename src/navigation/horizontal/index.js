@@ -11,7 +11,7 @@ import {
   Users,
   CreditCard,
   Anchor,
-  GitPullRequest
+  GitPullRequest,
 } from "react-feather";
 
 export default [
@@ -90,6 +90,13 @@ export default [
     title: "Industries",
     icon: <MessageCircle size={20} />,
     navLink: `/superadmin/industries`,
+    permission: ["SuperAdmin"],
+  },
+  {
+    id: "Transaction",
+    title: "TransactionList",
+    icon: <MessageCircle size={20} />,
+    navLink: `/superadmin/transactionlist`,
     permission: ["SuperAdmin"],
   },
   {

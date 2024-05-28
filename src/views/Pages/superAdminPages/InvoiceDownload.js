@@ -1,34 +1,17 @@
 /* eslint-disable */
 import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom/cjs/react-router-dom";
-import actions from "../../redux/payment/actions";
+import { useHistory } from "react-router-dom/cjs/react-router-dom";
 import { usePDF, Resolution } from "react-to-pdf";
 import moment from "moment/moment";
 import converter from "number-to-words";
 
-const Invoice = () => {
-  const details = useSelector(
-    (state) => state?.payment?.paymentDetails?.response
-  );
+const InvoiceDownload = ({ setdownload, details }) => {
   const { toPDF, targetRef } = usePDF({
     filename: `Invoice-${details?.invoicenumber}.pdf`,
     resolution: Resolution.HIGH,
   });
   const componentRef = useRef();
   const history = useHistory();
-  const dispatch = useDispatch();
-  const params = useParams();
-
-  useEffect(() => {
-    const fetchPaymentDetails = async () => {
-      await dispatch({
-        type: actions.PAYMENT_STATUS,
-        payload: { transactionId: params?.merchantTransactionid },
-      });
-    };
-    fetchPaymentDetails();
-  }, []);
 
   useEffect(() => {
     if (details) {
@@ -43,9 +26,8 @@ const Invoice = () => {
   }, [details]);
 
   useEffect(() => {
-    const slug = localStorage.getItem("slug");
     setTimeout(() => {
-      history.push(`/${slug}/payment/preview/${params?.merchantTransactionid}`);
+      setdownload(false);
     }, 50);
   }, []);
 
@@ -278,4 +260,4 @@ const Invoice = () => {
   );
 };
 
-export default Invoice;
+export default InvoiceDownload;
