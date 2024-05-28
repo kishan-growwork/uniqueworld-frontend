@@ -63,7 +63,6 @@ const HotVacancy = () => {
   const { width } = useBreakpoint();
   const dispatch = useDispatch();
   const { hotVacancy } = useSelector((state) => state.hotVacancy);
-
   const [show, setShow] = useState(false);
   const [user, setUser] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -73,6 +72,11 @@ const HotVacancy = () => {
   const [isOpen, setIsOpen] = useState(
     hotVacancy?.results?.map(() => false) ?? []
   );
+
+  console.info("----------------------------");
+  console.info("filterData =>", filterData);
+  console.info("----------------------------");
+
   const toggle = (index) => {
     const newCollapseStates = [...isOpen];
     newCollapseStates[index] = !newCollapseStates[index];
@@ -90,8 +94,15 @@ const HotVacancy = () => {
   };
 
   useEffect(() => {
-    getHotVacancy(1);
+    if (filterData.length !== 0) {
+      //  getOnBoarding(1);
+      getHotVacancy(1);
+    }
   }, [filterData]);
+
+  useEffect(() => {
+    getHotVacancy(1);
+  }, []);
 
   useEffect(() => {
     if (!show) setUser([]);
@@ -292,9 +303,20 @@ const HotVacancy = () => {
   const handleFilterToggleMode = (filter) => {
     setFilterToggleMode(filter);
   };
+
   const [clear, setclear] = useState(false);
+
   const handleClear = () => {
     setclear(true);
+    setFilterData([]);
+    dispatch({
+      type: hotVacancyActions.GET_HOT_VACANCY,
+      payload: {
+        filterData: [],
+        page: 1,
+        perPage: 10,
+      },
+    });
   };
   const setclearstate = (clear) => {
     setclear(clear);
@@ -449,7 +471,10 @@ const HotVacancy = () => {
     backgroundColor: hoverIndex == 3 && `${themecolor}30`,
     color: hoverIndex == 3 && themecolor,
   };
-
+  const keys = Object.keys(filterData).filter(
+    (key) => key !== "salaryRangeStart"
+  );
+  const length = keys.length;
   return (
     <>
       <div style={{ display: "flex", alignItems: "end" }}>
@@ -462,7 +487,7 @@ const HotVacancy = () => {
           >
             {width > 786 ? (
               <h3 style={{ fontSize: "16px", marginBottom: "9px" }}>
-                No Of Filter Applied : {Object.keys(filterData).length}
+                No Of Filter Applied : {length}
               </h3>
             ) : null}
 

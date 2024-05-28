@@ -228,18 +228,31 @@ export function* WATCH_DELETE_CANDIDATE(action) {
   const candidateResults = yield select((state) => state?.candidate);
   const resp = yield deleteCandidateAPI(action.payload);
 
-  if (resp?.msg == 'success') {
-    const data = candidateResults?.results.filter(item => item.id !== action.payload?.id);
+  if (resp?.msg == "success") {
+    console.log("working with the technologies");
+    const data = candidateResults?.results.filter(
+      (item) => item.id !== action.payload?.id
+    );
     yield put({
       type: actions.SET_CANDIDATE,
       payload: {
-        results: data
+        results: data,
       },
     });
-    action?.setLoading(false)
+    yield put({
+      type: actions.LOADING,
+      payload: false,
+    });
   } else {
-    action?.setLoading(false)
+    yield put({
+      type: actions.LOADING,
+      payload: false,
+    });
   }
+  yield put({
+    type: actions.LOADING,
+    payload: false,
+  });
 }
 
 export function* WATCH_FILTER_CANDIDATE(action) {
@@ -253,19 +266,17 @@ export function* WATCH_CANDIDATE_STATUS(action) {
   const candidateResults = yield select((state) => state?.candidate);
   const resp = yield candidateStatus(action.payload);
   if (resp) {
-
-  
-  const index = candidateResults?.results?.findIndex(
-    (item) => item.id === action.payload?.id
-  );
-  if (index !== -1) {
-    candidateResults.results[index].status = "view";
+    const index = candidateResults?.results?.findIndex(
+      (item) => item.id === action.payload?.id
+    );
+    if (index !== -1) {
+      candidateResults.results[index].status = "view";
+    }
+    yield put({
+      type: actions.SET_CANDIDATE,
+      payload: candidateResults,
+    });
   }
-  yield put({
-    type: actions.SET_CANDIDATE,
-    payload: candidateResults,
-  });
-}
 }
 export function* UPDATE_CANDIDATE_PUBLIC(action) {
   const data = yield updateCandidatePublicAPI(action.payload);

@@ -23,6 +23,10 @@ export const getAgencyDetailBySlug = async (payload) => {
   return await apiCall.get(`/agency/${payload}`);
 };
 
+export const getTransaction = async (payload) => {
+  return await apiCall.post(`/superAdmin/transactionlist`, payload);
+};
+
 export const getAgencyDetailBySlugPublic = async (payload) => {
   return await apiCall.get(`/agencypublic/${payload}`);
 };
@@ -45,4 +49,3 @@ export const getAgencyDashboardTableData = async (payload) => {
 export const updateAgencyValidity = async (payload) => {
   return await apiCall.post(`/superAdmin/updatevalidity`, payload);
 };
-

@@ -73,9 +73,8 @@ const User = () => {
   const [filterData, setFilterData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.info("-------------------------------");
   console.info("nameValidation => ", nameValidation);
-  console.info("-------------------------------");
+
   const [totalRows, setTotalRows] = useState();
   const [perPage, setPerPage] = useState(10);
   const [filterToggleMode, setFilterToggleMode] = useState(false);
@@ -141,11 +140,11 @@ const User = () => {
       type: planActions.GET_ALL_PLANS,
     });
   }, []);
-
   const getUser = async (page) => {
+    console.log("getUser", getUser);
     setLoading(true);
     await dispatch({
-      type: "GET_USER",
+      type: userActions.GET_USER,
       payload: {
         filterData,
         page,
@@ -159,8 +158,14 @@ const User = () => {
   }, [show]);
 
   useEffect(() => {
-    getUser(1);
+    if (filterData && Object.keys(filterData).length > 0) {
+      getUser(1);
+    }
   }, [filterData]);
+
+  useEffect(() => {
+    getUser(1);
+  }, []);
 
   useEffect(() => {
     setTotalRows(users.total);
@@ -429,7 +434,7 @@ const User = () => {
     setFilterToggleMode(filter);
   };
   const [clear, setclear] = useState(false);
-  const handleClear = () => {
+  const handleClear = async () => {
     setclear(true);
   };
   const setclearstate = (clear) => {

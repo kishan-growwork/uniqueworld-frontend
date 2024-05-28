@@ -5,9 +5,8 @@ import Select from "react-select";
 import Flatpickr from "react-flatpickr";
 import { selectThemeColors } from "@utils";
 import "@styles/react/libs/flatpickr/flatpickr.scss";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import course from "./../Course";
-import actions from "../../../redux/industries/actions";
 
 const OnBoarding = ({
   onBoarding,
@@ -16,12 +15,8 @@ const OnBoarding = ({
   isRecruiter,
   handleChange = () => {},
 }) => {
-  console.info("----------------------------");
-  console.info("onBoarding =>", onBoarding);
-  console.info("----------------------------");
   const jobCategories = useSelector((state) => state.jobCategory.results);
   const industries = useSelector((state) => state.industries);
-  const dispatch = useDispatch();
   const [am, setAm] = useState();
   const [field, setField] = useState();
   const [subCourse, setSubCourse] = useState();
@@ -86,11 +81,6 @@ const OnBoarding = ({
         }
       });
     }
-  }, []);
-  useEffect(() => {
-    dispatch({
-      type: actions.GET_ALL_INDUSTRIES,
-    });
   }, []);
   useEffect(() => {
     if (am !== undefined) {
@@ -165,11 +155,13 @@ const OnBoarding = ({
     }
   }, [jobCategories]);
   useEffect(() => {
-    if (onBoarding?.industries?.industryCategory) {
-      setSelectIndustries({
-        label: onBoarding?.industries?.industryCategory,
-        value: onBoarding?.industries?.id,
-      });
+    if (industries?.length > 0) {
+      if (onBoarding?.industries?.industryCategory) {
+        setSelectIndustries({
+          label: onBoarding?.industries?.industryCategory,
+          value: onBoarding?.industries?.id,
+        });
+      }
     }
   }, [onBoarding]);
   const themecolor = localStorage.getItem("themecolor");

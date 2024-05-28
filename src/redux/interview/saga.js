@@ -68,19 +68,21 @@ export function* WATCH_UPDATE_INTERVIEW(action) {
 }
 
 export function* WATCH_DELETE_INTERVIEW(action) {
-  yield deleteInterviewAPI(action.payload);
-  const user = JSON.parse(localStorage.getItem("user"));
-  const resp = yield getInterviewAPI({
-    page: action.payload?.page,
-    perPage: action.payload?.perPage,
-    filterData: [],
-    userId: user?.id,
-  });
-  resp.isSuccess = true;
-  yield put({
-    type: actions.SET_INTERVIEW,
-    payload: resp,
-  });
+  const deleing = yield deleteInterviewAPI(action.payload);
+  if (deleing) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const resp = yield getInterviewAPI({
+      page: action.payload?.page,
+      perPage: action.payload?.perPage,
+      filterData: [],
+      userId: user?.id,
+    });
+    resp.isSuccess = true;
+    yield put({
+      type: actions.SET_INTERVIEW,
+      payload: resp,
+    });
+  }
 }
 
 export function* WATCH_FILTER_INTERVIEW(action) {
