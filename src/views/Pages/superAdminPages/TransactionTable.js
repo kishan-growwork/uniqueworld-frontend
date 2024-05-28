@@ -42,13 +42,22 @@ import { useOnClickOutside } from "./../../../utility/hooks/useOnClickOutside";
 import Filter from "./Filter";
 
 function DatePicker({ state, setState, setFilterData }) {
+  const dispatch = useDispatch();
   const [show, setShow] = useState(false);
   function handleToggle() {
     setShow(!show);
   }
 
   async function callapi() {
-    setFilterData(show);
+    await dispatch({
+      type: agencyActions.GET_TRANSACTION,
+      payload: {
+        filterData: show[0],
+        page: 0,
+        perPage: 10,
+      },
+    });
+    setFilterData({ endDate: state[0].endDate });
     setShow(!show);
   }
   return (
@@ -128,6 +137,9 @@ const TransactionTable = () => {
   const [create, setCreate] = useState(false);
   const [update, setUpdate] = useState(false);
   const [filterData, setFilterData] = useState({});
+  console.info("----------------------------");
+  console.info("filterData =>", filterData);
+  console.info("----------------------------");
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState();
   const [perPage, setPerPage] = useState(10);
