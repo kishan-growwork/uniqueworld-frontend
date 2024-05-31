@@ -35,111 +35,52 @@ import { documentationImageLink } from "../../../configs/config";
 import { useHistory } from "react-router-dom";
 import InvoiceDownload from "./InvoiceDownload";
 import { addDays } from "date-fns";
-import { DateRangePicker } from "react-date-range";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
 import { useOnClickOutside } from "./../../../utility/hooks/useOnClickOutside";
 import Filter from "./Filter";
-
-function DatePicker({ state, setState, setFilterData }) {
-  const dispatch = useDispatch();
-  const [show, setShow] = useState(false);
-  function handleToggle() {
-    setShow(!show);
-  }
-
-  async function callapi() {
-    await dispatch({
-      type: agencyActions.GET_TRANSACTION,
-      payload: {
-        filterData: show[0],
-        page: 0,
-        perPage: 10,
-      },
-    });
-    setFilterData({ endDate: state[0].endDate });
-    setShow(!show);
-  }
+import { DateRangePicker } from "rsuite";
+import "rsuite/dist/rsuite-no-reset.min.css";
+function DatePicker({ handleClear, setState, setFilterData, state }) {
   return (
-    <>
-      <button
-        style={{
-          backgroundColor: "#CF509B",
-          padding: "0.6rem 2.5rem",
-          color: "white",
-          borderRadius: "5px",
-          border: "none",
-          fontWeight: "bold",
-          outline: "none",
-        }}
-        onClick={handleToggle}
-      >
-        Date Filter
-      </button>
-      <Modal
-        isOpen={show}
-        toggle={() => setShow(!show)}
-        className="modal-dialog-centered modal-lg d-flex center"
-      >
-        <DateRangePicker
-          onChange={(item) => setState([item.selection])}
-          showSelectionPreview={true}
-          moveRangeOnFirstSelection={false}
-          months={2}
-          ranges={state}
-          direction="horizontal"
-        />
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: "1rem 0",
-          }}
-        >
-          <button
-            style={{
-              backgroundColor: "#CF509B",
-              padding: "0.6rem 2.5rem",
-              color: "white",
-              borderRadius: "5px",
-              border: "none",
-              fontWeight: "bold",
-              outline: "none",
-            }}
-            onClick={callapi}
-          >
-            Filter
-          </button>
-        </div>
-      </Modal>
-    </>
+    <div>
+      <DateRangePicker
+        placement="auto"
+        onClean={() => handleClear()}
+        onChange={(e) => setState(e)}
+        value={state}
+      />
+    </div>
   );
 }
 
 const TransactionTable = () => {
+  const themecolor = localStorage.getItem("themecolor");
+  const { user } = useSelector((state) => state.auth);
+  console.info("----------------------------");
+  console.info("----------------------------");
   const dispatch = useDispatch();
-  const [state, setState] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: "selection",
-    },
-  ]);
+  const [state, setState] = useState([]);
 
+  console.info("state =>", state);
   const { width } = useBreakpoint();
   const { isLoading, clientsTransactions } = useSelector(
     (state) => state.agency
   );
+
+  useEffect(() => {
+    async function callapi() {
+      if (state && state?.length > 0) {
+        setFilterData({ startDate: state[0], endDate: state[1] });
+      }
+    }
+    callapi();
+  }, [state]);
+
   const [show, setShow] = useState(false);
   const [download, setdownload] = useState(false);
   const [agency, setAgency] = useState([]);
   const [create, setCreate] = useState(false);
   const [update, setUpdate] = useState(false);
   const [filterData, setFilterData] = useState({});
-  console.info("----------------------------");
-  console.info("filterData =>", filterData);
-  console.info("----------------------------");
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState();
   const [perPage, setPerPage] = useState(10);
@@ -196,7 +137,7 @@ const TransactionTable = () => {
   }, [show]);
 
   useEffect(() => {
-    if (Object.keys(filterData).length) {
+    if (Object.keys(filterData)?.length) {
       getAgency(1);
     }
   }, [filterData]);
@@ -208,40 +149,36 @@ const TransactionTable = () => {
   useEffect(() => {
     setTotalRows(clientsTransactions?.total);
   }, [clientsTransactions?.total]);
-  console.info("----------------------------");
-  console.info("filterData =>", filterData);
-  console.info("----------------------------");
+
+  const previewColumn =
+    user?.email == "uniqueworldjobs@gmail.com"
+      ? {
+          name: "Preview",
+          minWidth: "110px",
+          cell: (row) => (
+            <div className="column-action d-flex align-items-center">
+              <span
+                style={
+                  row?.servertoserverRes?.state !== "COMPLETED"
+                    ? { pointerEvents: "none", opacity: "0.5" }
+                    : { cursor: "pointer" }
+                }
+                onClick={() => {
+                  if (row?.servertoserverRes?.state === "COMPLETED") {
+                    setAgency(row);
+                    setUpdate(true);
+                    setShow(true);
+                  }
+                }}
+              >
+                <Eye size={17} className="mx-1" />
+              </span>
+            </div>
+          ),
+        }
+      : null;
   const columns = [
-    {
-      name: "Preview",
-      minWidth: "110px",
-      cell: (row) => (
-        <div div className="column-action d-flex align-items-center">
-          <span
-            style={
-              row?.servertoserverRes?.state != "COMPLETED"
-                ? { pointerEvents: "none", opacity: "0.5" }
-                : { cursor: "pointer" }
-            }
-            onClick={() => {
-              if (row?.servertoserverRes?.state == "COMPLETED") {
-                setAgency(row);
-                setUpdate(true);
-                setShow(true);
-              }
-            }}
-          >
-            <Eye size={17} className="mx-1" />
-          </span>
-          {/* <span
-            style={{ cursor: "pointer" }}
-            onClick={() => handleDeleteClick(row)}
-          >
-            <Trash size={17} className="mx-1" />
-          </span> */}
-        </div>
-      ),
-    },
+    ...(previewColumn ? [previewColumn] : []),
     {
       name: "Create_AT",
       selector: (row) => row?.createdAt?.slice(0, 10),
@@ -280,7 +217,10 @@ const TransactionTable = () => {
       },
     },
     {
-      name: "Invoice To",
+      name:
+        user?.email == "uniqueworldjobs@gmail.com"
+          ? "Invoice To"
+          : "Client Name",
       selector: (row) => {
         let invoiceto = "";
         if (
@@ -357,6 +297,7 @@ const TransactionTable = () => {
   };
   const [clear, setclear] = useState(false);
   const handleClear = async () => {
+    setState([]);
     setFilterData({});
     setclear(true);
     await dispatch({
@@ -371,6 +312,11 @@ const TransactionTable = () => {
   const setclearstate = (clear) => {
     setclear(clear);
   };
+
+  function filterKey(data) {
+    const notIncludedKeys = ["endDate"];
+    return Object.keys(data).filter((key) => !notIncludedKeys.includes(key));
+  }
 
   const customStyles = {
     headCells: {
@@ -618,15 +564,15 @@ const TransactionTable = () => {
       </Modal>
       <div style={{ display: "flex", alignItems: "end" }}>
         <h3 className="text-primary">
-          <b>Transaction Table</b>
+          <b style={themecolor && { color: themecolor }}>Transaction Table</b>
         </h3>
-        {Object.keys(filterData).length > 0 ? (
+        {filterKey(filterData).length > 0 ? (
           <div
             style={{ marginLeft: "auto", display: "flex", alignItems: "end" }}
           >
             {width > 786 ? (
               <h3 style={{ fontSize: "16px", marginBottom: "9px" }}>
-                No Of Filter Applied : {Object.keys(filterData).length}
+                No Of Filter Applied : {filterKey(filterData).length}
               </h3>
             ) : null}
 
@@ -634,6 +580,7 @@ const TransactionTable = () => {
               className="add-new-user "
               color="link"
               onClick={handleClear}
+              style={themecolor && { color: themecolor }}
             >
               {width > 786 ? "Clear" : "Clear Filter"}
             </Button>
@@ -647,14 +594,18 @@ const TransactionTable = () => {
                   width: "145px",
                   marginLeft:
                     Object.keys(filterData).length > 0 ? "10px" : "auto",
+                  backgroundColor: themecolor ? themecolor : "#CF509B",
+                  color: "white",
                 }
               : {
                   width: "60px",
                   marginLeft:
                     Object.keys(filterData).length > 0 ? "10px" : "auto",
+                  backgroundColor: themecolor ? themecolor : "#CF509B",
+                  color: "white",
                 }
           }
-          color="primary"
+          color="default"
           onClick={() => {
             setFilterData([]);
             filterToggle();
@@ -794,6 +745,7 @@ const TransactionTable = () => {
                     state={state}
                     setState={setState}
                     setFilterData={setFilterData}
+                    handleClear={handleClear}
                   />
                 }
               />

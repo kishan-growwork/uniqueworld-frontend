@@ -100,6 +100,13 @@ export default [
     permission: ["SuperAdmin"],
   },
   {
+    id: "Transaction",
+    title: "TransactionList",
+    icon: <MessageCircle size={20} />,
+    navLink: `/transactionlist`,
+    permission: ["Admin"],
+  },
+  {
     id: "Interview",
     title: "Interview",
     icon: <UserCheck size={20} />,

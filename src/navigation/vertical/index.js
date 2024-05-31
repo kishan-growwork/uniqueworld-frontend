@@ -44,6 +44,13 @@ export default [
     permission: ["SuperAdmin"],
   },
   {
+    id: "Transaction",
+    title: "TransactionList",
+    icon: <MessageCircle size={20} />,
+    navLink: `/transactionlist`,
+    permission: ["Admin"],
+  },
+  {
     id: "secondPage",
     title: "Candidate",
     icon: <User size={20} />,

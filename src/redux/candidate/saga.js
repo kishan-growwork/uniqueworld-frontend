@@ -23,9 +23,6 @@ import { candidateAPI } from "../../apis/dashBoard";
 import { store } from "../store";
 
 export function* WATCH_GET_CANDIDATE(action) {
-  const { agencyDetail } = yield select((state) => state?.agency);
-  action.payload.filterData.dataMergePermission =
-    agencyDetail?.permission?.dataMerge;
   const resp = yield getCandidateAPI(action.payload);
   yield put({
     type: actions.SET_CANDIDATE,
@@ -38,9 +35,6 @@ export function* WATCH_GET_SAVED_CANDIDATE(action) {
       type: actions.GET_SAVED_CANDIDATE_LOADER,
       payload: true,
     });
-    const { agencyDetail } = yield select((state) => state?.agency);
-    action.payload.filterData.dataMergePermission =
-      agencyDetail?.permission?.dataMerge;
     const resp = yield getSavedCandidateAPI(action.payload);
     yield put({
       type: actions.SET_CANDIDATE,

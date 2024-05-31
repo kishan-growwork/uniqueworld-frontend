@@ -17,9 +17,12 @@ const Filter = ({
   open,
   handleFilterToggleMode = () => {},
   // clear,
+  setFilterToggleMode,
   setclear = () => {},
 }) => {
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+
   // const getRole = useSelector((state) => state.roles);
   // const { plans } = useSelector((state) => state.plans);
   const { width } = useBreakpoint();
@@ -35,7 +38,6 @@ const Filter = ({
   const [planId, setplanId] = useState();
   const handleFilterData = async () => {
     handleFilterToggleMode(true);
-
     const filterData = {
       status: SelectedStatus?.value,
       city: selectedCity?.name,
@@ -52,6 +54,7 @@ const Filter = ({
       )
     );
 
+    setFilterToggleMode(!open);
     setFilterData(cleanedFilterData);
   };
   const handleClear = async () => {
@@ -144,9 +147,12 @@ const Filter = ({
   ];
 
   const { agency } = useSelector((state) => state);
+  console.info("----------------------------");
+  console.info("agencyagency =>", agency);
+  console.info("----------------------------");
 
   useEffect(() => {
-    if (agency?.allAgency.length == 0) {
+    if (agency?.allAgency?.length == 0) {
     }
   }, [agency?.allAgency]);
 
@@ -217,21 +223,23 @@ const Filter = ({
                 }}
               />
             </Col>
-            <Col md="12" className="mt-1">
-              <Label id="name">Agency</Label>
-              <Input
-                id="agency"
-                name="agency"
-                className="w-100"
-                type="text"
-                maxLength={200}
-                placeholder={"Enter Agency to"}
-                value={inputagency}
-                onChange={(e) => {
-                  setinputagency(e.target.value);
-                }}
-              />
-            </Col>
+            {user?.email === "uniqueworldjobs@gmail.com" && (
+              <Col md="12" className="mt-1">
+                <Label id="name">Agency</Label>
+                <Input
+                  id="agency"
+                  name="agency"
+                  className="w-100"
+                  type="text"
+                  maxLength={200}
+                  placeholder={"Enter Agency to"}
+                  value={inputagency}
+                  onChange={(e) => {
+                    setinputagency(e.target.value);
+                  }}
+                />
+              </Col>
+            )}
             <Col md="12" className="mt-1">
               <Label id="Email">Transaction Id</Label>
               <Input

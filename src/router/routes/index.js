@@ -86,6 +86,14 @@ const Routes = [
     },
   },
   {
+    path: "/:slug/transactionlist",
+    exact: true,
+    component: lazy(() =>
+      import("../../views/Pages/superAdminPages/TransactionTable.js")
+    ),
+    permission: ["Admin"],
+  },
+  {
     path: "/:slug/clients",
     exact: true,
     component: lazy(() => import("../../views/Pages/Clients")),
