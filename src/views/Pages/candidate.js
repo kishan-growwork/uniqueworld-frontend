@@ -144,6 +144,10 @@ const SecondPage = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [showWPModal, setShowWPModal] = useState(false);
 
+  console.info('--------------------')
+  console.info('candidateaaaaaaaaaaaaaa => ', candidate )
+  console.info('--------------------')
+
   // useLayoutEffect(() => {
   //   // if (bestMatchesCandidate) {
   //     dispatch({
@@ -1037,6 +1041,12 @@ const SecondPage = ({
       (item) => item?.id == candidate?.id
     );
     const ObjData = Object.assign({}, ...data);
+    console.info('--------------------')
+    console.info('ObjDataObjDataObjData => ', ObjData )
+    console.info('--------------------')
+    console.info('--------------------')
+    console.info('ObjDataObjDataObjData => ', candidate )
+    console.info('--------------------')
     const isMatch = _.isMatch(ObjData, candidate);
 
     if (isMatch == false) {
@@ -1079,6 +1089,7 @@ const SecondPage = ({
           perPage: perPage,
         },
       });
+        setShow(false)
     } else {
       setLoading(false);
     }
