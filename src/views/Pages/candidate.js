@@ -300,13 +300,25 @@ const SecondPage = ({
   }, []);
 
   useEffect(() => {
-    if (
-      Object.keys(filterData).length &&
-      create === false &&
-      update === false &&
-      show === false
-    ) {
-      getCandidates(currentPage);
+    if (auth?.user?.clients?.id) {
+      if (
+        Object.keys(filterData).length &&
+        create === false &&
+        update === false &&
+        show === false &&
+        filterKey(filterData)?.length
+      ) {
+        getCandidates(currentPage);
+      }
+    } else {
+      if (
+        Object.keys(filterData).length &&
+        create === false &&
+        update === false &&
+        show === false
+      ) {
+        getCandidates(currentPage);
+      }
     }
     // if (filterJobCategory?.length > 0) {
     //   getCandidates(currentPage);
@@ -1257,6 +1269,7 @@ const SecondPage = ({
   };
 
   const handleFilter = (filter) => {
+  
     setFilterData(filter);
     if (width < 769) {
       filterToggle();
