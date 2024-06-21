@@ -144,6 +144,10 @@ const SecondPage = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [showWPModal, setShowWPModal] = useState(false);
 
+  console.info('--------------------')
+  console.info('candidateaaaaaaaaaaaaaa => ', candidate )
+  console.info('--------------------')
+
   // useLayoutEffect(() => {
   //   // if (bestMatchesCandidate) {
   //     dispatch({
@@ -296,13 +300,25 @@ const SecondPage = ({
   }, []);
 
   useEffect(() => {
-    if (
-      Object.keys(filterData).length &&
-      create === false &&
-      update === false &&
-      show === false
-    ) {
-      getCandidates(currentPage);
+    if (auth?.user?.clients?.id) {
+      if (
+        Object.keys(filterData).length &&
+        create === false &&
+        update === false &&
+        show === false &&
+        filterKey(filterData)?.length
+      ) {
+        getCandidates(currentPage);
+      }
+    } else {
+      if (
+        Object.keys(filterData).length &&
+        create === false &&
+        update === false &&
+        show === false
+      ) {
+        getCandidates(currentPage);
+      }
     }
     // if (filterJobCategory?.length > 0) {
     //   getCandidates(currentPage);
@@ -1037,6 +1053,12 @@ const SecondPage = ({
       (item) => item?.id == candidate?.id
     );
     const ObjData = Object.assign({}, ...data);
+    console.info('--------------------')
+    console.info('ObjDataObjDataObjData => ', ObjData )
+    console.info('--------------------')
+    console.info('--------------------')
+    console.info('ObjDataObjDataObjData => ', candidate )
+    console.info('--------------------')
     const isMatch = _.isMatch(ObjData, candidate);
 
     if (isMatch == false) {
@@ -1079,6 +1101,7 @@ const SecondPage = ({
           perPage: perPage,
         },
       });
+        setShow(false)
     } else {
       setLoading(false);
     }
@@ -1246,6 +1269,7 @@ const SecondPage = ({
   };
 
   const handleFilter = (filter) => {
+  
     setFilterData(filter);
     if (width < 769) {
       filterToggle();
