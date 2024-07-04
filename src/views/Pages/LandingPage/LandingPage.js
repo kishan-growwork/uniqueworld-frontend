@@ -1801,14 +1801,7 @@ const LandingPage = () => {
                 className="col-12 col-md-10 col-xxl-11"
                 style={{ color: "#000" }}
               >
-                All Rights Reserved
-              </div>
-              <div
-                className="col-12 col-md-2 col-xxl-1"
-                style={{ wordSpacing: "12px" }}
-              >
-                <BsWhatsapp fill="#000" /> <BsFacebook fill="#000" />{" "}
-                <BsTwitter fill="#000" /> <BsLinkedin fill="#000" />
+                © 2023 All rights reserved by <strong style={{color: "#d0509b"}}> Unique world Jobs.</strong>
               </div>
             </div>
           </div>
