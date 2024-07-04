@@ -48,6 +48,7 @@ import onBoardingActions from "../../redux/onBoarding/actions";
 import { tostify } from "../../components/Tostify";
 import ReactCanvasConfetti from "react-canvas-confetti";
 import actions from "./../../redux/jobCategory/actions";
+import industriesactions from "../../redux/industries/actions";
 // import { uploadFiles } from '../../helper/fileUpload'
 import Loader from "../../components/Dialog/Loader";
 import { awsUploadAssetsWithResp } from "./../../helper/awsUploadAssets";
@@ -76,7 +77,7 @@ const OnBoarding = () => {
   const [onBoarding, setOnBoarding] = useState([]);
   const [create, setCreate] = useState(false);
   const [update, setUpdate] = useState(false);
-  const [filterData, setFilterData] = useState([]);
+  const [filterData, setFilterData] = useState({});
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState(1);
   const [perPage, setPerPage] = useState(10);
@@ -91,7 +92,11 @@ const OnBoarding = () => {
     newCollapseStates[index] = !newCollapseStates[index];
     setIsOpen(newCollapseStates);
   };
-
+  useEffect(() => {
+    dispatch({
+      type: industriesactions.GET_ALL_INDUSTRIES,
+    });
+  }, []);
   const clearStates = () => {
     setOnBoarding([]);
     setAnimation({});
@@ -140,10 +145,14 @@ const OnBoarding = () => {
   };
 
   useEffect(() => {
-    if (create === false && update === false) {
-      getOnBoarding(currentPage);
-    }
-  }, [create, update]);
+    getOnBoarding(currentPage);
+  }, []);
+
+  // useEffect(() => {
+  //   if (create === false && update === false) {
+  //     getOnBoarding(currentPage);
+  //   }
+  // }, [create]);
 
   useEffect(() => {
     (async () => {
@@ -157,10 +166,6 @@ const OnBoarding = () => {
   useEffect(() => {
     if (!show) setOnBoarding([]);
   }, [show]);
-
-  useEffect(() => {
-    getOnBoarding(1);
-  }, [filterData]);
 
   useEffect(() => {
     setTotalRows(onBoardings.total);
@@ -344,7 +349,6 @@ const OnBoarding = () => {
       payload: {
         id: onBoarding.id,
         data: fm,
-
         page: currentPage,
         perPage: perPage,
       },
@@ -502,6 +506,27 @@ const OnBoarding = () => {
   const setclearstate = (clear) => {
     setclear(clear);
   };
+
+  useEffect(() => {
+    if (filterData && Object.keys(filterData).length > 0) {
+      getOnBoarding(1);
+    }
+  }, [filterData]);
+
+  // useEffect(() => {
+  //   if (clear) {
+  //     setFilterData([]);
+  //     setclear(false);
+  //     dispatch({
+  //       type: onBoardingActions.GET_ONBOARDING,
+  //       payload: {
+  //         filterData: [],
+  //         page: 1,
+  //         perPage: 10,
+  //       },
+  //     });
+  //   }
+  // }, [clear]);
 
   function convertArrayOfObjectsToCSV(array) {
     let result;

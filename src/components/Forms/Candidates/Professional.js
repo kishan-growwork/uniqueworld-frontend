@@ -128,6 +128,7 @@ const Professional = ({
     });
     setCandidate({ ...candidate, industries_relation: data });
   };
+  
   const [calculatedExpectedSalary, setCalculatedExpectedSalary] = useState(
     "Current Monthly Salary + 20%"
   );
@@ -193,6 +194,15 @@ const Professional = ({
               }
             }
           }, []);
+
+      function handleSalary (){
+        setTimeout(() => {
+          if(calculatedExpectedSalary){
+            setCandidate({ ...candidate, expectedsalary: calculatedExpectedSalary });
+          }
+        }, 10);
+      }
+          
           useEffect(() => {
             if (!isNaN(values.currentSalary)) {
               const calculatedSalary = parseFloat(values.currentSalary) * 1.20;
@@ -269,6 +279,7 @@ const Professional = ({
                         onChange={(e) => {
                           setExperienceInYear(e);
                           setFieldValue("experienceInyear", e.value);
+                          setCandidate({ ...candidate, experienceInyear: e.value });
                         }}
                       />
                     </div>
@@ -293,6 +304,7 @@ const Professional = ({
                         onChange={(e) => {
                           setQuelification(e);
                           setFieldValue(e.id, e.value);
+                          setCandidate({ ...candidate, highestQualification: e.value });
                         }}
                       />
                     </div>
@@ -323,6 +335,7 @@ const Professional = ({
                         onChange={(e) => {
                           setField(e);
                           setFieldValue(e.id, e.label);
+                          setCandidate({ ...candidate, field: e.label });
                         }}
                       />
                     </div>
@@ -352,6 +365,7 @@ const Professional = ({
                         onChange={(e) => {
                           setSubCourse(e);
                           setFieldValue(e.id, e.value);
+                          setCandidate({ ...candidate, experienceInyear: e.value });
                         }}
                       />
                     </div>
@@ -378,10 +392,13 @@ const Professional = ({
                         // value={candidate?.professional?.expectedsalary}
                         // onChange={(e) => handleChangeProfessional(e)}
                         onChange={(e) =>
-                          setFieldValue(
-                            e.target.name,
-                            e.target.value.replace(/[^a-z /]/gi, "")
-                          )
+                          {
+                            setFieldValue(
+                              e.target.name,
+                              e.target.value.replace(/[^a-z /]/gi, "")
+                            )
+                          setCandidate({ ...candidate, designation: e.target.value.replace(/[^a-z /]/gi, "" )});
+                        }
                         }
                       />
                     </div>
@@ -405,6 +422,7 @@ const Professional = ({
                         onChange={(e) => {
                           setJobCat(e);
                           setFieldValue("jobCategoryId", e.value);
+                          setCandidate({ ...candidate, jobCategoryId: e.value});
                         }}
                       />
                     </div>
@@ -428,11 +446,13 @@ const Professional = ({
                         disabled={isDisabledAllFields}
                         placeholder={"Current Employer"}
                         // value={candidate?.professional?.currentEmployer}
-                        onChange={(e) =>
+                        onChange={(e) =>{
                           setFieldValue(
                             e.target.name,
                             e.target.value.replace(/[^a-z ^0-9 / , -]/gi, "")
                           )
+                          setCandidate({ ...candidate, currentEmployer: e.target.value.replace(/[^a-z ^0-9 / , -]/gi, "")});
+                        }
                         }
 
                         // onChange={(e) => handleChangeProfessional(e)}
@@ -456,11 +476,13 @@ const Professional = ({
                         disabled={isDisabledAllFields}
                         value={values?.currentSalary}
                         placeholder={"Enter Current Monthly Salary"}
-                        onChange={(e) =>
+                        onChange={(e) =>{
                           setFieldValue(
                             e.target.name,
                             e.target.value.replace(/\D/g, "")
                           )
+                          handleSalary()
+                        }
                         }
                       />
                     </div>
@@ -485,10 +507,12 @@ const Professional = ({
                         // value={candidate?.professional?.expectedsalary}
                         // onChange={(e) => handleChangeProfessional(e)}
                         onChange={(e) =>
-                          setFieldValue(
-                            e.target.name,
-                            e.target.value.replace(/\D/g, "")
-                          )
+                          {
+                            setFieldValue(
+                              e.target.name,
+                              e.target.value.replace(/\D/g, "")
+                            )
+                          }
                         }
                       />
                       <p style={{ color: "red", fontSize: "12px" }}>
@@ -514,6 +538,7 @@ const Professional = ({
                         onChange={(e) => {
                           setNoticePeriod(e);
                           setFieldValue(e.id, e.value);
+                          setCandidate({ ...candidate, noticePeriod: e.value});
                         }}
                       />
                     </div>
@@ -535,6 +560,7 @@ const Professional = ({
                         onChange={(e) => {
                           setCurrentlyWorking(e);
                           setFieldValue(e.id, e.value);
+                          setCandidate({ ...candidate, currentlyWorking: e.value});
                         }}
                       />
                     </div>
@@ -559,6 +585,7 @@ const Professional = ({
                         onChange={(e) => {
                           setEng(e);
                           setFieldValue(e.id, e.value);
+                          setCandidate({ ...candidate, english: e.value});
                         }}
                       />
                     </div>
@@ -585,7 +612,11 @@ const Professional = ({
                         type="text"
                         placeholder={"Eg: Vesu, Adajan, Kamrej"}
                         onChange={(e) =>
-                          setFieldValue(e.target.name, e.target.value)
+                          {
+
+                            setFieldValue(e.target.name, e.target.value)
+                            setCandidate({ ...candidate, preferedJobLocation: e.value});
+                          }
                         }
                       />
                     </div>
@@ -608,7 +639,10 @@ const Professional = ({
                         type="textarea"
                         placeholder={"Enter skill"}
                         onChange={(e) =>
-                          setFieldValue(e.target.name, e.target.value)
+                          {
+                            setFieldValue(e.target.name, e.target.value)
+                            setCandidate({ ...candidate, preferedJobLocation: e.value});
+                          }
                         }
                       />
                     </div>

@@ -144,6 +144,10 @@ const SecondPage = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [showWPModal, setShowWPModal] = useState(false);
 
+  console.info('--------------------')
+  console.info('candidateaaaaaaaaaaaaaa => ', candidate )
+  console.info('--------------------')
+
   // useLayoutEffect(() => {
   //   // if (bestMatchesCandidate) {
   //     dispatch({
@@ -229,21 +233,22 @@ const SecondPage = ({
         data.industriesId = industriesId;
       });
       if (!filterData?.jobCategoryId) {
-        const jobCategoryId = [];
+        const jobCategoryId = []; 
         auth?.user?.clients?.jobCategory_relation?.map((ele) => {
           jobCategoryId.push(ele?.jobCategoryId);
           data.jobCategoryId = jobCategoryId;
         });
       }
-      if (filterJobCategory?.length > 0) {
-        data.filterJobCategoryId = filterJobCategory;
-        // delete data.jobCategoryId;
-      }
+      // if (filterJobCategory?.length > 0) {
+      //   data.filterJobCategoryId = filterJobCategory;
+      //   // delete data.jobCategoryId;
+      // }
     } else {
       if (jobCategoryId.length > 0) {
         data.jobCategoryId = jobCategoryId;
       }
     }
+
     if (auth?.user?.clients?.id) {
       if (isSavedCandidates) {
         dispatch({
@@ -258,7 +263,7 @@ const SecondPage = ({
       } else {
         if (bestMatchesCandidate == true) {
           dispatch({
-            type: CandidateActions.GET_BEST_MATCHES_CANDIDATE,
+            type: CandidateActions.GET_BEST_MATCHES_CANDIDATE, 
             payload: {
               filterData: data,
               page,
@@ -295,14 +300,29 @@ const SecondPage = ({
   }, []);
 
   useEffect(() => {
-    if (
-      filterKey(filterData).length !== 0 &&
-      create === false &&
-      update === false &&
-      show === false
-    ) {
-      getCandidates(currentPage);
+    if (auth?.user?.clients?.id) {
+      if (
+        Object.keys(filterData).length &&
+        create === false &&
+        update === false &&
+        show === false &&
+        filterKey(filterData)?.length
+      ) {
+        getCandidates(currentPage);
+      }
+    } else {
+      if (
+        Object.keys(filterData).length &&
+        create === false &&
+        update === false &&
+        show === false
+      ) {
+        getCandidates(currentPage);
+      }
     }
+    // if (filterJobCategory?.length > 0) {
+    //   getCandidates(currentPage);
+    // }
   }, [filterData]);
 
   useEffect(() => {
@@ -310,7 +330,7 @@ const SecondPage = ({
       setCandidate([]);
       setIndustriesData([]);
     }
-  }, [show]);
+  }, [show]); 
 
   const clearStates = () => {
     if (candidates === "candidates_email_unique") {
@@ -1033,6 +1053,12 @@ const SecondPage = ({
       (item) => item?.id == candidate?.id
     );
     const ObjData = Object.assign({}, ...data);
+    console.info('--------------------')
+    console.info('ObjDataObjDataObjData => ', ObjData )
+    console.info('--------------------')
+    console.info('--------------------')
+    console.info('ObjDataObjDataObjData => ', candidate )
+    console.info('--------------------')
     const isMatch = _.isMatch(ObjData, candidate);
 
     if (isMatch == false) {
@@ -1075,6 +1101,7 @@ const SecondPage = ({
           perPage: perPage,
         },
       });
+        setShow(false)
     } else {
       setLoading(false);
     }
@@ -1242,6 +1269,7 @@ const SecondPage = ({
   };
 
   const handleFilter = (filter) => {
+  
     setFilterData(filter);
     if (width < 769) {
       filterToggle();
@@ -1254,6 +1282,7 @@ const SecondPage = ({
   const [clear, setclear] = useState(false);
   const handleClear = () => {
     setclear(true);
+    // setFilterJobCategory([]);
   };
   const setclearstate = (clear) => {
     setclear(clear);
@@ -1478,6 +1507,16 @@ const SecondPage = ({
     { length: totalPages },
     (_, index) => index + 1
   );
+
+  function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
 
   const startPage = Math.max(1, currentPage - 2);
   const endPage = Math.min(totalPages, startPage + 4);
@@ -1800,6 +1839,7 @@ const SecondPage = ({
           }}
         >
           <Filter
+            filterJobCategory={filterJobCategory}
             isSavedCandidates={isSavedCandidates}
             handleFilterToggleMode={handleFilterToggleMode}
             clear={clear}

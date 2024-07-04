@@ -56,6 +56,7 @@ const Filter = ({
   setFilterToggleMode,
   setLoading,
   setFilterJobCategory,
+  // filterJobCategory,
   isSavedCandidates,
   toggleSidebar,
   open,
@@ -68,6 +69,9 @@ const Filter = ({
   // handleClearr,
 }) => {
   const { clients } = useSelector((state) => state.auth.user);
+  console.info("----------------------------");
+  console.info("clients =>", clients);
+  console.info("----------------------------");
   const params = useLocation();
   const isBestMatches = params?.pathname?.includes("/best-matches");
   const dispatch = useDispatch();
@@ -151,13 +155,13 @@ const Filter = ({
   useEffect(() => {
     if (clients?.jobCategory_relation?.length > 0) {
       if (isBestMatches == true) {
-        const selected = [];
-        clients.jobCategory_relation?.forEach((ele) => {
-          ele.label = ele?.jobCategory?.jobCategory;
-          ele.value = ele?.jobCategory?.id;
-          selected.push(ele);
+        jobCategories.filter((item) => {
+          item.label = item.jobCategory;
+          item.value = item.id;
+          // item.id = "jobCategoryId"
+          return item;
         });
-        setJobCategoryOptions(selected);
+        setJobCategoryOptions(jobCategories);
       } else {
         if (jobCategories?.length > 0) {
           jobCategories.filter((item) => {
@@ -320,6 +324,7 @@ const Filter = ({
           const id = ele.value;
           return id;
         });
+        filterdata.filterJobCategoryId = temp;
         setFilterJobCategory(temp);
       } else {
         const temp = jobCategory.map((ele) => {
@@ -358,6 +363,11 @@ const Filter = ({
         return ele.value;
       });
     }
+    if (jobCategory?.length > 0) {
+      filterdata.jobCategoryId = jobCategory.map((ele) => {
+        return ele.value;
+      });
+    }
     if (interviewStatus?.value?.length > 0) {
       filterdata.interviewStatus = interviewStatus.value;
     }
@@ -386,6 +396,7 @@ const Filter = ({
     setIndustry([]);
     setSelectedState("");
     setSelectedCity("");
+    setFilterJobCategory([]);
     setInterviewStatus({ value: "", label: "Select Interview Status" });
     if (auth?.user?.clients?.id) {
       const industriesId = [];
@@ -459,7 +470,7 @@ const Filter = ({
         setFilterToggleMode(false);
       }
       if (event.key === "Enter") {
-        document.getElementById("handleFilterData").click();
+        document.getElementById("handleFilterData")?.click();
       }
     };
     document.addEventListener("keydown", keyDownHandler);

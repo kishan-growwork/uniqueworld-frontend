@@ -1,12 +1,12 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 // import { useHistory } from 'react-router-dom'
 import { Button, Form, Modal, ModalBody, ModalHeader } from "reactstrap";
 import InterviewForm from "../Forms/interview/interviewForm";
 import JobCat from "../Forms/JobCate/JobCat";
 import { useSelector } from "react-redux";
 import Loader from "./Loader";
-const slug = localStorage.getItem("slug");
+// const slug = localStorage.getItem("slug");
 const InterviewDialog = ({
   interviewHandler = () => {},
   candidateId,
@@ -28,7 +28,7 @@ const InterviewDialog = ({
   setShow,
   loading,
 }) => {
-  const history = useHistory();
+  // const history = useHistory();
   const handleChange = (e, text = "") => {
     if (text == "candidate") {
       setInterview({ ...interview, candidateId: e.value });
@@ -64,9 +64,9 @@ const InterviewDialog = ({
             setCreate(false);
             setUpdate(false);
 
-            if (candidateId) {
-              history.push(`/${slug}/candidate`);
-            }
+            // if (candidateId) {
+            //   history.push(`/${slug}/candidate`);
+            // }
           }}
         ></ModalHeader>
         {loading == true ? (
