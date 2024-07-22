@@ -1150,7 +1150,7 @@ const Agency = () => {
                               <div
                                 className="view-collapse"
                                 onClick={() => toggle(index)}
-                                style={{ color: "#cf509b" }}
+                                style={{ color: "#323D76" }}
                               >
                                 View Less
                                 <ChevronUp size={17} />{" "}
@@ -1161,7 +1161,7 @@ const Agency = () => {
                               <div
                                 className="view-collapse"
                                 onClick={() => toggle(index)}
-                                style={{ color: "#cf509b" }}
+                                style={{ color: "#323D76" }}
                               >
                                 View More
                                 <ChevronDown size={17} />

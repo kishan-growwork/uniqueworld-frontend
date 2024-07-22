@@ -4,7 +4,7 @@
 const themeConfig = {
   app: {
     appName: '',
-    appLogoImage: require('../assets/images/logo/unique.png')
+    appLogoImage: require('../assets/images/logo/unique-logo.png')
   },
   layout: {
     isRTL: false,

@@ -94,7 +94,7 @@ const Pricing = () => {
       //   },
       //   description: "Test Transaction",
       //   theme: {
-      //     color: "#cf509b",
+      //     color: "#323D76",
       //   },
       //   notes: {
       //     planId: selectedPlan?.id,

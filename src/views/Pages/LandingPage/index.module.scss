@@ -9,8 +9,8 @@
   border: 0;
   padding: 15px 20px;
   border-radius: 30px;
-  background: #ecaa48;
-  color: #000;
+  background: #323D76;
+  color: #fff;
   font-weight: 600;
   font-size: 18px;
   min-width: 250px;
@@ -18,12 +18,12 @@
   margin: 15px;
 
   &.active {
-    background: #eb4440;
+    background: #EF7F1A;
     color: #fff;
   }
 
   &:hover {
-    background: #eb4440;
+    background: #EF7F1A;
     color: #fff;
   }
 }
@@ -53,12 +53,12 @@
 
       h3 {
         font-size: 35px;
-        color: #d0509b;
+        color: #323D76;
         font-weight: bolder;
         line-height: 2.5rem;
 
         span {
-          color: #d0509b;
+          color: #323D76;
         }
       }
       h4 {
@@ -69,7 +69,7 @@
         // line-height: 4.5rem;
 
         span {
-          color: #d0509b;
+          color: #323D76;
         }
       }
 
@@ -77,7 +77,7 @@
         border: 0;
         padding: 15px 20px;
         border-radius: 20px;
-        background: #843762;
+        background: #323D76;
         color: #fff;
         font-weight: 600;
         max-width: 200px;
@@ -88,12 +88,12 @@
         margin-bottom: 10px;
 
         &.active {
-          background: #eb4440;
+          background: #EF7F1A;
           color: #fff;
         }
 
         &:hover {
-          background: #eb4440;
+          background: #EF7F1A;
           color: #fff;
         }
       }
@@ -162,7 +162,7 @@
       border: 0;
       padding: 15px 20px;
       border-radius: 20px;
-      background: #843762;
+      background: #323D76;
       color: #fff;
       font-weight: 600;
       max-width: 500px;
@@ -170,12 +170,12 @@
       transition: 0.5s ease-in-out;
 
       &.active {
-        background: #eb4440;
+        background: #EF7F1A;
         color: #fff;
       }
 
       &:hover {
-        background: #eb4440;
+        background: #EF7F1A;
         color: #fff;
       }
     }
@@ -192,7 +192,7 @@
     margin: 30px 0;
     margin-bottom: 50px;
     font-weight: 600;
-    color: rgb(248, 41, 77);
+    color: #323D76;
   }
   .landing-services-wrapper-lists {
     display: flex;
@@ -206,8 +206,8 @@
       border: 0;
       padding: 15px 20px;
       border-radius: 30px;
-      background: #ecaa48;
-      color: #000;
+      background: #323D76;
+      color: #fff;
       font-weight: 600;
       font-size: 18px;
       min-width: 250px;
@@ -215,12 +215,12 @@
       margin: 15px;
 
       &.active {
-        background: #eb4440;
+        background: #EF7F1A;
         color: #fff;
       }
 
       &:hover {
-        background: #eb4440;
+        background: #EF7F1A;
         color: #fff;
       }
     }
@@ -238,8 +238,8 @@
       border: 0;
       padding: 15px 20px;
       border-radius: 30px;
-      background: #ecaa48;
-      color: #000;
+      background: #323D76;
+      color: #fff;
       font-weight: 600;
       font-size: 18px;
       min-width: 250px;
@@ -247,12 +247,12 @@
       margin: 15px;
 
       &.active {
-        background: #eb4440;
+        background: #EF7F1A;
         color: #fff;
       }
 
       &:hover {
-        background: #eb4440;
+        background: #EF7F1A;
         color: #fff;
       }
     }
@@ -288,7 +288,7 @@ h4 {
 }
 .card-testimonials {
   text-align: center;
-  background-color: #ecaa48;
+  background-color: #323D76;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
   border-radius: 40px;
   overflow: hidden;
@@ -296,7 +296,7 @@ h4 {
   height: 450px;
   padding: 30px;
   align-items: center;
-  border-color: #cf509b;
+  border-color: #323D76;
 
   .card-heading {
     border: 1px solid rgba(0, 0, 0, 0.175);
@@ -320,13 +320,13 @@ h4 {
 
     h3 {
       margin: 20px 0;
-      color: rgb(248, 41, 77);
-      color: #000;
+      color: #323D76;
+      color: #fff;
     }
     h4 {
       font-size: 15px;
       line-height: 2rem;
-      color: #000;
+      color: #fff;
     }
   }
 }
@@ -339,7 +339,7 @@ h4 {
   height: 750px;
   padding: 30px;
   align-items: center;
-  border-color: #cf509b;
+  border-color: #323D76;
   margin: 20px 0;
 
   .card-heading {
@@ -354,11 +354,11 @@ h4 {
     margin-top: 30px;
     h2 {
       margin: 20px 0;
-      color: rgb(248, 41, 77);
+      color: #323D76;
     }
     h3 {
       margin: 20px 0;
-      color: rgb(248, 41, 77);
+      color: #323D76
     }
     p {
       font-size: 15px;

@@ -71,6 +71,7 @@ const Clients = () => {
   const [totalRows, setTotalRows] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [industriesData, setIndustriesData] = useState([]);
+  const [promiseLoading, setPromiseLoading] = useState(false);
   const [jobCategoryData, setJobCategoryData] = useState([]);
   const [isOpen, setIsOpen] = useState(
     clients?.results?.map(() => false) ?? []
@@ -182,7 +183,7 @@ const Clients = () => {
     dispatch({
       type: ClientActions.DELETE_CLIENT,
       payload: { id: row.id },
-      setLoading
+      setLoading,
     });
   };
 
@@ -235,7 +236,7 @@ const Clients = () => {
                 dispatch({
                   type: ClientActions.APPROVE_CLIENT,
                   payload: row,
-                  setLoading
+                  setLoading,
                 });
               } else {
                 toast.warn("Client already approved");
@@ -252,7 +253,7 @@ const Clients = () => {
                 dispatch({
                   type: ClientActions.DECLINED_CLIENT,
                   payload: row,
-                  setLoading
+                  setLoading,
                 });
               } else {
                 toast.warn("Client already Declined");
@@ -678,6 +679,32 @@ const Clients = () => {
     // doc.autoPrint(csv)
     link.click();
   }
+
+  const handleselected = (rows) => {
+    console.log('---------------------');
+    console.log('rows =>', rows);
+    console.log('---------------------');
+    let mails = [];
+    new Promise(() => {
+      setTimeout(() => {
+        mails = rows.selectedRows?.map((ele) => {
+          const obj = {};
+          obj.label = `${ele?.companyName} ${ele?.companyowner}`;
+          obj.email = ele.email;
+          return obj;
+        }, 3000);
+      });
+    });
+    new Promise(() => {
+      setTimeout(() => {
+        dispatch({
+          type: ClientActions.SET_SELECTED_FOR_EMAIL_CLIENT,
+          payload: { mails, totalRows: rows.selectedCount },
+        });
+        setPromiseLoading(false);
+      }, 3000);
+    });
+  };
   return (
     <>
       <div style={{ display: "flex", alignItems: "end" }}>
@@ -1108,6 +1135,13 @@ const Clients = () => {
               <DataTable
                 paginationRowsPerPageOptions={[10, 20, 30, 50, 100]}
                 fixedHeader={true}
+                selectableRows={true}
+                onSelectedRowsChange={(e) => {
+                  setTimeout(() => {
+                    setPromiseLoading(true);
+                  }, 10);
+                  handleselected(e);
+                }}
                 fixedHeaderScrollHeight="500px"
                 noHeader
                 subHeader

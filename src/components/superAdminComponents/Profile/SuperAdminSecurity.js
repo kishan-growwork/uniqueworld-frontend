@@ -47,7 +47,7 @@ const SuperAdminSecurity = () => {
 
     const [focus, setIsfocus] = useState(null);
 
-    const themecolor = "#cf509b";
+    const themecolor = "#323D76";
 
   const SignupSchema = yup.object().shape({
     currentPassword: yup

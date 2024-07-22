@@ -1808,7 +1808,7 @@ const SecondPage = ({
                 initialRating={5 - count?.resume_download_count}
                 emptySymbol={<Star size={20} fill="#babfc7" stroke="#babfc7" />}
                 fullSymbol={
-                  <Star size={20} fill={"#CF509B"} stroke={"#CF509B"} />
+                  <Star size={20} fill={"#323D76"} stroke={"#323D76"} />
                 }
               />
             </div>
@@ -2344,8 +2344,8 @@ const SecondPage = ({
                           fullSymbol={
                             <Star
                               size={20}
-                              fill={"#CF509B"}
-                              stroke={"#CF509B"}
+                              fill={"#323D76"}
+                              stroke={"#323D76"}
                             />
                           }
                         />

@@ -21,7 +21,7 @@ const AgencyCard = ({ dated }) => {
     grid: {
       show: false,
     },
-    colors: ["#cf509b"],
+    colors: ["#323D76"],
     dataLabels: {
       enabled: false,
     },

@@ -20,13 +20,13 @@ import { selectThemeColors } from '@utils'
 import '@styles/react/libs/editor/editor.scss'
 import '@styles/react/libs/react-select/_react-select.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import actions from '../../redux/candidate/actions'
+import actions from '../../redux/client/actions'
 import Loader from './../Dialog/Loader'
 import { toast } from 'react-toastify'
 
-const ComposeEmail = ({ composeOpen, toggleCompose }) => {
-    const { selectedCandidates } = useSelector(state => state.candidate)
-    const { isSent, isNotSent } = useSelector(state => state.candidate)
+const ComposeClientEmail = ({ composeOpen, toggleCompose }) => {
+    const { selectedClient } = useSelector(state => state.client)
+    const { isSent, isNotSent } = useSelector(state => state.client)
   
     const [subject, setSubject] = useState("")
     const dispatch = useDispatch()
@@ -107,13 +107,13 @@ const ComposeEmail = ({ composeOpen, toggleCompose }) => {
                     </Button> */}
                     <div className='compose-mail-form-field mt-1'>
                         <Label for='email-to' className='form-label'>
-                            To: {selectedCandidates?.totalRows} Selected
+                            To: {selectedClient?.totalRows} Selected
                         </Label>
                         <div className='flex-grow-1'>
                             <Select
                                 isMulti
                                 id='email-to'
-                                value={selectedCandidates?.mails}
+                                value={selectedClient?.mails}
                                 isClearable={false}
                                 theme={selectThemeColors}
                                 className='react-select select-borderless react-selectformails'
@@ -165,4 +165,4 @@ const ComposeEmail = ({ composeOpen, toggleCompose }) => {
     )
 }
 
-export default ComposeEmail
+export default ComposeClientEmail

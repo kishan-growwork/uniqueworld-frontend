@@ -3,7 +3,7 @@ import PricingCards from "./PricingCards";
 // import useRazorpay from "react-razorpay";
 import "@styles/base/pages/page-pricing.scss";
 import { useSelector } from "react-redux";
-import logo from "../../../../assets/images/logo/unique.png";
+import logo from "../../../../assets/images/logo/unique-logo.png";
 
 const Pricing = () => {
   const { currentPlan } = useSelector((state) => state.subscription);

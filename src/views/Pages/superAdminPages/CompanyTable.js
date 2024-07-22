@@ -230,7 +230,7 @@ const CompanyTable = () => {
           <PaginationLink
             style={{
               borderRadius: "0.5rem ",
-              backgroundColor: "#CF509B",
+              backgroundColor: "#323D76",
               color: "white",
             }}
           >

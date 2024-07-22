@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import logo from "../../../assets/images/logo/unique.png";
+import logo from "../../../assets/images/logo/unique-logo.png";
 import classNames from "classnames";
 import Marquee from "react-fast-marquee";
 // import poster1 from '../../../assets/images/landingpage/Mask Group 1.png'
@@ -115,7 +115,7 @@ const LandingPage = () => {
           width: "100%",
           left: "0",
           padding: "10px 15px",
-          backgroundColor: "#cf509b",
+          backgroundColor: "#323D76",
           color: "#fff",
           borderRadius: "8px",
         }}
@@ -157,8 +157,8 @@ const LandingPage = () => {
               justifyContent: "center",
               alignItems: "center",
               border:
-                selectWtspMsg == 1 ? " 1px solid #cf509b" : "1px solid #ccc",
-              backgroundColor: selectWtspMsg == 1 ? "#cf509b" : "transparent",
+                selectWtspMsg == 1 ? " 1px solid #323D76" : "1px solid #ccc",
+              backgroundColor: selectWtspMsg == 1 ? "#323D76" : "transparent",
             }}
           >
             <div
@@ -190,8 +190,8 @@ const LandingPage = () => {
               justifyContent: "center",
               alignItems: "center",
               border:
-                selectWtspMsg == 2 ? " 1px solid #cf509b" : "1px solid #ccc",
-              backgroundColor: selectWtspMsg == 2 ? "#cf509b" : "transparent",
+                selectWtspMsg == 2 ? " 1px solid #323D76" : "1px solid #ccc",
+              backgroundColor: selectWtspMsg == 2 ? "#323D76" : "transparent",
             }}
           >
             <div
@@ -223,8 +223,8 @@ const LandingPage = () => {
               justifyContent: "center",
               alignItems: "center",
               border:
-                selectWtspMsg == 3 ? " 1px solid #cf509b" : "1px solid #ccc",
-              backgroundColor: selectWtspMsg == 3 ? "#cf509b" : "transparent",
+                selectWtspMsg == 3 ? " 1px solid #323D76" : "1px solid #ccc",
+              backgroundColor: selectWtspMsg == 3 ? "#323D76" : "transparent",
             }}
           >
             <div
@@ -243,7 +243,7 @@ const LandingPage = () => {
         <Button
           style={{
             width: "145px",
-            backgroundColor: "#cf509b",
+            backgroundColor: "#323D76",
             color: "white",
           }}
           className="add-new-user"
@@ -1141,7 +1141,7 @@ const LandingPage = () => {
                         <div className={style["card-heading"]}>AS</div>
                       </div>
                       <div className={style["card-content"]}>
-                        <p style={{ fontSize: "13px" }}>
+                        <p style={{ fontSize: "13px", color: "#fff" }}>
                           <i>
                             "Such a good experience with Unique world placement
                             Specially thanx dhaval sir"
@@ -1168,7 +1168,7 @@ const LandingPage = () => {
                         <div className={style["card-heading"]}>DG</div>
                       </div>
                       <div className={style["card-content"]}>
-                        <p style={{ fontSize: "13px" }}>
+                        <p style={{ fontSize: "13px", color: "#fff" }}>
                           <i>
                             "Working with Unique World is the best Experience I
                             have ever had with any consultant they are so fast
@@ -1199,7 +1199,7 @@ const LandingPage = () => {
                         <div className={style["card-heading"]}>PS</div>
                       </div>
                       <div className={style["card-content"]}>
-                        <p style={{ fontSize: "13px" }}>
+                        <p style={{ fontSize: "13px", color: "#fff" }}>
                           <i>
                             "Unique World Placement is best service provider we
                             have hired staff and very satisfied with service"
@@ -1226,7 +1226,7 @@ const LandingPage = () => {
                         <div className={style["card-heading"]}>RP</div>
                       </div>
                       <div className={style["card-content"]}>
-                        <p style={{ fontSize: "13px" }}>
+                        <p style={{ fontSize: "13px", color: "#fff" }}>
                           <i>
                             "Great recruiter for job seekers. Professional and
                             responsible. And the best thing is unlike other
@@ -1255,7 +1255,7 @@ const LandingPage = () => {
                         <div className={style["card-heading"]}>RY</div>
                       </div>
                       <div className={style["card-content"]}>
-                        <p style={{ fontSize: "13px" }}>
+                        <p style={{ fontSize: "13px", color: "#fff" }}>
                           <i>
                             "Unique world has helped me a lot in finding a great
                             job opportunity. I am really satisfied with their
@@ -1283,7 +1283,7 @@ const LandingPage = () => {
                         <div className={style["card-heading"]}>CP</div>
                       </div>
                       <div className={style["card-content"]}>
-                        <p style={{ fontSize: "13px" }}>
+                        <p style={{ fontSize: "13px", color: "#fff" }}>
                           <i>
                             "I got my first job through this agency and I’m
                             thankful to Dhaval Gandhi as he has been very
@@ -1801,7 +1801,11 @@ const LandingPage = () => {
                 className="col-12 col-md-10 col-xxl-11"
                 style={{ color: "#000" }}
               >
-                © 2023 All rights reserved by <strong style={{color: "#d0509b"}}> Unique world Jobs.</strong>
+                © 2023 All rights reserved by{" "}
+                <strong style={{ color: "#323D76" }}>
+                  {" "}
+                  Unique world Jobs.
+                </strong>
               </div>
             </div>
           </div>

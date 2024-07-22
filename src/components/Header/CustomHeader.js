@@ -30,6 +30,7 @@ import { useLocation } from "react-router-dom";
 import ComposeEmail from "../ComposeEmail/ComposeEmail";
 // import { debounce } from "lodash";
 import useBreakpoint from "../../utility/hooks/useBreakpoints";
+import ComposeClientEmail from "../ComposeEmail/ComposeClientEmail";
 const CustomHeader = ({
   store,
   setCreate,
@@ -42,9 +43,12 @@ const CustomHeader = ({
   const { width } = useBreakpoint();
   const dispatch = useDispatch();
   const { selectedCandidates } = useSelector((state) => state.candidate);
+  const { selectedClient } = useSelector((state) => state.client);
+
   const location = useLocation().pathname;
   const [mobile, setMobile] = useState("");
   const [composeOpen, setComposeOpen] = useState(false);
+  const [composeClientOpen, setComposeClientOpen] = useState(false);
   const slug = localStorage.getItem("slug");
   const auth = useSelector((state) => state?.auth);
   console.info("----------------------------");
@@ -190,7 +194,11 @@ const CustomHeader = ({
   }
 
   const toggleCompose = () => {
-    setComposeOpen(!composeOpen);
+    setComposeOpen(!composeOpen); 
+  };
+
+  const toggleComposeEmail = () => {
+    setComposeClientOpen(!composeClientOpen); 
   };
   const themecolor = useSelector(
     (state) => state?.agency?.agencyDetail?.themecolor
@@ -563,13 +571,25 @@ const CustomHeader = ({
                     </Button>
                   </Col>
                 )}
+                {selectedClient?.mails?.length > 0 && (
+                  <Col>
+                    <Button
+                      onClick={() => setComposeClientOpen(true)}
+                      style={{ cursor: "pointer", marginRight: "10px" }}
+                      caret
+                      outline
+                    >
+                      <Mail className="font-small-4 me-50" />
+                    </Button>
+                  </Col>
+                )}
               </>
             )}
 
             <Button
               style={{
                 width: "145px",
-                backgroundColor: themecolor ? themecolor : "#cf509b",
+                backgroundColor: themecolor ? themecolor : "#323D76",
                 color: "white",
               }}
               className="add-new-user"
@@ -591,6 +611,9 @@ const CustomHeader = ({
       </Row>
       {composeOpen && (
         <ComposeEmail toggleCompose={toggleCompose} composeOpen={composeOpen} />
+      )}
+       {composeClientOpen && (
+        <ComposeClientEmail toggleCompose={toggleComposeEmail} composeOpen={composeClientOpen} />
       )}
     </div>
   );
