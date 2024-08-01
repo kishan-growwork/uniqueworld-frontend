@@ -82,6 +82,8 @@ import jobcategoryActions from "./../../redux/jobCategory/actions";
 import industriesActions from "./../../redux/industries/actions";
 import WhatsappDialog from "../../components/Dialog/WhatsappDialog";
 import _ from "lodash";
+import maleIcon from "../../../src/assets/images/icons/male-icon.jpg";
+import FemaleIcon from "../../../src/assets/images/icons/female-icon.jpg";
 
 const canvasStyles = {
   position: "fixed",
@@ -425,7 +427,6 @@ const SecondPage = ({
     handleselected(selectedCandidatesRef.current);
   };
   const handleselected = (rows) => {
-   
     let mails = [];
     new Promise(() => {
       setTimeout(() => {
@@ -1633,7 +1634,7 @@ const SecondPage = ({
   const [clientData, setClientData] = useState([]);
 
   const ProfileImage = ({ imageUrl, gender, email, mobile, candidate }) => {
-    const defaultIcon = gender === "female" ? UserPlus : User;
+    const defaultIcon = gender === "female" ? FemaleIcon : maleIcon;
 
     return (
       <div
@@ -1657,12 +1658,14 @@ const SecondPage = ({
             }}
           />
         ) : (
-          <User
-            size={100}
+          <img
+            src={defaultIcon}
+            alt="Profile"
             style={{
+              width: "100px",
+              height: "100px",
               borderRadius: "50%",
-              backgroundColor: "#f0f0f0",
-              padding: "10px",
+              objectFit: "cover",
             }}
           />
         )}
@@ -2692,6 +2695,9 @@ const SecondPage = ({
             ) : (
               <>
                 {candidateList?.map((candidate, index) => {
+                  console.log("---------------------");
+                  console.log("candidate =>", candidate);
+                  console.log("---------------------");
                   let color = "light-success";
                   if (candidate?.interviewStatus === "available")
                     color = "light-warning";
@@ -2716,157 +2722,379 @@ const SecondPage = ({
                   else if (candidate?.interviewStatus === "reschedule")
                     color = "warning";
                   return (
-                    <Card className="mb-3" key={index} style={{ width: "75%" }}>
-                      <CardBody>
-                        <Row>
-                          <Col
-                            md="7"
-                            style={{
-                              borderRight: "1px solid #ccc",
-                              paddingRight: "15px",
-                            }}
-                          >
-                            <Row>
-                              <Col>
-                                <CardTitle
-                                  tag="h4"
-                                  className="d-flex align-items-center"
-                                  style={{
-                                    fontSize: "23px",
-                                    borderBottom: "1px solid #ccc",
-                                    paddingBottom: "15px",
-                                  }}
-                                >
-                                  {" "}
-                                  <input
-                                    type="checkbox"
-                                    style={{ marginRight: "10px" }}
-                                    onChange={(e) => {
-                                      setTimeout(() => {
-                                        setPromiseLoading(true);
-                                      }, 10);
-                                      handleSelectedCard(
-                                        candidate,
-                                        e.target.checked
-                                      );
+                    <>
+                      <Card
+                        key={index}
+                        style={{ width: "75%", marginBottom: "10px" }}
+                      >
+                        <CardBody>
+                          <Row>
+                            <Col
+                              md="7"
+                              style={{
+                                borderRight: "1px solid #ccc",
+                                paddingRight: "15px",
+                              }}
+                            >
+                              <Row>
+                                <Col>
+                                  <CardTitle
+                                    tag="h4"
+                                    className="d-flex align-items-center"
+                                    style={{
+                                      fontSize: "23px",
+                                      borderBottom: "1px solid #ccc",
+                                      paddingBottom: "15px",
+                                    }}
+                                  >
+                                    {" "}
+                                    <input
+                                      type="checkbox"
+                                      style={{ marginRight: "10px" }}
+                                      onChange={(e) => {
+                                        setTimeout(() => {
+                                          setPromiseLoading(true);
+                                        }, 10);
+                                        handleSelectedCard(
+                                          candidate,
+                                          e.target.checked
+                                        );
+                                      }}
+                                    />
+                                    <span>
+                                      {candidate?.firstname}{" "}
+                                      {candidate?.lastname}
+                                    </span>
+                                    <Badge
+                                      pill
+                                      color="default"
+                                      style={{
+                                        fontSize: "12px",
+                                        backgroundColor:
+                                          candidate.status === "new"
+                                            ? themecolor
+                                            : `${themecolor}80`,
+                                        marginLeft: "10px",
+                                      }}
+                                    >
+                                      {candidate?.status}
+                                    </Badge>
+                                    {auth?.user?.clients ? null : (
+                                      <Badge
+                                        style={{
+                                          fontSize: "12px",
+                                          marginLeft: "10px",
+                                        }}
+                                        pill
+                                        color={color}
+                                        className="column-action d-flex align-items-center"
+                                      >
+                                        {candidate?.interviewStatus}
+                                      </Badge>
+                                    )}
+                                  </CardTitle>
+                                </Col>
+                              </Row>
+                              <Row>
+                                <Col className="d-flex align-items-center">
+                                  <Briefcase
+                                    size={20}
+                                    style={{
+                                      marginRight: "5px",
+                                      color: "gray",
                                     }}
                                   />
                                   <span>
-                                    {candidate?.firstname} {candidate?.lastname}
+                                    {candidate?.professional
+                                      ?.experienceInyear || "-"}
                                   </span>
-                                  <Badge
-                                    pill
-                                    color="default"
+                                </Col>
+                                <Col className="d-flex align-items-center">
+                                  <span
                                     style={{
-                                      fontSize: "12px",
-                                      backgroundColor:
-                                        candidate.status === "new"
-                                          ? themecolor
-                                          : `${themecolor}80`,
-                                      marginLeft: "10px",
+                                      marginRight: "5px",
+                                      color: "gray",
                                     }}
                                   >
-                                    {candidate?.status}
-                                  </Badge>
-                                  {auth?.user?.clients ? null : (
-                                    <Badge
+                                    ₹
+                                  </span>
+                                  <span>
+                                    {candidate?.professional?.expectedsalary ||
+                                      "-"}
+                                  </span>
+                                </Col>
+                                <Col className="d-flex align-items-center">
+                                  <MapPin
+                                    size={20}
+                                    style={{
+                                      marginRight: "5px",
+                                      color: "gray",
+                                    }}
+                                  />
+                                  <span>
+                                    {candidate?.professional
+                                      ?.preferedJobLocation || "-"}
+                                  </span>
+                                </Col>
+                                <Col className="d-flex align-items-center">
+                                  <Clock
+                                    size={20}
+                                    style={{
+                                      marginRight: "5px",
+                                      color: "gray",
+                                    }}
+                                  />
+                                  <span>
+                                    {candidate?.professional?.noticePeriod ||
+                                      "-"}
+                                  </span>
+                                </Col>
+                              </Row>
+                              <Row>
+                                <CardBody
+                                  style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    paddingLeft: "1rem",
+                                  }}
+                                >
+                                  {renderStatesTable(candidate)}{" "}
+                                </CardBody>
+                              </Row>
+                            </Col>
+                            <Col
+                              md="4"
+                              style={{
+                                borderRight: "1px solid #ccc",
+                                paddingRight: "15px",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                            >
+                              <ProfileImage
+                                candidate={candidate}
+                                imageUrl={candidate?.image}
+                                gender={candidate?.gender}
+                                email={candidate?.email}
+                                mobile={candidate?.mobile}
+                              />
+                            </Col>
+                            <Col
+                              md="1"
+                              className="d-flex align-items-center justify-content-center"
+                              style={{ flexDirection: "column" }}
+                            >
+                              {auth?.user?.clients ? null : (
+                                <>
+                                  {" "}
+                                  <div
+                                    style={{
+                                      color: "#007bff",
+                                      cursor: "pointer",
+                                      borderRadius: "50%",
+                                      backgroundColor: "white",
+                                      padding: "10px",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      width: "40px",
+                                      height: "40px",
+                                      marginTop: "10px",
+                                    }}
+                                    onClick={async () => {
+                                      if (
+                                        candidate?.agency?.email ==
+                                          user?.agency?.email ||
+                                        user?.email == allAccessEmail
+                                      ) {
+                                        setCandidate(candidate);
+                                        setIndustriesData(
+                                          candidate?.industries_relation
+                                        );
+                                        statusUpdate(candidate);
+                                        setEmail(candidate?.email);
+                                        setUpdate(true);
+                                        setShow(true);
+                                      } else {
+                                        setIsDisabledAllFields(true);
+                                        setCandidate(candidate);
+                                        setIndustriesData(
+                                          candidate?.industries_relation
+                                        );
+                                        statusUpdate(candidate);
+                                        setEmail(candidate?.email);
+                                        setUpdate(true);
+                                        setShow(true);
+                                      }
+                                    }}
+                                  >
+                                    <Edit size={25} color="black" />
+                                  </div>
+                                  <div
+                                    style={{
+                                      color: "#dc3545",
+                                      cursor: "pointer",
+                                      borderRadius: "50%",
+                                      backgroundColor: "white",
+                                      padding: "10px",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      width: "40px",
+                                      height: "40px",
+                                      marginTop: "10px",
+                                    }}
+                                    onClick={() => {
+                                      if (
+                                        candidate?.agency?.email ==
+                                          user?.agency?.email ||
+                                        user?.email == allAccessEmail
+                                      ) {
+                                        handleDeleteClick(candidate);
+                                      }
+                                    }}
+                                  >
+                                    <Trash2 size={25} color="black" />
+                                  </div>
+                                </>
+                              )}
+                              {auth?.user?.clients ? null : (
+                                <>
+                                  <div
+                                    onClick={() => {
+                                      history.push(
+                                        `/${slug}/interview?id=${candidate.id}&first=${candidate.firstname}&last=${candidate.lastname}`
+                                      );
+                                    }}
+                                    style={{
+                                      cursor: "pointer",
+                                      borderRadius: "50%",
+                                      backgroundColor: "white",
+                                      padding: "10px",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      width: "40px",
+                                      height: "40px",
+                                    }}
+                                  >
+                                    <UserCheck size={25} color="black" />
+                                  </div>
+                                </>
+                              )}
+                              {/* {auth?.user?.clients ? (
+                                candidate?.interview_request?.isdisabled ==
+                                true ? (
+                                  <>
+                                    {" "}
+                                    <div
                                       style={{
-                                        fontSize: "12px",
-                                        marginLeft: "10px",
+                                        color: "#7F8487",
+                                        cursor: "pointer",
+                                        borderRadius: "50%",
+                                        backgroundColor: "white",
+                                        padding: "10px",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        width: "40px",
+                                        height: "40px",
                                       }}
-                                      pill
-                                      color={color}
-                                      className="column-action d-flex align-items-center"
                                     >
-                                      {candidate?.interviewStatus}
-                                    </Badge>
-                                  )}
-                                </CardTitle>
-                              </Col>
-                            </Row>
-                            <Row>
-                              <Col className="d-flex align-items-center">
-                                <Briefcase
-                                  size={20}
-                                  style={{ marginRight: "5px", color: "gray" }}
-                                />
-                                <span>
-                                  {candidate?.professional?.experienceInyear ||
-                                    "-"}
-                                </span>
-                              </Col>
-                              <Col className="d-flex align-items-center">
-                                <DollarSign
-                                  size={20}
-                                  style={{ marginRight: "5px", color: "gray" }}
-                                />
-                                <span>
-                                  {candidate?.professional?.expectedsalary ||
-                                    "-"}
-                                </span>
-                              </Col>
-                              <Col className="d-flex align-items-center">
-                                <MapPin
-                                  size={20}
-                                  style={{ marginRight: "5px", color: "gray" }}
-                                />
-                                <span>
-                                  {candidate?.professional
-                                    ?.preferedJobLocation || "-"}
-                                </span>
-                              </Col>
-                              <Col className="d-flex align-items-center">
-                                <Clock
-                                  size={20}
-                                  style={{ marginRight: "5px", color: "gray" }}
-                                />
-                                <span>
-                                  {candidate?.professional?.noticePeriod || "-"}
-                                </span>
-                              </Col>
-                            </Row>
-                            <Row>
-                              <CardBody
-                                style={{
-                                  display: "flex",
-                                  flexDirection: "column",
-                                  paddingLeft: "1rem",
-                                }}
-                              >
-                                {renderStatesTable(candidate)}{" "}
-                              </CardBody>
-                            </Row>
-                          </Col>
-                          <Col
-                            md="4"
-                            style={{
-                              borderRight: "1px solid #ccc",
-                              paddingRight: "15px",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
-                          >
-                            <ProfileImage
-                              candidate={candidate}
-                              imageUrl={candidate?.image}
-                              gender={candidate?.gender}
-                              email={candidate?.email}
-                              mobile={candidate?.mobile}
-                            />
-                          </Col>
-                          <Col
-                            md="1"
-                            className="d-flex align-items-center justify-content-center"
-                            style={{ flexDirection: "column" }}
-                          >
-                            {auth?.user?.clients ? null : (
-                              <>
-                                {" "}
-                                <div
+                                      <Calendar size={25} color="gray" />
+                                    </div>
+                                  </>
+                                ) : (
+                                  <div
+                                    style={{
+                                      color: "#7F8487",
+                                      cursor: "pointer",
+                                      borderRadius: "50%",
+                                      backgroundColor: "white",
+                                      padding: "10px",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
+                                      width: "40px",
+                                      height: "40px",
+                                    }}
+                                    onClick={() => {
+                                      setLoading(true);
+                                      interviewRequest(candidate);
+                                    }}
+                                  >
+                                    <Calendar size={25} color="black" />
+                                  </div>
+                                )
+                              ) : null} */}
+
+                              {auth?.user?.clients ? (
+                                count?.plan?.planName == "free" ||
+                                count?.plan?.planName == "Trial" ? (
+                                  candidate?.interview_request?.isdisabled ==
+                                  true ? (
+                                    <>
+                                      {" "}
+                                      <div
+                                        style={{
+                                          color: "#7F8487",
+                                          cursor: "pointer",
+                                          borderRadius: "50%",
+                                          backgroundColor: "white",
+                                          padding: "10px",
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                          width: "40px",
+                                          height: "40px",
+                                        }}
+                                      >
+                                        <Calendar size={25} color="gray" />
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <>
+                                      {" "}
+                                      <div
+                                        style={{
+                                          color: "#7F8487",
+                                          cursor: "pointer",
+                                          borderRadius: "50%",
+                                          backgroundColor: "white",
+                                          padding: "10px",
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                          width: "40px",
+                                          height: "40px",
+                                        }}
+                                        onClick={() => {
+                                          setLoading(true);
+                                          interviewRequest(candidate);
+                                        }}
+                                      >
+                                        <Calendar size={25} color="black" />
+                                      </div>
+                                    </>
+                                  )
+                                ) : null
+                              ) : null}
+
+                              {candidate?.mobile && (
+                                <a
+                                  onClick={() => {
+                                    setWPnumber(candidate?.mobile);
+                                    auth?.user?.clients
+                                      ? count?.plan?.planName !== "free" &&
+                                        count?.plan?.planName !== "Trial"
+                                        ? setShowWPModal(true)
+                                        : setWhatsappOpen(true)
+                                      : window.open(
+                                          `https://wa.me/91${candidate?.mobile}`
+                                        );
+                                  }}
                                   style={{
-                                    color: "#007bff",
-                                    cursor: "pointer",
                                     borderRadius: "50%",
                                     backgroundColor: "white",
                                     padding: "10px",
@@ -2877,152 +3105,44 @@ const SecondPage = ({
                                     height: "40px",
                                     marginTop: "10px",
                                   }}
-                                  onClick={async () => {
-                                    if (
-                                      candidate?.agency?.email ==
-                                        user?.agency?.email ||
-                                      user?.email == allAccessEmail
-                                    ) {
-                                      setCandidate(candidate);
-                                      setIndustriesData(
-                                        candidate?.industries_relation
-                                      );
-                                      statusUpdate(candidate);
-                                      setEmail(candidate?.email);
-                                      setUpdate(true);
-                                      setShow(true);
-                                    } else {
-                                      setIsDisabledAllFields(true);
-                                      setCandidate(candidate);
-                                      setIndustriesData(
-                                        candidate?.industries_relation
-                                      );
-                                      statusUpdate(candidate);
-                                      setEmail(candidate?.email);
-                                      setUpdate(true);
-                                      setShow(true);
-                                    }
-                                  }}
                                 >
-                                  <Edit size={25} color="black" />
-                                </div>
-                                <div
-                                  style={{
-                                    color: "#dc3545",
-                                    cursor: "pointer",
-                                    borderRadius: "50%",
-                                    backgroundColor: "white",
-                                    padding: "10px",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    width: "40px",
-                                    height: "40px",
-                                    marginTop: "10px",
-                                  }}
-                                  onClick={() => {
-                                    if (
-                                      candidate?.agency?.email ==
-                                        user?.agency?.email ||
-                                      user?.email == allAccessEmail
-                                    ) {
-                                      handleDeleteClick(candidate);
-                                    }
-                                  }}
-                                >
-                                  <Trash2 size={25} color="black" />
-                                </div>
-                              </>
-                            )}
-
-                            {auth?.user?.clients ? (
-                              candidate?.interview_request?.isdisabled ==
-                                true ||
-                              count?.plan?.planName === "free" ||
-                              count?.plan?.planName === "Trial" ? null : (
-                                <div
-                                  style={{
-                                    color: "#7F8487",
-                                    cursor: "pointer",
-                                    borderRadius: "50%",
-                                    backgroundColor: "white",
-                                    padding: "10px",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    width: "40px",
-                                    height: "40px",
-                                  }}
-                                  onClick={() => {
-                                    setLoading(true);
-                                    interviewRequest(candidate);
-                                  }}
-                                >
-                                  <Calendar size={25} color="black" />
-                                </div>
-                              )
-                            ) : (
-                              <div
-                                onClick={() => {
-                                  history.push(
-                                    `/${slug}/interview?id=${candidate.id}&first=${candidate.firstname}&last=${candidate.lastname}`
-                                  );
-                                }}
-                                style={{
-                                  cursor: "pointer",
-                                  borderRadius: "50%",
-                                  backgroundColor: "white",
-                                  padding: "10px",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                  width: "40px",
-                                  height: "40px",
-                                }}
-                              >
-                                <UserCheck size={25} color="black" />
-                              </div>
-                            )}
-
-                            {candidate?.mobile && (
-                              <a
-                                onClick={() => {
-                                  setWPnumber(candidate?.mobile);
-                                  auth?.user?.clients
-                                    ? count?.plan?.planName !== "free" &&
-                                      count?.plan?.planName !== "Trial"
-                                      ? setShowWPModal(true)
-                                      : setWhatsappOpen(true)
-                                    : window.open(
-                                        `https://wa.me/91${candidate?.mobile}`
-                                      );
-                                }}
-                                style={{
-                                  borderRadius: "50%",
-                                  backgroundColor: "white",
-                                  padding: "10px",
-                                  display: "flex",
-                                  justifyContent: "center",
-                                  alignItems: "center",
-                                  width: "40px",
-                                  height: "40px",
-                                  marginTop: "10px",
-                                }}
-                              >
-                                <img
-                                  src={whatsapp}
-                                  style={{
-                                    height: "20px",
-                                    width: "20px",
-                                    color: "white",
-                                  }}
-                                />
-                              </a>
-                            )}
-                          </Col>
-                        </Row>
-                      </CardBody>
-                    </Card>
+                                  <img
+                                    src={whatsapp}
+                                    style={{
+                                      height: "20px",
+                                      width: "20px",
+                                      color: "white",
+                                    }}
+                                  />
+                                </a>
+                              )}
+                            </Col>
+                          </Row>
+                        </CardBody>
+                      </Card>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          alignItems: "center",
+                          width: "75%",
+                          marginBottom: "2rem",
+                        }}
+                      >
+                        <div>
+                          <span style={{ color: "gray" }}>
+                            Applied On&nbsp;: &nbsp;&nbsp;
+                          </span>
+                          <span>
+                            {candidate?.createdAt
+                              ? moment(candidate?.createdAt).format(
+                                  "D MMM YYYY"
+                                )
+                              : "-"}
+                          </span>
+                        </div>
+                      </div>
+                    </>
                   );
                 })}
               </>

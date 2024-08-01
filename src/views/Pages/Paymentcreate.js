@@ -38,6 +38,9 @@ const Paymentcreate = () => {
   const [selectedState, setSelectedState] = useState();
   const [selectedCity, setSelectedCity] = useState();
   const { planbyid } = useSelector((state) => state?.plans);
+  console.log('---------------------');
+  console.log('planbyid =>', planbyid);
+  console.log('---------------------');
   const { user } = useSelector((state) => state?.user);
 
   useEffect(() => {

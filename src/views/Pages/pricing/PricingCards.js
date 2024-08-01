@@ -28,17 +28,16 @@ const PricingCards = ({
   planId,
   // createOrderInstance = () => {},
 }) => {
-  console.log('---------------------');
-  console.log('data =>', data);
-  console.log('---------------------');
+  const slug = localStorage.getItem("slug");
   const colsProps = { md: 3, xs: 12 };
   const themecolor = useSelector(
     (state) => state?.agency?.agencyDetail?.themecolor
   );
+  const history = useHistory();
   const [disabledIndexes, setDisabledIndexes] = useState([]);
-  console.log('---------------------');
-  console.log('disabledIndexes =>', disabledIndexes);
-  console.log('---------------------');
+  console.log("---------------------");
+  console.log("disabledIndexes =>", disabledIndexes);
+  console.log("---------------------");
   const [isOpenPaymentQR, setIsOpenPaymentQR] = useState(false);
 
   useEffect(() => {
@@ -52,9 +51,10 @@ const PricingCards = ({
     }, []);
     setDisabledIndexes(newDisabledIndexes);
   }, [data, planId]);
-  
+
   const renderPricingCards = () => {
     return data?.map((item, index) => {
+
       if (item?.planName != "Trial") {
         return (
           <Col key={index} {...colsProps}>
@@ -100,7 +100,8 @@ const PricingCards = ({
                     onClick={async () => {
                       //  createOrderInstance(item)
                       item?.planName == "Enterprises" ||
-                      item?.planName == "Professionals"
+                      item?.planName == "Professionals" ||
+                       item?.planName == "Startup"
                         ? history.push(`/${slug}/payment/create/${item?.id}`)
                         : null;
                       // let resp = await createPayment(item);

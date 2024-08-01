@@ -27,7 +27,12 @@ const User = ({
   const getRole = useSelector((state) => state.roles);
   const { plans } = useSelector((state) => state.plans);
   const [selectedPlan, setSelectedPlan] = useState();
-
+console.log('---------------------');
+console.log('selectedPlan =>', selectedPlan);
+console.log('---------------------');
+console.log('---------------------');
+console.log('user =>', user);
+console.log('---------------------');
   useEffect(() => {
     states?.map((ele) => {
       ele.label = ele.name;
