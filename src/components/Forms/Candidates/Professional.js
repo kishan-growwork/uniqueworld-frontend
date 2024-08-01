@@ -223,6 +223,9 @@ const Professional = ({
             }
             candidate.professional = values;
           }, [values]);
+          console.log('---------------------');
+          console.log('values =>', values);
+          console.log('---------------------');
           return (
             <Form>
               <div>
@@ -637,11 +640,11 @@ const Professional = ({
                         disabled={isDisabledAllFields}
                         maxLength={200}
                         type="textarea"
-                        placeholder={"Enter skill"}
+                        placeholder={"HTML | CSS | React | Node"}
                         onChange={(e) =>
                           {
                             setFieldValue(e.target.name, e.target.value)
-                            setCandidate({ ...candidate, preferedJobLocation: e.value});
+                            setCandidate({ ...candidate, skill: e.value});
                           }
                         }
                       />

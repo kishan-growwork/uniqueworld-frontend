@@ -33,6 +33,18 @@ const Pricing = () => {
       },
     },
     {
+      planName: "StartUp",
+      price: "1499",
+      planFeature: {
+        interview_count: "-1",
+        mail_notification: true,
+        upgrade_profile_top: true,
+        validate_days: 90,
+        whatsapp_notification: true,
+        export_candidate_lists: true,
+      },
+    },
+    {
       planName: "Professionals",
       price: "3999",
       planFeature: {

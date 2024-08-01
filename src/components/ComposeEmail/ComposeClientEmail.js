@@ -20,12 +20,16 @@ import { selectThemeColors } from '@utils'
 import '@styles/react/libs/editor/editor.scss'
 import '@styles/react/libs/react-select/_react-select.scss'
 import { useDispatch, useSelector } from 'react-redux'
-import actions from '../../redux/client/actions'
+
 import Loader from './../Dialog/Loader'
 import { toast } from 'react-toastify'
+import actions from '../../redux/candidate/actions'
 
 const ComposeClientEmail = ({ composeOpen, toggleCompose }) => {
     const { selectedClient } = useSelector(state => state.client)
+    console.log('---------------------');
+    console.log('selectedClient =>', selectedClient);
+    console.log('---------------------');
     const { isSent, isNotSent } = useSelector(state => state.client)
   
     const [subject, setSubject] = useState("")
@@ -70,7 +74,7 @@ const ComposeClientEmail = ({ composeOpen, toggleCompose }) => {
         if (subject?.length < 2) toast.error("Enter Subject")
         else {
             setLoading(true)
-            const mails = selectedCandidates?.mails?.map((ele) => ele.email)
+            const mails = selectedClient?.mails?.map((ele) => ele.email)
             dispatch({
                 type: actions.SEND_MAIL_TO_SELECTED_CANDIDATES,
                 payload: { mails, subject, html }

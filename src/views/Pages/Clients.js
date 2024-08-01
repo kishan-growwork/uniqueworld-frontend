@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import DataTable from "react-data-table-component";
 import {
   Edit,
@@ -681,9 +682,9 @@ const Clients = () => {
   }
 
   const handleselected = (rows) => {
-    console.log('---------------------');
-    console.log('rows =>', rows);
-    console.log('---------------------');
+ console.log('---------------------');
+ console.log('rows =>', rows);
+ console.log('---------------------');
     let mails = [];
     new Promise(() => {
       setTimeout(() => {
