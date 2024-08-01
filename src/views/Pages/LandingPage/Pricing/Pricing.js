@@ -3,7 +3,7 @@ import PricingCards from "./PricingCards";
 // import useRazorpay from "react-razorpay";
 import "@styles/base/pages/page-pricing.scss";
 import { useSelector } from "react-redux";
-import logo from "../../../../assets/images/logo/unique.png";
+import logo from "../../../../assets/images/logo/unique-logo.png";
 
 const Pricing = () => {
   const { currentPlan } = useSelector((state) => state.subscription);
@@ -30,6 +30,18 @@ const Pricing = () => {
         validate_days: null,
         whatsapp_notification: false,
         export_candidate_lists: false,
+      },
+    },
+    {
+      planName: "StartUp",
+      price: "1499",
+      planFeature: {
+        interview_count: "-1",
+        mail_notification: true,
+        upgrade_profile_top: true,
+        validate_days: 90,
+        whatsapp_notification: true,
+        export_candidate_lists: true,
       },
     },
     {

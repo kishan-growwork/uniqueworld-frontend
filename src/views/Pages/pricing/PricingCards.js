@@ -1,3 +1,4 @@
+/*eslint-disable */
 import classnames from "classnames";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -27,13 +28,17 @@ const PricingCards = ({
   planId,
   // createOrderInstance = () => {},
 }) => {
-  const history = useHistory();
-  const slug = localStorage.getItem("slug");
-  const colsProps = { md: 4, xs: 12 };
+  console.log('---------------------');
+  console.log('data =>', data);
+  console.log('---------------------');
+  const colsProps = { md: 3, xs: 12 };
   const themecolor = useSelector(
     (state) => state?.agency?.agencyDetail?.themecolor
   );
   const [disabledIndexes, setDisabledIndexes] = useState([]);
+  console.log('---------------------');
+  console.log('disabledIndexes =>', disabledIndexes);
+  console.log('---------------------');
   const [isOpenPaymentQR, setIsOpenPaymentQR] = useState(false);
 
   useEffect(() => {
@@ -47,6 +52,7 @@ const PricingCards = ({
     }, []);
     setDisabledIndexes(newDisabledIndexes);
   }, [data, planId]);
+  
   const renderPricingCards = () => {
     return data?.map((item, index) => {
       if (item?.planName != "Trial") {

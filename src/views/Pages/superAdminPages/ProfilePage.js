@@ -17,7 +17,7 @@ export const CustomBreadcrumbItem = ({ title, color, fontWeight }) => (
 );
 
 const ProfilePage = () => {
-  const themecolor = "#cf509b";
+  const themecolor = "#323D76";
 
   const [activeTab, setActiveTab] = useState("1");
   const toggleTab = (tab) => {

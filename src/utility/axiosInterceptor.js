@@ -51,7 +51,7 @@ apiCall.interceptors.response.use(
       localStorage.setItem("agencyId", resp?.data?.user.agencyId);
       localStorage.setItem(
         "themecolor",
-        resp?.data?.user?.agency?.themecolor || "#cf509b"
+        resp?.data?.user?.agency?.themecolor || "#323D76"
       );
       return resp;
     }

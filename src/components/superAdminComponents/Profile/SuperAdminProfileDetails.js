@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Button, CardBody, Col, Input, Label, Row } from "reactstrap";
 
 const SuperAdminProfileDetails = () => {
-//   const themecolor = "#cf509b";
+//   const themecolor = "#323D76";
 
   const user = useSelector((state) => state?.auth?.user);
 

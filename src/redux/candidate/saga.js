@@ -23,6 +23,9 @@ import { candidateAPI } from "../../apis/dashBoard";
 import { store } from "../store";
 
 export function* WATCH_GET_CANDIDATE(action) {
+  // const { agencyDetail } = yield select((state) => state?.agency);
+  // action.payload.filterData.dataMergePermission =
+  //   agencyDetail?.permission?.dataMerge;
   const resp = yield getCandidateAPI(action.payload);
   yield put({
     type: actions.SET_CANDIDATE,
@@ -35,6 +38,9 @@ export function* WATCH_GET_SAVED_CANDIDATE(action) {
       type: actions.GET_SAVED_CANDIDATE_LOADER,
       payload: true,
     });
+    // const { agencyDetail } = yield select((state) => state?.agency);
+    // action.payload.filterData.dataMergePermission =
+    //   agencyDetail?.permission?.dataMerge;
     const resp = yield getSavedCandidateAPI(action.payload);
     yield put({
       type: actions.SET_CANDIDATE,
@@ -66,9 +72,9 @@ export function* WATCH_GET_CLIENT_CANDIDATE(action) {
       payload: true,
     });
     const planId = store.getState()?.subscription?.currentPlan?.id;
-    const { agencyDetail } = yield select((state) => state?.agency);
-    action.payload.filterData.dataMergePermission =
-      agencyDetail?.permission?.dataMerge;
+    // const { agencyDetail } = yield select((state) => state?.agency);
+    // action.payload.filterData.dataMergePermission =
+    //   agencyDetail?.permission?.dataMerge;
     const resp = yield getClientCandidateAPI(action.payload, planId);
 
     if (resp) {
@@ -107,9 +113,9 @@ export function* WATCH_GET_BEST_MATCHES_CANDIDATE(action) {
       payload: true,
     });
     const planId = store.getState()?.subscription?.currentPlan?.id;
-    const { agencyDetail } = yield select((state) => state?.agency);
-    action.payload.filterData.dataMergePermission =
-      agencyDetail?.permission?.dataMerge;
+    // const { agencyDetail } = yield select((state) => state?.agency);
+    // action.payload.filterData.dataMergePermission =
+    //   agencyDetail?.permission?.dataMerge;
     const resp = yield getBestMatchesCandidateAPI(action.payload, planId);
 
     if (resp) {

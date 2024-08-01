@@ -119,6 +119,7 @@ const Filter = ({
       document.removeEventListener("keydown", keyDownHandler);
     };
   }, []);
+
   const genderOptions = [
     { value: "male", id: "gender", label: "Male" },
     { value: "female", id: "gender", label: "Female" },

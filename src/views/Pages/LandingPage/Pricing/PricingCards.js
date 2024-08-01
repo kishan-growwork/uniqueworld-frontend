@@ -23,7 +23,7 @@ const PricingCards = ({
 
   // createOrderInstance = () => {},
 }) => {
-  const colsProps = { md: 4, xs: 12 };
+  const colsProps = { md: 3, xs: 12 };
   const themecolor = "#ecaa48";
   const currentUrl = window.origin;
 

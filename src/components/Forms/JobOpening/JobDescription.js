@@ -280,7 +280,7 @@ function JobDescription({
             >
                 <ModalHeader className='bg-transparent' ></ModalHeader>
                 <ModalBody className='px-sm-5 mx-50 pb-5'>
-                    <h1 className='text-center mb-1' style={{ color: "#CF509B" }} >Already Registered!!</h1>
+                    <h1 className='text-center mb-1' style={{ color: "#323D76" }} >Already Registered!!</h1>
                     <p className='text-center'> If you want to apply for this job opportunity please feel free to visit UNIQUE WORLD PLACEMENTGMENT MANAGEMENT or contact us on +91-9974877260</p>
                 </ModalBody>
             </Modal> */}
