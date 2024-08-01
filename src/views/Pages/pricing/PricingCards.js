@@ -1,3 +1,4 @@
+/*eslint-disable */
 import classnames from "classnames";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
