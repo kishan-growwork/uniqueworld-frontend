@@ -17,7 +17,7 @@ import { selectThemeColors } from "@utils";
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 // import PickerDefault from './../pickerDefalut'
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 // import actions from '../../../redux/client/actions'
 import { Scrollbars } from "react-custom-scrollbars";
 // import actions from "../../../redux/industries/actions";
@@ -44,11 +44,8 @@ const Filter = ({
   open,
   handleFilterToggleMode = () => {},
   clear,
-  setclear = () => { },
-  filterKey = () => { },
-  filterData
+  setclear = () => {},
 }) => {
-  const dispatch = useDispatch();
   const [filter, setFilter] = useState(initialState);
   const industries = useSelector((state) => state.industries);
   const [industry, setIndustry] = useState([]);
@@ -130,16 +127,6 @@ const Filter = ({
   const handleClear = () => {
     setFilter(initialState);
     setIndustry([]);
-    if (filterKey(filterData).length) {
-      dispatch({
-        type: "GET_CLIENT",
-        payload: {
-          filterData: [],
-          page: 1,
-          perPage: 10,
-        },
-      });
-    }
     setFilterData([]);
     setSelectedState("");
     setSelectedCity("");

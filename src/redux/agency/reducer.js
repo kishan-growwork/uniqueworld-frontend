@@ -7,6 +7,7 @@ const initialState = {
   agencyCount: [],
   agencyDashboard: [],
   agencyDashboardTableData: [],
+  clientsTransactions: [],
 };
 
 export const agencyReducer = (state = initialState, action) => {
@@ -22,6 +23,9 @@ export const agencyReducer = (state = initialState, action) => {
       return state;
     case agencyActions.SET_AGENCY_DASHBOARD_TABLE_DATA:
       state.agencyDashboardTableData = action.payload;
+      return state;
+    case agencyActions.SET_TRANSACTION:
+      state.clientsTransactions = action.payload;
       return state;
     case agencyActions.SET_AGENCY_LOADING:
       return { ...state, isLoading: action.payload };

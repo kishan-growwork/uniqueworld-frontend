@@ -75,6 +75,25 @@ const Routes = [
     },
   },
   {
+    path: "/superadmin/transactionlist",
+    exact: true,
+    component: lazy(() =>
+      import("../../views/Pages/superAdminPages/TransactionTable.js")
+    ),
+    permission: ["SuperAdmin"],
+    meta: {
+      authRoute: true,
+    },
+  },
+  {
+    path: "/:slug/transactionlist",
+    exact: true,
+    component: lazy(() =>
+      import("../../views/Pages/superAdminPages/TransactionTable.js")
+    ),
+    permission: ["Admin"],
+  },
+  {
     path: "/:slug/clients",
     exact: true,
     component: lazy(() => import("../../views/Pages/Clients")),
@@ -248,6 +267,16 @@ const Routes = [
       "Recruiter",
       "Client",
     ],
+  },
+  {
+    path: "/invoicedownload/:merchantTransactionid",
+    // path: "/:slug/payment/preview",
+    exact: true,
+    layout: "BlankLayout",
+    component: lazy(() =>
+      import("../../views/Pages/superAdminPages/InvoiceDownload.js")
+    ),
+    permission: ["SuperAdmin"],
   },
   {
     path: "/:slug/payment/status/:merchantTransactionid",
