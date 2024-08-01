@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -17,6 +17,7 @@ import {
   X,
   Mail,
   MoreVertical,
+  Search,
 } from "react-feather";
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
@@ -27,8 +28,9 @@ import actions from "../../redux/candidate/actions";
 import { tostifySuccess } from "../Tostify";
 import { useLocation } from "react-router-dom";
 import ComposeEmail from "../ComposeEmail/ComposeEmail";
-import { debounce } from "lodash";
+// import { debounce } from "lodash";
 import useBreakpoint from "../../utility/hooks/useBreakpoints";
+import ComposeClientEmail from "../ComposeEmail/ComposeClientEmail";
 const CustomHeader = ({
   store,
   setCreate,
@@ -41,9 +43,12 @@ const CustomHeader = ({
   const { width } = useBreakpoint();
   const dispatch = useDispatch();
   const { selectedCandidates } = useSelector((state) => state.candidate);
+  const { selectedClient } = useSelector((state) => state.client);
+
   const location = useLocation().pathname;
   const [mobile, setMobile] = useState("");
   const [composeOpen, setComposeOpen] = useState(false);
+  const [composeClientOpen, setComposeClientOpen] = useState(false);
   const slug = localStorage.getItem("slug");
   const auth = useSelector((state) => state?.auth);
   // useEffect(() => {
@@ -54,16 +59,16 @@ const CustomHeader = ({
   //   }
   // }, [filterData]);
 
-  const debounceOnChangeForMobileNumber = useCallback(
-    debounce((q) => {
-      if (q) {
-        setFilterData({ mobile: q });
-      } else {
-        setFilterData({});
-      }
-    }, 300),
-    []
-  );
+  // const debounceOnChangeForMobileNumber = useCallback(
+  //   debounce((q) => {
+  //     if (q) {
+  //       setFilterData({ mobile: q });
+  //     } else {
+  //       setFilterData({});
+  //     }
+  //   }, 300),
+  //   []
+  // );
   const professionalField = [
     "jobCategoryId",
     "industriesId",
@@ -188,6 +193,10 @@ const CustomHeader = ({
   const toggleCompose = () => {
     setComposeOpen(!composeOpen);
   };
+
+  const toggleComposeEmail = () => {
+    setComposeClientOpen(!composeClientOpen);
+  };
   const themecolor = useSelector(
     (state) => state?.agency?.agencyDetail?.themecolor
   );
@@ -209,6 +218,11 @@ const CustomHeader = ({
     color: hoverIndex == 4 && themecolor,
   };
 
+  const MailStyle = {
+    backgroundColor: hoverIndex == 5 && `${themecolor}30`,
+    color: hoverIndex == 4 && themecolor,
+  };
+
   const [focus, setIsfocus] = useState(null);
   return (
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-50 mb-75">
@@ -216,33 +230,56 @@ const CustomHeader = ({
         <Col xl="6" className="d-flex align-items-center p-0">
           <Col>
             {location === `/${slug}/candidate` ? (
-              <Input
-                id="filterMobile"
-                type="text"
-                maxLength={10}
-                placeholder="Enter Mobile"
-                value={mobile}
-                onFocus={() => setIsfocus("filterMobile")}
-                onBlur={() => setIsfocus(null)}
-                style={
-                  width <= 768
-                    ? {
-                        width: "180%",
-                        borderRadius: "10px",
-                        borderColor: focus === "filterMobile" && themecolor,
-                      }
-                    : {
-                        width: "50%",
-                        borderColor: focus === "filterMobile" && themecolor,
-                      }
-                }
-                onChange={(e) => {
-                  setMobile(e.target.value.replace(/\D/g, ""));
-                  debounceOnChangeForMobileNumber(
-                    e.target.value.replace(/\D/g, "")
-                  );
-                }}
-              />
+              <div style={{ position: "relative" }}>
+                <Input
+                  id="filterMobile"
+                  type="text"
+                  maxLength={10}
+                  placeholder="Enter Mobile"
+                  value={mobile}
+                  onFocus={() => setIsfocus("filterMobile")}
+                  onBlur={() => setIsfocus(null)}
+                  style={
+                    width <= 768
+                      ? {
+                          width: "180%",
+                          borderRadius: "10px",
+                          borderColor: focus === "filterMobile" && themecolor,
+                        }
+                      : {
+                          width: "50%",
+                          borderColor: focus === "filterMobile" && themecolor,
+                        }
+                  }
+                  onKeyDown={(e) => {
+                    if (e.keyCode === 13) {
+                      setFilterData({
+                        mobile: e.target.value.replace(/\D/g, ""),
+                      });
+                    }
+                  }}
+                  onChange={(e) => {
+                    setMobile(e.target.value.replace(/\D/g, ""));
+                    console.info("--------------------");
+                    console.info("e.target.value => ", e.target.value);
+                    console.info("--------------------");
+                    if (e.target.value.replace(/\D/g, "") == "") {
+                      setFilterData({
+                        mobile: e.target.value.replace(/\D/g, ""),
+                      });
+                    }
+                  }}
+                />
+                <Search
+                  style={{
+                    position: "absolute",
+                    cursor: "pointer",
+                    top: "7px",
+                    right: "52%",
+                  }}
+                  onClick={() => setFilterData({ mobile: mobile })}
+                />
+              </div>
             ) : null}
           </Col>
 
@@ -403,44 +440,30 @@ const CustomHeader = ({
             {auth?.user?.agency?.isDownloadAble === true && (
               <>
                 {" "}
-                {location === `/${slug}/candidate` ? (
-                  <UncontrolledDropdown className="me-1">
-                    <Button
-                      color="secondary"
-                      style={{ cursor: "pointer" }}
-                      caret
-                      outline
-                    >
-                      <CSVLink
-                        data={data}
-                        headers={headers}
-                        style={{ color: "#82868b" }}
-                      >
-                        <Download className="font-small-4 me-50" />
-                        <span className="align-middle">Download Sample</span>
-                      </CSVLink>
-                    </Button>
-                  </UncontrolledDropdown>
-                ) : null}
-                <UncontrolledDropdown className="me-1">
-                  <DropdownToggle color="secondary" caret outline>
-                    <Share className="font-small-4 me-50" />
-                    <span className="align-middle">Export</span>
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem
-                      style={profileStyle}
-                      onMouseEnter={() => setHoverIndex(1)}
-                      onMouseLeave={() => setHoverIndex(0)}
-                      className="w-100"
-                      onClick={() => downloadCSV(store)}
-                    >
-                      <FileText className="font-small-4 me-50" />
-                      <span className="align-middle">CSV</span>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
-                {location === `/${slug}/candidate` ? (
+                {location === `/${slug}/candidate` ? null : (
+                  <>
+                    {" "}
+                    <UncontrolledDropdown className="me-1">
+                      <DropdownToggle color="secondary" caret outline>
+                        <Share className="font-small-4 me-50" />
+                        <span className="align-middle">Export</span>
+                      </DropdownToggle>
+                      <DropdownMenu>
+                        <DropdownItem
+                          style={profileStyle}
+                          onMouseEnter={() => setHoverIndex(1)}
+                          onMouseLeave={() => setHoverIndex(0)}
+                          className="w-100"
+                          onClick={() => downloadCSV(store)}
+                        >
+                          <FileText className="font-small-4 me-50" />
+                          <span className="align-middle">CSV</span>
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </UncontrolledDropdown>
+                  </>
+                )}
+                {/* {location === `/${slug}/candidate` ? (
                   <UncontrolledDropdown className="me-1">
                     <CSVReader
                       onUploadAccepted={async (results) => {
@@ -523,11 +546,23 @@ const CustomHeader = ({
                       }}
                     </CSVReader>
                   </UncontrolledDropdown>
-                ) : null}
-                {selectedCandidates?.mails?.length > 0 && (
+                ) : null} */}
+                {/* {selectedCandidates?.mails?.length > 0 && (
                   <Col>
                     <Button
                       onClick={() => setComposeOpen(true)}
+                      style={{ cursor: "pointer", marginRight: "10px" }}
+                      caret
+                      outline
+                    >
+                      <Mail className="font-small-4 me-50" />
+                    </Button>
+                  </Col>
+                )} */}
+                {selectedClient?.mails?.length > 0 && (
+                  <Col>
+                    <Button
+                      onClick={() => setComposeClientOpen(true)}
                       style={{ cursor: "pointer", marginRight: "10px" }}
                       caret
                       outline
@@ -542,7 +577,7 @@ const CustomHeader = ({
             <Button
               style={{
                 width: "145px",
-                backgroundColor: themecolor ? themecolor : "#cf509b",
+                backgroundColor: themecolor ? themecolor : "#323D76",
                 color: "white",
               }}
               className="add-new-user"
@@ -559,11 +594,177 @@ const CustomHeader = ({
                 <>Add New</>
               )}
             </Button>
+            {location === `/${slug}/candidate` ? (
+              // <UncontrolledDropdown className="me-1">
+              //   <Button
+              //     color="secondary"
+              //     style={{ cursor: "pointer" }}
+              //     caret
+              //     outline
+              //   >
+              //     <CSVLink
+              //       data={data}
+              //       headers={headers}
+              //       style={{ color: "#82868b" }}
+              //     >
+              //       <Download className="font-small-4 me-50" />
+              //       <span className="align-middle">Download Sample</span>
+              //     </CSVLink>
+              //   </Button>
+              // </UncontrolledDropdown>
+              <UncontrolledDropdown className="chart-dropdown">
+                <DropdownToggle
+                  color=""
+                  className="bg-transparent btn-sm border-0 p-50"
+                >
+                  <MoreVertical size={18} className="cursor-pointer" />
+                </DropdownToggle>
+                <DropdownMenu end>
+                  {location === `/${slug}/candidate` ? (
+                    <DropdownItem
+                      className="w-100"
+                      style={SampleStyle}
+                      onMouseEnter={() => setHoverIndex(2)}
+                      onMouseLeave={() => setHoverIndex(0)}
+                    >
+                      {" "}
+                      {location === `/${slug}/candidate` ? (
+                        <CSVLink
+                          data={data}
+                          headers={headers}
+                          style={{
+                            color: "#82868b",
+                            borderColor: `${themecolor}30`,
+                          }}
+                        >
+                          <Download className="font-small-4 me-50" />
+                          <span className="align-middle">Download Sample</span>
+                        </CSVLink>
+                      ) : null}
+                    </DropdownItem>
+                  ) : null}{" "}
+                  {location === `/${slug}/candidate` ? (
+                    <DropdownItem
+                      className="w-100"
+                      style={ImportStyle}
+                      onMouseEnter={() => setHoverIndex(3)}
+                      onMouseLeave={() => setHoverIndex(0)}
+                    >
+                      <CSVReader
+                        onUploadAccepted={async (results) => {
+                          const headers = results?.data[0];
+                          const data = [];
+                          results?.data.forEach((ele, index) => {
+                            if (index > 0) {
+                              const obj = {};
+                              const professional = {};
+                              ele.forEach((element, i) => {
+                                if (
+                                  professionalField.includes(headers[i]) &&
+                                  element.length > 0
+                                ) {
+                                  professional[headers[i]] = element;
+                                } else if (element?.length > 0) {
+                                  obj[headers[i]] = element;
+                                }
+                              });
+
+                              if (JSON.stringify(obj) !== "{}") {
+                                obj.professional = professional;
+                                data.push(obj);
+                              }
+                            }
+                          });
+                          await dispatch({
+                            type: actions.CREATE_CANDIDATE_CSV,
+                            payload: { data },
+                          });
+                        }}
+                      >
+                        {({
+                          getRootProps,
+                          acceptedFile,
+                          getRemoveFileProps,
+                        }) => {
+                          useEffect(() => {
+                            if (acceptedFile?.name?.length > 0) {
+                              tostifySuccess(
+                                `${acceptedFile?.name?.slice(0, 7)}... Uploaded`
+                              );
+                            }
+                          }, [acceptedFile]);
+                          return (
+                            <>
+                              <div {...getRootProps()}></div>
+                              <UploadCloud className="font-small-4 me-50" />{" "}
+                              Import
+                              <div
+                                {...getRemoveFileProps()}
+                                style={{
+                                  position: "absolute",
+                                  left: "47px",
+                                  top: "1px",
+                                }}
+                              >
+                                {acceptedFile ? (
+                                  <>
+                                    <X
+                                      color="red"
+                                      onClick={() => {
+                                        tostifySuccess(
+                                          `${acceptedFile?.name?.slice(
+                                            0,
+                                            7
+                                          )}... Removed`
+                                        );
+                                      }}
+                                      size={15}
+                                    />
+                                  </>
+                                ) : null}
+                              </div>
+                            </>
+                          );
+                        }}
+                      </CSVReader>
+                    </DropdownItem>
+                  ) : null}
+                  <DropdownItem
+                    className="w-100"
+                    onClick={() => downloadCSV(store)}
+                    style={CSVStyle}
+                    onMouseEnter={() => setHoverIndex(4)}
+                    onMouseLeave={() => setHoverIndex(0)}
+                  >
+                    <FileText className="font-small-4 me-50" />
+                    <span className="align-middle">Download CSV</span>
+                  </DropdownItem>
+                  {selectedCandidates?.mails?.length > 0 && (
+                    <DropdownItem
+                      className="w-100"
+                      onClick={() => setComposeOpen(true)}
+                      style={MailStyle}
+                      onMouseEnter={() => setHoverIndex(5)}
+                      onMouseLeave={() => setHoverIndex(0)}
+                    >
+                      <Mail className="font-small-4 me-50" />
+                      <span className="align-middle">Mail</span>
+                    </DropdownItem>
+                  )}
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            ) : null}
           </div>
         </Col>
       </Row>
       {composeOpen && (
         <ComposeEmail toggleCompose={toggleCompose} composeOpen={composeOpen} />
+      )}
+      {composeClientOpen && (
+        <ComposeClientEmail
+          toggleCompose={toggleComposeEmail}
+          composeOpen={composeClientOpen}
+        />
       )}
     </div>
   );

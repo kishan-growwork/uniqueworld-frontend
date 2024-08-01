@@ -63,7 +63,7 @@ const FooterOfClient = () => {
           >
             {numberofemp && (
               <>
-                <h3 style={{ color: "#cf509b" }}>
+                <h3 style={{ color: "#323D76" }}>
                   {numberofemp?.employee[0]?.count}
                 </h3>
                 <p style={{ marginBottom: "0px" }}>Registered Candidate</p>
@@ -80,7 +80,7 @@ const FooterOfClient = () => {
           >
             {numberofemp && (
               <>
-                <h3 style={{ color: "#cf509b" }}>
+                <h3 style={{ color: "#323D76" }}>
                   {numberofemp?.employer[0]?.count}
                 </h3>
                 <p style={{ marginBottom: "0px" }}>Total Employer</p>

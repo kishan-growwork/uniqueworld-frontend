@@ -21,8 +21,19 @@ import {
   ChevronRight,
   Calendar,
   X,
+  Clock,
+  MapPin,
+  DollarSign,
+  Briefcase,
+  User,
+  Trash2,
 } from "react-feather";
-import { Pagination, PaginationItem, PaginationLink } from "reactstrap";
+import {
+  CardImg,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+} from "reactstrap";
 import { MoreVertical } from "react-feather";
 import {
   Badge,
@@ -56,7 +67,7 @@ import ReactCanvasConfetti from "react-canvas-confetti";
 import clientactions from "../../redux/client/actions";
 // import { uploadFiles } from './../../helper/fileUpload'
 import Loader from "../../components/Dialog/Loader";
-import whatsapp from "../../assets/images/whatsapp-svgrepo-com.svg";
+import whatsapp from "../../assets/images/whatsapp.png";
 import { awsUploadAssetsWithResp } from "../../helper/awsUploadAssets";
 import moment from "moment/moment";
 import subscriptionActions from "../../redux/subscription/actions";
@@ -127,6 +138,7 @@ const SecondPage = ({
   const [candidateList, setCandidateList] = useState();
   const [popUp, setPopUp] = useState(false);
   const [promiseLoading, setPromiseLoading] = useState(false);
+
   const [whatsappOpen, setWhatsappOpen] = useState(false);
   const [WPnumber, setWPnumber] = useState();
   const [filterJobCategory, setFilterJobCategory] = useState([]);
@@ -143,6 +155,7 @@ const SecondPage = ({
   const [isDisabledAllFields, setIsDisabledAllFields] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [showWPModal, setShowWPModal] = useState(false);
+  const [showContactDetails, setShowContactDetails] = useState(false);
 
   // useLayoutEffect(() => {
   //   // if (bestMatchesCandidate) {
@@ -235,15 +248,16 @@ const SecondPage = ({
           data.jobCategoryId = jobCategoryId;
         });
       }
-      if (filterJobCategory?.length > 0) {
-        data.filterJobCategoryId = filterJobCategory;
-        // delete data.jobCategoryId;
-      }
+      // if (filterJobCategory?.length > 0) {
+      //   data.filterJobCategoryId = filterJobCategory;
+      //   // delete data.jobCategoryId;
+      // }
     } else {
       if (jobCategoryId.length > 0) {
         data.jobCategoryId = jobCategoryId;
       }
     }
+
     if (auth?.user?.clients?.id) {
       if (isSavedCandidates) {
         dispatch({
@@ -295,14 +309,29 @@ const SecondPage = ({
   }, []);
 
   useEffect(() => {
-    if (
-      filterKey(filterData).length !== 0 &&
-      create === false &&
-      update === false &&
-      show === false
-    ) {
-      getCandidates(currentPage);
+    if (auth?.user?.clients?.id) {
+      if (
+        Object.keys(filterData).length &&
+        create === false &&
+        update === false &&
+        show === false &&
+        filterKey(filterData)?.length
+      ) {
+        getCandidates(currentPage);
+      }
+    } else {
+      if (
+        Object.keys(filterData).length &&
+        create === false &&
+        update === false &&
+        show === false
+      ) {
+        getCandidates(currentPage);
+      }
     }
+    // if (filterJobCategory?.length > 0) {
+    //   getCandidates(currentPage);
+    // }
   }, [filterData]);
 
   useEffect(() => {
@@ -379,12 +408,28 @@ const SecondPage = ({
       setLoading,
     });
   };
+  const selectedCandidatesRef = useRef([]);
 
+  const handleSelectedCard = (candidate, isChecked) => {
+    if (isChecked) {
+      selectedCandidatesRef.current = [
+        ...selectedCandidatesRef.current,
+        candidate,
+      ];
+    } else {
+      selectedCandidatesRef.current = selectedCandidatesRef.current.filter(
+        (item) => item !== candidate
+      );
+    }
+
+    handleselected(selectedCandidatesRef.current);
+  };
   const handleselected = (rows) => {
+   
     let mails = [];
     new Promise(() => {
       setTimeout(() => {
-        mails = rows.selectedRows?.map((ele) => {
+        mails = rows?.map((ele) => {
           const obj = {};
           obj.label = `${ele?.firstname} ${ele?.lastname}`;
           obj.email = ele.email;
@@ -396,7 +441,7 @@ const SecondPage = ({
       setTimeout(() => {
         dispatch({
           type: CandidateActions.SET_SELECTED_FOR_EMAIL_CANDIDATE,
-          payload: { mails, totalRows: rows.selectedCount },
+          payload: { mails, totalRows: rows?.length },
         });
         setPromiseLoading(false);
       }, 3000);
@@ -1032,6 +1077,12 @@ const SecondPage = ({
       (item) => item?.id == candidate?.id
     );
     const ObjData = Object.assign({}, ...data);
+    console.info("--------------------");
+    console.info("ObjDataObjDataObjData => ", ObjData);
+    console.info("--------------------");
+    console.info("--------------------");
+    console.info("ObjDataObjDataObjData => ", candidate);
+    console.info("--------------------");
     const isMatch = _.isMatch(ObjData, candidate);
 
     if (isMatch == false) {
@@ -1074,6 +1125,7 @@ const SecondPage = ({
           perPage: perPage,
         },
       });
+      setShow(false);
     } else {
       setLoading(false);
     }
@@ -1253,6 +1305,7 @@ const SecondPage = ({
   const [clear, setclear] = useState(false);
   const handleClear = () => {
     setclear(true);
+    // setFilterJobCategory([]);
   };
   const setclearstate = (clear) => {
     setclear(clear);
@@ -1463,6 +1516,69 @@ const SecondPage = ({
       </>
     ));
   };
+
+  const renderStatesTable = (candidate) => {
+    const industryCategories =
+      candidate?.industries_relation
+        ?.map((relation) => relation.industries?.industryCategory)
+        .filter(Boolean)
+        .join(" | ") || "-";
+
+    const statesArr = [
+      {
+        title: "Industries",
+        value: industryCategories,
+      },
+      {
+        title: "Job Category",
+        value: candidate?.professional?.jobCategory?.jobCategory || "-",
+      },
+      {
+        title: "Education",
+        value:
+          `${candidate?.professional?.field} [${candidate?.professional?.highestQualification}]` ||
+          "-",
+      },
+      {
+        title: "Pref. Location",
+        value: candidate?.professional?.preferedJobLocation || "-",
+      },
+      {
+        title: "Skills",
+        value: candidate?.professional?.skill || "-",
+      },
+    ];
+
+    return statesArr.map((state, index) => (
+      <>
+        <div
+          key={state.title}
+          className="browser-states"
+          style={{ marginTop: "10px" }}
+        >
+          <div className="state-col">
+            <Row>
+              <Col md={3}>
+                <strong
+                  style={{
+                    fontSize: "16px",
+                    color: "gray",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {state.title}:{" "}
+                </strong>
+              </Col>
+              <Col md={9}>
+                <strong style={{ fontSize: "16px" }}>{state.value}</strong>
+              </Col>
+            </Row>
+          </div>
+        </div>
+      </>
+    ));
+  };
+
   const [candidateToDelete, setCandidateToDelete] = useState(null);
   const handleDeleteClick = (result) => {
     setCandidateToDelete(result);
@@ -1477,6 +1593,16 @@ const SecondPage = ({
     { length: totalPages },
     (_, index) => index + 1
   );
+
+  function debounce(func, delay) {
+    let timer;
+    return function (...args) {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        func.apply(this, args);
+      }, delay);
+    };
+  }
 
   const startPage = Math.max(1, currentPage - 2);
   const endPage = Math.min(totalPages, startPage + 4);
@@ -1505,6 +1631,165 @@ const SecondPage = ({
   };
 
   const [clientData, setClientData] = useState([]);
+
+  const ProfileImage = ({ imageUrl, gender, email, mobile, candidate }) => {
+    const defaultIcon = gender === "female" ? UserPlus : User;
+
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+          flexDirection: "column",
+        }}
+      >
+        {imageUrl ? (
+          <img
+            src={imageUrl}
+            alt="Profile"
+            style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              objectFit: "cover",
+            }}
+          />
+        ) : (
+          <User
+            size={100}
+            style={{
+              borderRadius: "50%",
+              backgroundColor: "#f0f0f0",
+              padding: "10px",
+            }}
+          />
+        )}
+
+        {auth?.user?.clients ? (
+          count?.plan?.planName === "free" ||
+          count?.plan?.planName === "Trial" ? (
+            <>
+              {" "}
+              <Button
+                color="light-primary"
+                style={{
+                  backgroundColor: `${themecolor}`,
+                  color: "white",
+                  marginTop: "20px",
+                  marginBottom: "20px",
+                }}
+                onClick={() => setShowContactDetails(true)}
+              >
+                Show Contact Details
+              </Button>
+            </>
+          ) : (
+            <>
+              <div
+                // key={state.title}
+                className="browser-states"
+                style={{ marginTop: "25px" }}
+              >
+                <div className="state-col">
+                  <strong
+                    style={{
+                      fontSize: "16px",
+                      color: "black",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {email}
+                  </strong>
+                </div>
+                <div
+                  className="state-col"
+                  style={{ textAlign: "center", marginTop: "10px" }}
+                >
+                  <strong
+                    style={{
+                      fontSize: "16px",
+                      color: "black",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {mobile}
+                  </strong>
+                </div>
+              </div>
+            </>
+          )
+        ) : (
+          <>
+            <div
+              // key={state.title}
+              className="browser-states"
+              style={{ marginTop: "25px" }}
+            >
+              <div className="state-col">
+                <strong
+                  style={{
+                    fontSize: "16px",
+                    color: "black",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {email}
+                </strong>
+              </div>
+              <div
+                className="state-col"
+                style={{ textAlign: "center", marginTop: "10px" }}
+              >
+                <strong
+                  style={{
+                    fontSize: "16px",
+                    color: "black",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {mobile}
+                </strong>
+              </div>
+            </div>
+          </>
+        )}
+
+        {candidate?.resume !== null && candidate?.resume?.length > 0 ? (
+          <Button
+            color="defult"
+            style={{
+              marginTop: "20px",
+              backgroundColor: themecolor,
+              color: "white",
+            }}
+            onClick={() => {
+              auth?.user?.clients
+                ? handleOpenResume(candidate)
+                : window.open(candidate?.resume);
+            }}
+          >
+            View Resume
+          </Button>
+        ) : (
+          <>
+            {" "}
+            <Button
+              color="light-primary"
+              style={{
+                backgroundColor: `${themecolor}80`,
+                color: "white",
+                marginTop: "20px",
+              }}
+            >
+              View Resume
+            </Button>
+          </>
+        )}
+      </div>
+    );
+  };
 
   return (
     <>
@@ -1596,6 +1881,28 @@ const SecondPage = ({
                   type: subscriptionActions.RESUME_COUNT_FINISH,
                   payload: false,
                 });
+                history.push(`/${slug}/pricing`);
+              }}
+            >
+              Upgrade Plan
+            </Button>
+          </ModalFooter>
+        </Modal>
+
+        <Modal className="modal-dialog-centered" isOpen={showContactDetails}>
+          <ModalHeader toggle={() => setShowContactDetails(false)} />
+          <ModalBody>
+            You Can't See Contact Details, Please Upgrade Your Plan!!
+          </ModalBody>
+          <ModalFooter>
+            <Button color="link" onClick={() => setShowContactDetails(false)}>
+              Close
+            </Button>
+            <Button
+              color="default"
+              style={{ backgroundColor: themecolor, color: "white" }}
+              onClick={() => {
+                setShowContactDetails(false);
                 history.push(`/${slug}/pricing`);
               }}
             >
@@ -1770,7 +2077,7 @@ const SecondPage = ({
                 initialRating={5 - count?.resume_download_count}
                 emptySymbol={<Star size={20} fill="#babfc7" stroke="#babfc7" />}
                 fullSymbol={
-                  <Star size={20} fill={"#CF509B"} stroke={"#CF509B"} />
+                  <Star size={20} fill={"#323D76"} stroke={"#323D76"} />
                 }
               />
             </div>
@@ -1801,6 +2108,7 @@ const SecondPage = ({
           }}
         >
           <Filter
+            filterJobCategory={filterJobCategory}
             isSavedCandidates={isSavedCandidates}
             handleFilterToggleMode={handleFilterToggleMode}
             clear={clear}
@@ -2233,12 +2541,59 @@ const SecondPage = ({
                 </PaginationItem>
               </Pagination>
             )}
-          <Card
+          {/* <Card
             className="overflow-hidden"
             style={width < 769 ? { display: "none" } : {}}
+          > */}
+          <div
+            className="react-dataTable"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+            }}
           >
-            <div className="react-dataTable">
-              <DataTable
+            <div style={{ width: "74%" }}>
+              {auth?.user?.clients ? (
+                (clientUser?.clients?.id && count?.plan?.planName == "free") ||
+                count?.plan?.planName == "Trial" ? (
+                  //  && user?.email == 'gunjan@growworkinfotech.com'
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    <div>
+                      Free Resume Download Remain :{" "}
+                      {5 - count?.resume_download_count}
+                    </div>
+                    <Rating
+                      readonly
+                      initialRating={5 - count?.resume_download_count}
+                      emptySymbol={
+                        <Star size={20} fill="#babfc7" stroke="#babfc7" />
+                      }
+                      fullSymbol={
+                        <Star size={20} fill={"#323D76"} stroke={"#323D76"} />
+                      }
+                    />
+                  </div>
+                ) : null
+              ) : (
+                <CustomHeader
+                  filterData={filterData}
+                  setFilterData={setFilterData}
+                  setShow={setShow}
+                  setCreate={setCreate}
+                  store={candidates?.results}
+                />
+              )}
+            </div>
+            {/* <DataTable
                 paginationRowsPerPageOptions={[10, 20, 30, 50, 100]}
                 // paginationComponentOptions={paginationComponentOptions}
                 selectableRows={auth?.user?.role?.name === "Admin" && true}
@@ -2309,8 +2664,8 @@ const SecondPage = ({
                           fullSymbol={
                             <Star
                               size={20}
-                              fill={"#CF509B"}
-                              stroke={"#CF509B"}
+                              fill={"#323D76"}
+                              stroke={"#323D76"}
                             />
                           }
                         />
@@ -2328,9 +2683,398 @@ const SecondPage = ({
                     />
                   )
                 }
+              /> */}
+            {loading == true ? (
+              <ComponentSpinner
+                isClientCandidate={true}
+                theamcolour={themecolor}
               />
-            </div>
-          </Card>
+            ) : (
+              <>
+                {candidateList?.map((candidate, index) => {
+                  let color = "light-success";
+                  if (candidate?.interviewStatus === "available")
+                    color = "light-warning";
+                  else if (candidate?.interviewStatus === "scheduled")
+                    color = "light-info";
+                  else if (candidate?.interviewStatus === "rejected")
+                    color = "light-danger";
+                  else if (candidate?.interviewStatus === "completed")
+                    color = "light-secondary";
+                  else if (candidate?.interviewStatus === "cv shared")
+                    color = "secondary";
+                  else if (candidate?.interviewStatus === "hired")
+                    color = "light-success";
+                  else if (candidate?.interviewStatus === "Not Joined It")
+                    color = "warning";
+                  else if (candidate?.interviewStatus === "Left")
+                    color = "light-info";
+                  else if (candidate?.interviewStatus === "shortlisted")
+                    color = "info";
+                  else if (candidate?.interviewStatus === "trail")
+                    color = "dark";
+                  else if (candidate?.interviewStatus === "reschedule")
+                    color = "warning";
+                  return (
+                    <Card className="mb-3" key={index} style={{ width: "75%" }}>
+                      <CardBody>
+                        <Row>
+                          <Col
+                            md="7"
+                            style={{
+                              borderRight: "1px solid #ccc",
+                              paddingRight: "15px",
+                            }}
+                          >
+                            <Row>
+                              <Col>
+                                <CardTitle
+                                  tag="h4"
+                                  className="d-flex align-items-center"
+                                  style={{
+                                    fontSize: "23px",
+                                    borderBottom: "1px solid #ccc",
+                                    paddingBottom: "15px",
+                                  }}
+                                >
+                                  {" "}
+                                  <input
+                                    type="checkbox"
+                                    style={{ marginRight: "10px" }}
+                                    onChange={(e) => {
+                                      setTimeout(() => {
+                                        setPromiseLoading(true);
+                                      }, 10);
+                                      handleSelectedCard(
+                                        candidate,
+                                        e.target.checked
+                                      );
+                                    }}
+                                  />
+                                  <span>
+                                    {candidate?.firstname} {candidate?.lastname}
+                                  </span>
+                                  <Badge
+                                    pill
+                                    color="default"
+                                    style={{
+                                      fontSize: "12px",
+                                      backgroundColor:
+                                        candidate.status === "new"
+                                          ? themecolor
+                                          : `${themecolor}80`,
+                                      marginLeft: "10px",
+                                    }}
+                                  >
+                                    {candidate?.status}
+                                  </Badge>
+                                  {auth?.user?.clients ? null : (
+                                    <Badge
+                                      style={{
+                                        fontSize: "12px",
+                                        marginLeft: "10px",
+                                      }}
+                                      pill
+                                      color={color}
+                                      className="column-action d-flex align-items-center"
+                                    >
+                                      {candidate?.interviewStatus}
+                                    </Badge>
+                                  )}
+                                </CardTitle>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col className="d-flex align-items-center">
+                                <Briefcase
+                                  size={20}
+                                  style={{ marginRight: "5px", color: "gray" }}
+                                />
+                                <span>
+                                  {candidate?.professional?.experienceInyear ||
+                                    "-"}
+                                </span>
+                              </Col>
+                              <Col className="d-flex align-items-center">
+                                <DollarSign
+                                  size={20}
+                                  style={{ marginRight: "5px", color: "gray" }}
+                                />
+                                <span>
+                                  {candidate?.professional?.expectedsalary ||
+                                    "-"}
+                                </span>
+                              </Col>
+                              <Col className="d-flex align-items-center">
+                                <MapPin
+                                  size={20}
+                                  style={{ marginRight: "5px", color: "gray" }}
+                                />
+                                <span>
+                                  {candidate?.professional
+                                    ?.preferedJobLocation || "-"}
+                                </span>
+                              </Col>
+                              <Col className="d-flex align-items-center">
+                                <Clock
+                                  size={20}
+                                  style={{ marginRight: "5px", color: "gray" }}
+                                />
+                                <span>
+                                  {candidate?.professional?.noticePeriod || "-"}
+                                </span>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <CardBody
+                                style={{
+                                  display: "flex",
+                                  flexDirection: "column",
+                                  paddingLeft: "1rem",
+                                }}
+                              >
+                                {renderStatesTable(candidate)}{" "}
+                              </CardBody>
+                            </Row>
+                          </Col>
+                          <Col
+                            md="4"
+                            style={{
+                              borderRight: "1px solid #ccc",
+                              paddingRight: "15px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <ProfileImage
+                              candidate={candidate}
+                              imageUrl={candidate?.image}
+                              gender={candidate?.gender}
+                              email={candidate?.email}
+                              mobile={candidate?.mobile}
+                            />
+                          </Col>
+                          <Col
+                            md="1"
+                            className="d-flex align-items-center justify-content-center"
+                            style={{ flexDirection: "column" }}
+                          >
+                            {auth?.user?.clients ? null : (
+                              <>
+                                {" "}
+                                <div
+                                  style={{
+                                    color: "#007bff",
+                                    cursor: "pointer",
+                                    borderRadius: "50%",
+                                    backgroundColor: "white",
+                                    padding: "10px",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    width: "40px",
+                                    height: "40px",
+                                    marginTop: "10px",
+                                  }}
+                                  onClick={async () => {
+                                    if (
+                                      candidate?.agency?.email ==
+                                        user?.agency?.email ||
+                                      user?.email == allAccessEmail
+                                    ) {
+                                      setCandidate(candidate);
+                                      setIndustriesData(
+                                        candidate?.industries_relation
+                                      );
+                                      statusUpdate(candidate);
+                                      setEmail(candidate?.email);
+                                      setUpdate(true);
+                                      setShow(true);
+                                    } else {
+                                      setIsDisabledAllFields(true);
+                                      setCandidate(candidate);
+                                      setIndustriesData(
+                                        candidate?.industries_relation
+                                      );
+                                      statusUpdate(candidate);
+                                      setEmail(candidate?.email);
+                                      setUpdate(true);
+                                      setShow(true);
+                                    }
+                                  }}
+                                >
+                                  <Edit size={25} color="black" />
+                                </div>
+                                <div
+                                  style={{
+                                    color: "#dc3545",
+                                    cursor: "pointer",
+                                    borderRadius: "50%",
+                                    backgroundColor: "white",
+                                    padding: "10px",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    width: "40px",
+                                    height: "40px",
+                                    marginTop: "10px",
+                                  }}
+                                  onClick={() => {
+                                    if (
+                                      candidate?.agency?.email ==
+                                        user?.agency?.email ||
+                                      user?.email == allAccessEmail
+                                    ) {
+                                      handleDeleteClick(candidate);
+                                    }
+                                  }}
+                                >
+                                  <Trash2 size={25} color="black" />
+                                </div>
+                              </>
+                            )}
+
+                            {auth?.user?.clients ? (
+                              candidate?.interview_request?.isdisabled ==
+                                true ||
+                              count?.plan?.planName === "free" ||
+                              count?.plan?.planName === "Trial" ? null : (
+                                <div
+                                  style={{
+                                    color: "#7F8487",
+                                    cursor: "pointer",
+                                    borderRadius: "50%",
+                                    backgroundColor: "white",
+                                    padding: "10px",
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    width: "40px",
+                                    height: "40px",
+                                  }}
+                                  onClick={() => {
+                                    setLoading(true);
+                                    interviewRequest(candidate);
+                                  }}
+                                >
+                                  <Calendar size={25} color="black" />
+                                </div>
+                              )
+                            ) : (
+                              <div
+                                onClick={() => {
+                                  history.push(
+                                    `/${slug}/interview?id=${candidate.id}&first=${candidate.firstname}&last=${candidate.lastname}`
+                                  );
+                                }}
+                                style={{
+                                  cursor: "pointer",
+                                  borderRadius: "50%",
+                                  backgroundColor: "white",
+                                  padding: "10px",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  width: "40px",
+                                  height: "40px",
+                                }}
+                              >
+                                <UserCheck size={25} color="black" />
+                              </div>
+                            )}
+
+                            {candidate?.mobile && (
+                              <a
+                                onClick={() => {
+                                  setWPnumber(candidate?.mobile);
+                                  auth?.user?.clients
+                                    ? count?.plan?.planName !== "free" &&
+                                      count?.plan?.planName !== "Trial"
+                                      ? setShowWPModal(true)
+                                      : setWhatsappOpen(true)
+                                    : window.open(
+                                        `https://wa.me/91${candidate?.mobile}`
+                                      );
+                                }}
+                                style={{
+                                  borderRadius: "50%",
+                                  backgroundColor: "white",
+                                  padding: "10px",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                  width: "40px",
+                                  height: "40px",
+                                  marginTop: "10px",
+                                }}
+                              >
+                                <img
+                                  src={whatsapp}
+                                  style={{
+                                    height: "20px",
+                                    width: "20px",
+                                    color: "white",
+                                  }}
+                                />
+                              </a>
+                            )}
+                          </Col>
+                        </Row>
+                      </CardBody>
+                    </Card>
+                  );
+                })}
+              </>
+            )}
+
+            {!filterToggleMode && candidates?.results?.length > 0 && (
+              <Pagination className="d-flex mt-3 align-items-center justify-content-center">
+                <PaginationItem>
+                  <PaginationLink
+                    previous
+                    href="#"
+                    onClick={() =>
+                      handlePageChange(Math.max(1, currentPage - 1))
+                    }
+                  >
+                    <ChevronLeft size={15} /> Prev
+                  </PaginationLink>
+                </PaginationItem>
+
+                {visiblePageNumbers?.map((pageNumber) => (
+                  <PaginationItem
+                    key={pageNumber}
+                    active={pageNumber === currentPage}
+                  >
+                    <PaginationLink
+                      onClick={() => handlePageChange(pageNumber)}
+                      style={{
+                        borderRadius: "0.5rem ",
+                        backgroundColor:
+                          pageNumber === currentPage && themecolor,
+                      }}
+                    >
+                      {pageNumber}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+
+                <PaginationItem>
+                  <PaginationLink
+                    next
+                    href="#"
+                    onClick={() =>
+                      handlePageChange(Math.min(totalPages, currentPage + 1))
+                    }
+                  >
+                    Next <ChevronRight size={15} />
+                  </PaginationLink>
+                </PaginationItem>
+              </Pagination>
+            )}
+          </div>
+          {/* </Card> */}
         </Col>
       </Row>
       {show === true ? (

@@ -14,7 +14,7 @@ import {
   Modal,
   ModalHeader,
 } from "reactstrap";
-import unique from "../../../assets/images/logo/unique.png";
+import unique from "../../../assets/images/logo/unique-logo.png";
 import "@styles/react/pages/page-authentication.scss";
 // import { Controller, useForm } from "react-hook-form"
 import { useDispatch, useSelector } from "react-redux";

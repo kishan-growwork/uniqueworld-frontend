@@ -43,6 +43,7 @@ import Loader from "./../../components/Dialog/Loader";
 import actions from "./../../redux/feedBack/actions";
 import useBreakpoint from "../../utility/hooks/useBreakpoints";
 import ComponentSpinner from "../../@core/components/spinner/Loading-spinner";
+import actionsclients from "../../redux/client/actions";
 
 const FeedBack = () => {
   const auth = useSelector((state) => state.auth);
@@ -61,6 +62,12 @@ const FeedBack = () => {
   const [perPage, setPerPage] = useState(10);
   const [filterToggleMode, setFilterToggleMode] = useState(false);
   const [clientFeedBackList, setClientFeedBackList] = useState();
+
+  useEffect(() => {
+    dispatch({
+      type: actionsclients.GET_All_CLIENT,
+    });
+  }, []);
 
   const clearStates = () => {
     setCreate(false);
@@ -115,6 +122,12 @@ const FeedBack = () => {
 
   useEffect(() => {
     getFeedBack(1);
+  }, []);
+
+  useEffect(() => {
+    if (filterData && Object.keys(filterData).length > 0) {
+      getFeedBack(1);
+    }
   }, [filterData]);
 
   useEffect(() => {

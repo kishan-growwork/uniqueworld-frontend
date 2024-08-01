@@ -13,6 +13,10 @@ import userActions from "../../../redux/user/actions";
 
 const Pricing = () => {
   const { plans } = useSelector((state) => state.plans);
+  
+  console.log('---------------------');
+  console.log('plans =>', plans);
+  console.log('---------------------');
   const { user } = useSelector((state) => state.auth);
   const { currentPlan } = useSelector((state) => state.subscription);
   // const [Razorpay] = useRazorpay();
@@ -94,7 +98,7 @@ const Pricing = () => {
       //   },
       //   description: "Test Transaction",
       //   theme: {
-      //     color: "#cf509b",
+      //     color: "#323D76",
       //   },
       //   notes: {
       //     planId: selectedPlan?.id,

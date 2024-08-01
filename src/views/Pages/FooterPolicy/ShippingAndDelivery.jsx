@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import logo from "../../../assets/images/logo/unique.png";
+import logo from "../../../assets/images/logo/unique-logo.png";
 import "./Index.scss"
 import style from "../LandingPage/index.module.scss";
 import { IoCallOutline, IoLocationOutline } from "react-icons/io5";

@@ -73,9 +73,8 @@ const User = () => {
   const [filterData, setFilterData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.info("-------------------------------");
   console.info("nameValidation => ", nameValidation);
-  console.info("-------------------------------");
+
   const [totalRows, setTotalRows] = useState();
   const [perPage, setPerPage] = useState(10);
   const [filterToggleMode, setFilterToggleMode] = useState(false);
@@ -141,11 +140,11 @@ const User = () => {
       type: planActions.GET_ALL_PLANS,
     });
   }, []);
-
   const getUser = async (page) => {
+    console.log("getUser", getUser);
     setLoading(true);
     await dispatch({
-      type: "GET_USER",
+      type: userActions.GET_USER,
       payload: {
         filterData,
         page,
@@ -159,8 +158,14 @@ const User = () => {
   }, [show]);
 
   useEffect(() => {
-    getUser(1);
+    if (filterData && Object.keys(filterData).length > 0) {
+      getUser(1);
+    }
   }, [filterData]);
+
+  useEffect(() => {
+    getUser(1);
+  }, []);
 
   useEffect(() => {
     setTotalRows(users.total);
@@ -282,7 +287,7 @@ const User = () => {
     if (typeof user?.image === "object" && user?.image !== null) {
       const resp = await awsUploadAssetsWithResp(user?.image);
 
-      user.image = `${resp.url}`;
+      user.image = `${resp?.url}`;
     }
     // if (freePlanId?.length) {
     //     await dispatch({
@@ -302,10 +307,6 @@ const User = () => {
     const regex =
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-    // if (update === true) {
-    //     userUpdateHandler()
-    // }
-    // if (create === true) {
     if (
       rolevalidation == "" ||
       rolevalidation == undefined ||
@@ -313,77 +314,38 @@ const User = () => {
       rolevalidation == "null"
     )
       return tostify("Please Select Role", error);
-    else if (
-      nameValidation?.length < 2 ||
-      nameValidation == undefined ||
-      nameValidation == "" ||
-      nameValidation == null
-    )
+
+    if (!nameValidation || nameValidation.length < 2)
       return tostify(" Please Enter Valid Name", error);
-    else if (
-      !emailValidation ||
-      regex?.test(emailValidation) === false ||
-      emailValidation == "" ||
-      emailValidation == undefined ||
-      emailValidation == null
-    )
+
+    if (!emailValidation || regex.test(emailValidation) === false)
       return tostify("Please Enter Valid Email", error);
-    else if (
-      passwordValidation?.length < 8 ||
-      passwordValidation == undefined ||
-      passwordValidation == null ||
-      passwordValidation == ""
-    )
+
+    if (!passwordValidation || passwordValidation.length < 8)
       return tostify("Please Enter 8 Character password", error);
-    else if (
-      mobileValidation?.length !== 10 ||
-      mobileValidation == undefined ||
-      mobileValidation == null ||
-      mobileValidation == ""
-    )
+
+    if (!mobileValidation || mobileValidation.length !== 10)
       return tostify("Please Enter Valid Contact Number", error);
-    else if (
-      user?.state == undefined ||
-      user?.state?.length === 0 ||
-      user?.state == "" ||
-      user?.stateId == undefined ||
-      user?.stateId?.length === 0 ||
-      user?.stateId == ""
+
+    if (
+      !user?.state ||
+      user.state.length === 0 ||
+      !user.stateId ||
+      user.stateId.length === 0
     )
       return tostify("Please Enter Valid State", error);
-    else if (
-      user?.city == undefined ||
-      user?.city?.length === 0 ||
-      user?.city == "" ||
-      user?.cityId == undefined ||
-      user?.cityId?.length === 0 ||
-      user?.cityId == ""
-    )
-      return tostify("Please Enter Valid City", error);
-    else if (addressValidation.length < 2)
-      return tostify("Please Enter Valid Address", error);
-    else if (
-      user?.state == undefined ||
-      user?.state?.length === 0 ||
-      user?.state == "" ||
-      user?.stateId == undefined ||
-      user?.stateId?.length === 0 ||
-      user?.stateId == ""
-    )
-      return tostify("Please Enter Valid State", error);
-    else if (
-      user?.city == undefined ||
-      user?.city?.length === 0 ||
-      user?.city == "" ||
-      user?.cityId == undefined ||
-      user?.cityId?.length === 0 ||
-      user?.cityId == ""
+
+    if (
+      !user?.city ||
+      user.city.length === 0 ||
+      !user.cityId ||
+      user.cityId.length === 0
     )
       return tostify("Please Enter Valid City", error);
 
-    // else userCreateHandler()
+
+
     return error;
-    // }
   };
 
   const UserActionHandler = async () => {
@@ -429,7 +391,7 @@ const User = () => {
     setFilterToggleMode(filter);
   };
   const [clear, setclear] = useState(false);
-  const handleClear = () => {
+  const handleClear = async () => {
     setclear(true);
   };
   const setclearstate = (clear) => {

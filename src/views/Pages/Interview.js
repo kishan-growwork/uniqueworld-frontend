@@ -55,6 +55,8 @@ import Loader from "./../../components/Dialog/Loader";
 import moment from "moment";
 import useBreakpoint from "../../utility/hooks/useBreakpoints";
 import ComponentSpinner from "../../@core/components/spinner/Loading-spinner";
+import actions from "../../redux/client/actions";
+
 const canvasStyles = {
   position: "fixed",
   pointerEvents: "none",
@@ -67,7 +69,6 @@ const canvasStyles = {
 const Interview = () => {
   const auth = useSelector((state) => state.auth);
   const { width } = useBreakpoint();
-
   const dispatch = useDispatch();
   const history = useHistory();
   const location = useLocation().search;
@@ -126,7 +127,7 @@ const Interview = () => {
       setLoading(false);
     }
     if (interviews?.isSuccess === true) {
-      getInterviews(1);
+      // getInterviews(1);
       clearStates();
     }
   }, [interviews?.results]);
@@ -190,15 +191,21 @@ const Interview = () => {
   //   })();
   // }, []);
 
+  // useEffect(() => {
+  //   if (create === false && update === false && candidateId === null) {
+  //     getInterviews(currentPage);
+  //   }
+  // }, []);
+
   useEffect(() => {
-    if (create === false && update === false && candidateId === null) {
-      getInterviews(currentPage);
+    if (filterData && Object.keys(filterData).length > 0) {
+      getInterviews(1);
     }
-  }, []);
+  }, [filterData]);
 
   useEffect(() => {
     getInterviews(1);
-  }, [filterData]);
+  }, []);
 
   useEffect(() => {
     setTotalRows(interviews.total);

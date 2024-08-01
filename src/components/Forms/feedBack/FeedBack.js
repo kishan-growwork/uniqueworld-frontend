@@ -4,11 +4,9 @@ import Select from "react-select";
 import { selectThemeColors } from "@utils";
 import Flatpickr from "react-flatpickr";
 import "@styles/react/libs/flatpickr/flatpickr.scss";
-import { useDispatch, useSelector } from "react-redux";
-import actions from "../../../redux/client/actions";
+import { useSelector } from "react-redux";
 
 const FeedBack = ({ feedBack, setFeedBack, handleChange = () => {} }) => {
-  const dispatch = useDispatch();
   const getCompany = useSelector((state) => state.client);
 
   const onBoardings = useSelector((state) => state.onBoarding.results);
@@ -16,12 +14,6 @@ const FeedBack = ({ feedBack, setFeedBack, handleChange = () => {} }) => {
   const [selectCompany, setSelectCompany] = useState();
 
   const [company, setCompany] = useState();
-
-  useEffect(() => {
-    dispatch({
-      type: actions.GET_All_CLIENT,
-    });
-  }, []);
 
   useEffect(() => {
     const test = [];

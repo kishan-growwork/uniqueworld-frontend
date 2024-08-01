@@ -31,6 +31,7 @@ import { BsGenderAmbiguous } from "react-icons/bs";
 import { MdOutlinePlace } from "react-icons/md";
 import { PiStudentLight } from "react-icons/pi";
 import { MdOutlineAttachMoney } from "react-icons/md";
+import WhatsappDialog from "../../components/Dialog/WhatsappDialog";
 
 const JobOpeningMatches = () => {
   const history = useHistory();
@@ -51,6 +52,9 @@ const JobOpeningMatches = () => {
   const [perPage, setPerPage] = useState(10);
   const [whatsappOpen, setWhatsappOpen] = useState(false);
   const [pageLoader, setPageLoader] = useState(false);
+  const [showWPModal, setShowWPModal] = useState(false);
+  const [WPnumber, setWPnumber] = useState();
+  const [clientData, setClientData] = useState([]);
 
   console.info("--------------------");
   console.info("jobOpeningMatchCandidate => ", jobOpeningMatchCandidate);
@@ -114,45 +118,6 @@ const JobOpeningMatches = () => {
       },
     },
   };
-
-  // const jobOpeningColumn = [
-  //   {
-  //     name: "Create_AT",
-  //     selector: (row) => row?.createdAt?.slice(0, 10),
-  //   },
-  //   {
-  //     name: "job Category",
-  //     selector: (row) => row?.jobCategory?.jobCategory,
-  //   },
-  //   {
-  //     name: "No. Of Vacancy",
-  //     selector: (row) => row?.numberOfVacancy,
-  //   },
-  //   {
-  //     name: "Experience",
-  //     selector: (row) => row?.minExperienceYears,
-  //   },
-  //   {
-  //     name: "Gender",
-  //     selector: (row) => row?.gender,
-  //   },
-  //   {
-  //     name: "Work",
-  //     selector: (row) => row?.workType,
-  //   },
-  //   {
-  //     name: "Qualification",
-  //     selector: (row) => row?.qualification,
-  //   },
-  //   {
-  //     name: "Salary Range Start",
-  //     selector: (row) => row?.salaryRangeStart,
-  //   },
-  //   {
-  //     name: "Salary Range End",
-  //     selector: (row) => row?.salaryRangeEnd,
-  //   },
-  // ];
 
   const columnsClients = [
     {
@@ -374,11 +339,13 @@ const JobOpeningMatches = () => {
     },
     {
       name: "Chat",
-      cell: () => {
+      cell: (row) => {
         return (
           <>
             <a
-              onClick={() => setWhatsappOpen(true)}
+              onClick={() => {
+                setShowWPModal(true), setWPnumber(row?.mobile);
+              }}
               style={{ display: "flex", justifyContent: "center" }}
             >
               <img src={whatsapp} style={{ height: "20%", width: "20%" }} />
@@ -386,33 +353,6 @@ const JobOpeningMatches = () => {
           </>
         );
       },
-    },
-    {
-      name: "Interview Shedule",
-      selector: (row) => (
-        <Button
-          disabled={row?.interview_request?.isdisabled == true ? true : false}
-          onClick={() => {
-            setLoading(true);
-            candidateInterviewRequest(row);
-          }}
-          style={
-            row?.interview_request?.isdisabled == true
-              ? {
-                  opacity: "0.5",
-                  padding: "10px",
-                  backgroundColor: themeColor,
-                  color: "white",
-                }
-              : { padding: "10px", backgroundColor: themeColor, color: "white" }
-          }
-          color="default"
-        >
-          {row?.interview_request?.isdisabled == true
-            ? "Req. Sent"
-            : "Interview"}
-        </Button>
-      ),
     },
     {
       name: "resume",
@@ -700,6 +640,16 @@ const JobOpeningMatches = () => {
           </Col>
         </Row>
       </div>
+      {showWPModal === true ? (
+        <WhatsappDialog
+          WPnumber={WPnumber}
+          loading={isLoading}
+          showWPModal={showWPModal}
+          setShowWPModal={setShowWPModal}
+          clientData={clientData}
+          setClientData={setClientData}
+        />
+      ) : null}
       <Modal
         className="modal-dialog-centered"
         isOpen={whatsappOpen}

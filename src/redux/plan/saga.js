@@ -14,10 +14,14 @@ function* WATCH_GET_ALL_PLANS() {
   try {
     setLoading(true);
     const res = yield getPlanList();
+    console.log('---------------------');
+    console.log('res =>', res);
+    console.log('---------------------');
+
     yield put({
       type: actions.SET_PLAN_STATE,
       payload: {
-        plans: res,
+        plans: res?.sort((a,b) => a?.price - b?.price)
       },
     });
     setLoading(false);

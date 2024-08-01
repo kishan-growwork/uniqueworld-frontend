@@ -23,9 +23,9 @@ import { candidateAPI } from "../../apis/dashBoard";
 import { store } from "../store";
 
 export function* WATCH_GET_CANDIDATE(action) {
-  const { agencyDetail } = yield select((state) => state?.agency);
-  action.payload.filterData.dataMergePermission =
-    agencyDetail?.permission?.dataMerge;
+  // const { agencyDetail } = yield select((state) => state?.agency);
+  // action.payload.filterData.dataMergePermission =
+  //   agencyDetail?.permission?.dataMerge;
   const resp = yield getCandidateAPI(action.payload);
   yield put({
     type: actions.SET_CANDIDATE,
@@ -38,9 +38,9 @@ export function* WATCH_GET_SAVED_CANDIDATE(action) {
       type: actions.GET_SAVED_CANDIDATE_LOADER,
       payload: true,
     });
-    const { agencyDetail } = yield select((state) => state?.agency);
-    action.payload.filterData.dataMergePermission =
-      agencyDetail?.permission?.dataMerge;
+    // const { agencyDetail } = yield select((state) => state?.agency);
+    // action.payload.filterData.dataMergePermission =
+    //   agencyDetail?.permission?.dataMerge;
     const resp = yield getSavedCandidateAPI(action.payload);
     yield put({
       type: actions.SET_CANDIDATE,
@@ -72,9 +72,9 @@ export function* WATCH_GET_CLIENT_CANDIDATE(action) {
       payload: true,
     });
     const planId = store.getState()?.subscription?.currentPlan?.id;
-    const { agencyDetail } = yield select((state) => state?.agency);
-    action.payload.filterData.dataMergePermission =
-      agencyDetail?.permission?.dataMerge;
+    // const { agencyDetail } = yield select((state) => state?.agency);
+    // action.payload.filterData.dataMergePermission =
+    //   agencyDetail?.permission?.dataMerge;
     const resp = yield getClientCandidateAPI(action.payload, planId);
 
     if (resp) {
@@ -113,9 +113,9 @@ export function* WATCH_GET_BEST_MATCHES_CANDIDATE(action) {
       payload: true,
     });
     const planId = store.getState()?.subscription?.currentPlan?.id;
-    const { agencyDetail } = yield select((state) => state?.agency);
-    action.payload.filterData.dataMergePermission =
-      agencyDetail?.permission?.dataMerge;
+    // const { agencyDetail } = yield select((state) => state?.agency);
+    // action.payload.filterData.dataMergePermission =
+    //   agencyDetail?.permission?.dataMerge;
     const resp = yield getBestMatchesCandidateAPI(action.payload, planId);
 
     if (resp) {
@@ -228,18 +228,31 @@ export function* WATCH_DELETE_CANDIDATE(action) {
   const candidateResults = yield select((state) => state?.candidate);
   const resp = yield deleteCandidateAPI(action.payload);
 
-  if (resp?.msg == 'success') {
-    const data = candidateResults?.results.filter(item => item.id !== action.payload?.id);
+  if (resp?.msg == "success") {
+    console.log("working with the technologies");
+    const data = candidateResults?.results.filter(
+      (item) => item.id !== action.payload?.id
+    );
     yield put({
       type: actions.SET_CANDIDATE,
       payload: {
-        results: data
+        results: data,
       },
     });
-    action?.setLoading(false)
+    yield put({
+      type: actions.LOADING,
+      payload: false,
+    });
   } else {
-    action?.setLoading(false)
+    yield put({
+      type: actions.LOADING,
+      payload: false,
+    });
   }
+  yield put({
+    type: actions.LOADING,
+    payload: false,
+  });
 }
 
 export function* WATCH_FILTER_CANDIDATE(action) {
@@ -253,19 +266,17 @@ export function* WATCH_CANDIDATE_STATUS(action) {
   const candidateResults = yield select((state) => state?.candidate);
   const resp = yield candidateStatus(action.payload);
   if (resp) {
-
-  
-  const index = candidateResults?.results?.findIndex(
-    (item) => item.id === action.payload?.id
-  );
-  if (index !== -1) {
-    candidateResults.results[index].status = "view";
+    const index = candidateResults?.results?.findIndex(
+      (item) => item.id === action.payload?.id
+    );
+    if (index !== -1) {
+      candidateResults.results[index].status = "view";
+    }
+    yield put({
+      type: actions.SET_CANDIDATE,
+      payload: candidateResults,
+    });
   }
-  yield put({
-    type: actions.SET_CANDIDATE,
-    payload: candidateResults,
-  });
-}
 }
 export function* UPDATE_CANDIDATE_PUBLIC(action) {
   const data = yield updateCandidatePublicAPI(action.payload);
