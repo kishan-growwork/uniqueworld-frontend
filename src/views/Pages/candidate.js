@@ -135,7 +135,7 @@ const SecondPage = ({
   const [gender, setGender] = useState(null);
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState(1);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(20);
   const [filterToggleMode, setFilterToggleMode] = useState(false);
   const [candidateList, setCandidateList] = useState();
   const [popUp, setPopUp] = useState(false);
@@ -1967,6 +1967,7 @@ const SecondPage = ({
           </div>
         ) : null}
         <Button
+        disabled={loading}
           style={
             width > 769
               ? {
@@ -1996,6 +1997,7 @@ const SecondPage = ({
           <></>
         ) : (
           <Button
+        disabled={loading}
             style={
               width > 769
                 ? {
@@ -2086,13 +2088,15 @@ const SecondPage = ({
             </div>
           ) : null
         ) : (
-          <CustomHeader
+  loading==false&&
+            <CustomHeader
             filterData={filterData}
             setFilterData={setFilterData}
             setShow={setShow}
             setCreate={setCreate}
             store={candidates?.results}
-          />
+            />
+          
         )}
       </div>
 
@@ -2587,6 +2591,7 @@ const SecondPage = ({
                   </div>
                 ) : null
               ) : (
+  loading==false&&
                 <CustomHeader
                   filterData={filterData}
                   setFilterData={setFilterData}
@@ -3162,7 +3167,8 @@ const SecondPage = ({
               </>
             )}
 
-            {!filterToggleMode && candidates?.results?.length > 0 && (
+            {!filterToggleMode && loading==false&&candidates?.results?.length > 0 && (
+              <>
               <Pagination className="d-flex mt-3 align-items-center justify-content-center">
                 <PaginationItem>
                   <PaginationLink
@@ -3206,6 +3212,7 @@ const SecondPage = ({
                   </PaginationLink>
                 </PaginationItem>
               </Pagination>
+              </>
             )}
           </div>
           {/* </Card> */}
