@@ -73,8 +73,6 @@ const User = () => {
   const [filterData, setFilterData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.info("nameValidation => ", nameValidation);
-
   const [totalRows, setTotalRows] = useState();
   const [perPage, setPerPage] = useState(10);
   const [filterToggleMode, setFilterToggleMode] = useState(false);

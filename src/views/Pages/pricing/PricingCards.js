@@ -129,36 +129,64 @@ const PricingCards = ({
                 >
                   {item?.planFeature?.interview_count !== undefined ? (
                     <ListGroupItem tag="li">
+                        <p style={{
+                        fontSize:"12px"
+                      }}>
                       Unlimited Interview Request*
+                      </p>
                     </ListGroupItem>
                   ) : null}
                   {item?.planFeature?.validate_days !== null ? (
                     <ListGroupItem tag="li">
+                      <p style={{
+                        fontSize:"12px"
+                      }}>
                       Validate for {item?.planFeature?.validate_days} days
+                      </p>
                     </ListGroupItem>
                   ) : null}
                   {item?.planFeature?.upgrade_profile_top ? (
                     <ListGroupItem tag="li">
+                        <p style={{
+                        fontSize:"12px"
+                      }}>
                       New Upgrade Profile Shown on Top Priority
+                      </p>
                     </ListGroupItem>
                   ) : null}
                   {item?.planFeature?.export_candidate_lists ? (
                     <ListGroupItem tag="li">
+                        <p style={{
+                        fontSize:"12px"
+                      }}>
                       Downloading with Saved Profile
+                      </p>
                     </ListGroupItem>
                   ) : (
                     <ListGroupItem tag="li">
+                        <p style={{
+                        fontSize:"12px"
+                      }}>
                       5 Downloading with Saved Profile
+                      </p>
                     </ListGroupItem>
                   )}
                   {item?.planFeature?.mail_notification ? (
                     <ListGroupItem tag="li">
+                        <p style={{
+                        fontSize:"12px"
+                      }}>
                       Unlimited New Candidates Response by Mail Notification
+                      </p>
                     </ListGroupItem>
                   ) : null}
                   {item?.planFeature?.whatsapp_notification ? (
                     <ListGroupItem tag="li">
+                        <p style={{
+                        fontSize:"12px"
+                      }}>
                       Unlimited New Candidates Response by WhatsApp Notification
+                      </p>
                     </ListGroupItem>
                   ) : null}
                 </ListGroup>

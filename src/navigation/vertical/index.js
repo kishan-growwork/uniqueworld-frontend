@@ -43,13 +43,7 @@ export default [
     navLink: `/superadmin/transactionlist`,
     permission: ["SuperAdmin"],
   },
-  {
-    id: "Transaction",
-    title: "TransactionList",
-    icon: <MessageCircle size={20} />,
-    navLink: `/transactionlist`,
-    permission: ["Admin"],
-  },
+
   {
     id: "secondPage",
     title: "Candidate",
@@ -142,6 +136,13 @@ export default [
     permission: ["Admin", "BDM"],
   },
   {
+    id: "Transaction",
+    title: "TransactionList",
+    icon: <MessageCircle size={20} />,
+    navLink: `/transactionlist`,
+    permission: ["Admin"],
+  },
+  {
     id: "HRDocumentation",
     title: "HR Documentation",
     icon: <FilePlus size={20} />,
@@ -162,4 +163,5 @@ export default [
     navLink: "/pricing",
     permission: ["Client"],
   },
+  
 ];

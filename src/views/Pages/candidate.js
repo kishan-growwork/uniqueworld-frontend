@@ -3130,10 +3130,12 @@ const SecondPage = ({
                         }}
                       >
                         <div>
-                          <span style={{ color: "gray" }}>
+                          <span style={{ color: "gray",fontSize:"12px" }}>
                             Applied On&nbsp;: &nbsp;&nbsp;
                           </span>
-                          <span>
+                          <span style={{
+                            fontSize:"12px"
+                          }}>
                             {candidate?.createdAt
                               ? moment(candidate?.createdAt).format(
                                   "D MMM YYYY"
