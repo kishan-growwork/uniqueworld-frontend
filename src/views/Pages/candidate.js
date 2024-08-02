@@ -1562,7 +1562,7 @@ const SecondPage = ({
               <Col md={3}>
                 <strong
                   style={{
-                    fontSize: "16px",
+                    fontSize: "12px",
                     color: "gray",
                     fontWeight: "bold",
                   }}
@@ -1571,7 +1571,7 @@ const SecondPage = ({
                 </strong>
               </Col>
               <Col md={9}>
-                <strong style={{ fontSize: "16px" }}>{state.value}</strong>
+                <strong style={{ fontSize: "12px" }}>{state.value}</strong>
               </Col>
             </Row>
           </div>
@@ -1698,7 +1698,7 @@ const SecondPage = ({
                 <div className="state-col">
                   <strong
                     style={{
-                      fontSize: "16px",
+                      fontSize: "12px",
                       color: "black",
                       fontWeight: "bold",
                     }}
@@ -1712,7 +1712,7 @@ const SecondPage = ({
                 >
                   <strong
                     style={{
-                      fontSize: "16px",
+                      fontSize: "12px",
                       color: "black",
                       fontWeight: "bold",
                     }}
@@ -1733,7 +1733,7 @@ const SecondPage = ({
               <div className="state-col">
                 <strong
                   style={{
-                    fontSize: "16px",
+                    fontSize: "12px",
                     color: "black",
                     fontWeight: "bold",
                   }}
@@ -1747,7 +1747,7 @@ const SecondPage = ({
               >
                 <strong
                   style={{
-                    fontSize: "16px",
+                    fontSize: "12px",
                     color: "black",
                     fontWeight: "bold",
                   }}
@@ -2725,7 +2725,7 @@ const SecondPage = ({
                     <>
                       <Card
                         key={index}
-                        style={{ width: "75%", marginBottom: "10px" }}
+                        style={{ width: "90%", marginBottom: "10px" }}
                       >
                         <CardBody>
                           <Row>
@@ -2761,7 +2761,9 @@ const SecondPage = ({
                                         );
                                       }}
                                     />
-                                    <span>
+                                    <span style={{
+                                      fontSize:"18px"
+                                    }}>
                                       {candidate?.firstname}{" "}
                                       {candidate?.lastname}
                                     </span>
@@ -2769,7 +2771,7 @@ const SecondPage = ({
                                       pill
                                       color="default"
                                       style={{
-                                        fontSize: "12px",
+                                        fontSize: "10px",
                                         backgroundColor:
                                           candidate.status === "new"
                                             ? themecolor
@@ -2782,7 +2784,7 @@ const SecondPage = ({
                                     {auth?.user?.clients ? null : (
                                       <Badge
                                         style={{
-                                          fontSize: "12px",
+                                          fontSize: "10px",
                                           marginLeft: "10px",
                                         }}
                                         pill
@@ -2804,7 +2806,9 @@ const SecondPage = ({
                                       color: "gray",
                                     }}
                                   />
-                                  <span>
+                                  <span style={{
+                                      fontSize: "12px",
+                                  }}>
                                     {candidate?.professional
                                       ?.experienceInyear || "-"}
                                   </span>
@@ -2813,12 +2817,15 @@ const SecondPage = ({
                                   <span
                                     style={{
                                       marginRight: "5px",
+                                      fontSize: "12px",
                                       color: "gray",
                                     }}
                                   >
                                     ₹
                                   </span>
-                                  <span>
+                                  <span style={{
+                                      fontSize: "12px",
+                                  }}>
                                     {candidate?.professional?.expectedsalary ||
                                       "-"}
                                   </span>
@@ -2831,7 +2838,9 @@ const SecondPage = ({
                                       color: "gray",
                                     }}
                                   />
-                                  <span>
+                                  <span style={{
+                                      fontSize: "12px",
+                                  }}>
                                     {candidate?.professional
                                       ?.preferedJobLocation || "-"}
                                   </span>
@@ -2844,7 +2853,9 @@ const SecondPage = ({
                                       color: "gray",
                                     }}
                                   />
-                                  <span>
+                                  <span style={{
+                                      fontSize: "12px",
+                                  }}>
                                     {candidate?.professional?.noticePeriod ||
                                       "-"}
                                   </span>
@@ -2856,6 +2867,7 @@ const SecondPage = ({
                                     display: "flex",
                                     flexDirection: "column",
                                     paddingLeft: "1rem",
+                                    fontSize: "12px",
                                   }}
                                 >
                                   {renderStatesTable(candidate)}{" "}
