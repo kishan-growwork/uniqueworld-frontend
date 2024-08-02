@@ -2557,7 +2557,7 @@ const SecondPage = ({
               flexDirection: "column",
             }}
           >
-            <div style={{ width: "74%" }}>
+            <div style={{ width: "89%" }}>
               {auth?.user?.clients ? (
                 (clientUser?.clients?.id && count?.plan?.planName == "free") ||
                 count?.plan?.planName == "Trial" ? (
@@ -3137,7 +3137,7 @@ const SecondPage = ({
                           display: "flex",
                           justifyContent: "flex-end",
                           alignItems: "center",
-                          width: "75%",
+                          width: "90%",
                           marginBottom: "2rem",
                         }}
                       >

@@ -16,7 +16,7 @@ const Filter = ({
   toggleSidebar,
   open,
   handleFilterToggleMode = () => {},
-  // clear,
+  clear,
   setFilterToggleMode,
   setclear = () => {},
 }) => {
@@ -61,9 +61,10 @@ const Filter = ({
     setFilterData({});
     setSelectedState("");
     setSelectedCity("");
-    SetselectedStatus("");
+    SetselectedStatus(null);
     SetinvoiceTo("");
     setinputagency("");
+    setplanId("")
     settransactionId("");
     await dispatch({
       type: agencyActions.GET_TRANSACTION,
@@ -122,11 +123,12 @@ const Filter = ({
     getCities();
   }, [selectedState]);
 
-  // useEffect(() => {
-  //   if (clear == true) {
-  //     handleClear();
-  //   }
-  // }, [clear]);
+  useEffect(() => {
+    if (clear == true) {
+      handleClear();
+      setclear(false)
+    }
+  }, [clear]);
 
   const statusOptions = [
     { value: "PENDING", id: "Pending", label: "Pending" },
