@@ -167,7 +167,7 @@ const Basic = ({
                 borderColor: focus === "alternateMobile" && themecolor,
               }}
               className="w-100"
-              placeholder={"Enter Father/Mother Mother"}
+              placeholder={"Enter Father/Mother Mobile Number"}
               type="text"
               maxLength={"10"}
               disabled={isDisabledAllFields}

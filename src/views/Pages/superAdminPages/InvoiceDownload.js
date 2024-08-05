@@ -101,7 +101,7 @@ const InvoiceDownload = ({ setdownload, details }) => {
                 borderRight: "0.5px solid black",
               }}
             >
-              <h3>Addressed To :</h3>
+              <h3>Invoice To :</h3>
               <p>
                 {invoiceto} <br />
                 {details?.address} <br />
@@ -118,7 +118,7 @@ const InvoiceDownload = ({ setdownload, details }) => {
                 <strong>Invoice No. :</strong> {details?.invoicenumber}
                 <br />
                 <strong>Invoice Date:</strong>{" "}
-                {details?.createdAt?.slice(0, 10)}
+                {moment(details?.createdAt).format("DD-MM-YYYY")}
               </p>
             </div>
           </div>
@@ -164,7 +164,7 @@ const InvoiceDownload = ({ setdownload, details }) => {
                     {`${fromdate} to ${todate}`}
                   </td>
                   <td style={{ border: "1px solid #000", padding: "0.5rem" }}>
-                    000001
+                    9985
                   </td>
                   <td style={{ border: "1px solid #000", padding: "0.5rem" }}>
                     {`₹ ${details?.plans?.price}`}
