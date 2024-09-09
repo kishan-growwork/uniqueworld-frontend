@@ -84,7 +84,7 @@ export function* WATCH_GET_CLIENT_CANDIDATE(action) {
       });
     }
 
-    if (resp.msg) {
+    if (resp?.isUpgradePlan) {
       yield put({
         type: actions.PLAN_EXPIRE,
         payload: resp,

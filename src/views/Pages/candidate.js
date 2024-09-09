@@ -28,12 +28,15 @@ import {
   User,
   Trash2,
 } from "react-feather";
+import UserMaleIcon from "../../assets/images/avatars/male.jpg";
+import UserFemaleIcon from "../../assets/images/avatars/female.jpg";
 import {
   CardImg,
   Pagination,
   PaginationItem,
   PaginationLink,
 } from "reactstrap";
+import { selectThemeColors } from "@utils";
 import { MoreVertical } from "react-feather";
 import {
   Badge,
@@ -51,6 +54,7 @@ import {
   Row,
   UncontrolledDropdown,
 } from "reactstrap";
+import Select from "react-select";
 import { CardBody, CardText, CardTitle, CardHeader } from "reactstrap";
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
@@ -91,6 +95,14 @@ const canvasStyles = {
   top: 0,
   left: 0,
 };
+
+const pageOptions = [
+  { label: "10", value: 10, id: 10 },
+  { label: "20", value: 20, id: 20 },
+  { label: "50", value: 50, id: 50 },
+  { label: "100", value: 100, id: 100 },
+  { label: "200", value: 200, id: 200 },
+];
 
 const SecondPage = ({
   isSavedCandidates = false,
@@ -134,6 +146,7 @@ const SecondPage = ({
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState(1);
   const [perPage, setPerPage] = useState(10);
+  const [perPageSelect, setPerPageSelect] = useState(pageOptions[0]);
   const [filterToggleMode, setFilterToggleMode] = useState(false);
   const [candidateList, setCandidateList] = useState();
   const [popUp, setPopUp] = useState(false);
@@ -211,7 +224,7 @@ const SecondPage = ({
   // }, [client]);
 
   useEffect(() => {
-    if (candidates?.msg) {
+    if (candidates?.isUpgradePlan) {
       setIsPlanExpireModalOpen(true);
     }
   }, [candidates]);
@@ -306,7 +319,7 @@ const SecondPage = ({
 
   useEffect(() => {
     getCandidates(currentPage);
-  }, []);
+  }, [perPage]);
 
   useEffect(() => {
     if (auth?.user?.clients?.id) {
@@ -425,7 +438,6 @@ const SecondPage = ({
     handleselected(selectedCandidatesRef.current);
   };
   const handleselected = (rows) => {
-   
     let mails = [];
     new Promise(() => {
       setTimeout(() => {
@@ -1657,14 +1669,19 @@ const SecondPage = ({
             }}
           />
         ) : (
-          <User
-            size={100}
-            style={{
-              borderRadius: "50%",
-              backgroundColor: "#f0f0f0",
-              padding: "10px",
-            }}
+          <img
+            src={gender == "male" ? UserMaleIcon : UserFemaleIcon}
+            alt="male icon"
+            style={{ height: "100px", width: "100px", borderRadius: "50%" }}
           />
+          // <User
+          //   size={100}
+          //   style={{
+          //     borderRadius: "50%",
+          //     backgroundColor: "#f0f0f0",
+          //     padding: "10px",
+          //   }}
+          // />
         )}
 
         {auth?.user?.clients ? (
@@ -2796,12 +2813,17 @@ const SecondPage = ({
                                 </span>
                               </Col>
                               <Col className="d-flex align-items-center">
-                                <DollarSign
-                                  size={20}
-                                  style={{ marginRight: "5px", color: "gray" }}
-                                />
+                                <span
+                                  style={{
+                                    marginRight: "5px",
+                                    color: "gray",
+                                    fontSize: "20px",
+                                  }}
+                                >
+                                  &#8377;
+                                </span>
                                 <span>
-                                  {candidate?.professional?.expectedsalary ||
+                                  {candidate?.professional?.currentSalary ||
                                     "-"}
                                 </span>
                               </Col>
@@ -2810,10 +2832,7 @@ const SecondPage = ({
                                   size={20}
                                   style={{ marginRight: "5px", color: "gray" }}
                                 />
-                                <span>
-                                  {candidate?.professional
-                                    ?.preferedJobLocation || "-"}
-                                </span>
+                                <span>{candidate?.city || "-"}</span>
                               </Col>
                               <Col className="d-flex align-items-center">
                                 <Clock
@@ -3029,49 +3048,68 @@ const SecondPage = ({
             )}
 
             {!filterToggleMode && candidates?.results?.length > 0 && (
-              <Pagination className="d-flex mt-3 align-items-center justify-content-center">
-                <PaginationItem>
-                  <PaginationLink
-                    previous
-                    href="#"
-                    onClick={() =>
-                      handlePageChange(Math.max(1, currentPage - 1))
-                    }
-                  >
-                    <ChevronLeft size={15} /> Prev
-                  </PaginationLink>
-                </PaginationItem>
-
-                {visiblePageNumbers?.map((pageNumber) => (
-                  <PaginationItem
-                    key={pageNumber}
-                    active={pageNumber === currentPage}
-                  >
+              <>
+                <Pagination className="d-flex mt-3 align-items-center justify-content-center position-relative">
+                  <Select
+                    // isDisabled={update}
+                    menuPlacement="top"
+                    style={{ cursor: "pointer" }}
+                    id="perPage"
+                    name="perPage"
+                    defaultValue={pageOptions[0]}
+                    value={perPageSelect}
+                    options={pageOptions}
+                    className="react-select mr-3"
+                    classNamePrefix="pagination-select select"
+                    theme={selectThemeColors}
+                    onChange={(e) => {
+                      setPerPageSelect(e);
+                      setPerPage(parseInt(e.value));
+                    }}
+                  />
+                  <PaginationItem>
                     <PaginationLink
-                      onClick={() => handlePageChange(pageNumber)}
-                      style={{
-                        borderRadius: "0.5rem ",
-                        backgroundColor:
-                          pageNumber === currentPage && themecolor,
-                      }}
+                      previous
+                      href="#"
+                      onClick={() =>
+                        handlePageChange(Math.max(1, currentPage - 1))
+                      }
                     >
-                      {pageNumber}
+                      <ChevronLeft size={15} /> Prev
                     </PaginationLink>
                   </PaginationItem>
-                ))}
 
-                <PaginationItem>
-                  <PaginationLink
-                    next
-                    href="#"
-                    onClick={() =>
-                      handlePageChange(Math.min(totalPages, currentPage + 1))
-                    }
-                  >
-                    Next <ChevronRight size={15} />
-                  </PaginationLink>
-                </PaginationItem>
-              </Pagination>
+                  {visiblePageNumbers?.map((pageNumber) => (
+                    <PaginationItem
+                      key={pageNumber}
+                      active={pageNumber === currentPage}
+                    >
+                      <PaginationLink
+                        onClick={() => handlePageChange(pageNumber)}
+                        style={{
+                          borderRadius: "0.5rem ",
+                          backgroundColor:
+                            pageNumber === currentPage && themecolor,
+                        }}
+                      >
+                        {pageNumber}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+
+                  <PaginationItem>
+                    <PaginationLink
+                      next
+                      href="#"
+                      onClick={() =>
+                        handlePageChange(Math.min(totalPages, currentPage + 1))
+                      }
+                    >
+                      Next <ChevronRight size={15} />
+                    </PaginationLink>
+                  </PaginationItem>
+                </Pagination>
+              </>
             )}
           </div>
           {/* </Card> */}
